@@ -1,0 +1,1231 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter_1/">
+      
+      
+        <link rel="next" href="../creating-a-menu-bar/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+    
+    
+      
+        <title>Table View - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#table-view" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Table View
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    QML Desktop Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chapter 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Table View
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Table View
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simple-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Layout
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pure-qml-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pure QML Table
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-keybindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding Keybindings
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handling-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling Focus
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      All Together
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Table
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Python">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Manager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mainpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main.py
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qml" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../creating-a-menu-bar/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Creating a Menu Bar
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../home/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home TODo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../list/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    List
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../table/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Table View
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simple-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Layout
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pure-qml-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pure QML Table
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adding-keybindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding Keybindings
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handling-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling Focus
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      All Together
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Table
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Code">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Python">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table Manager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mainpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main.py
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qml" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+  <div class="md-content" data-md-component="content">
+    <article class="md-content__inner md-typeset">
+      
+                  
+
+
+
+<h1 id="table-view">Table View<a class="headerlink" href="#table-view" title="Permanent link">&para;</a></h1>
+<h2 id="simple-layout">Simple Layout<a class="headerlink" href="#simple-layout" title="Permanent link">&para;</a></h2>
+<p>Start with a simple layout:</p>
+<p><img alt="" src="../assets/2025-02-24T16%3A58%3A16.449354.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="nx">pragma</span> <span class="k">ComponentBehavior:</span> <span class="nx">Bound</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="nx">property</span> <span class="kr">int</span> <span class="k">focusBorderWidth:</span> <span class="mi">10</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_1</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;red&quot;</span>
+            <span class="nx">Label</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="s2">&quot;Left&quot;</span>
+                <span class="k">color:</span> <span class="s2">&quot;blue&quot;</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">font.pixelSize:</span> <span class="mi">36</span>
+                <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_2</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;blue&quot;</span>
+            <span class="nx">Label</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="s2">&quot;Right&quot;</span>
+                <span class="k">color:</span> <span class="s2">&quot;red&quot;</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">font.pixelSize:</span> <span class="mi">36</span>
+                <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="pure-qml-table">Pure QML Table<a class="headerlink" href="#pure-qml-table" title="Permanent link">&para;</a></h2>
+<p>Start with the simple table model from <sup id="fnref:1740376766"><a class="footnote-ref" href="#fn:1740376766">1</a></sup>, note there is a mistake in the documentation, the delegate requires the line:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+</code></pre></div>
+<p>and the text should be qualified with an id like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
+</code></pre></div>
+<p>I had trouble getting this to work otherwise. So the delegate should look like this</p>
+<div class="highlight"><pre><span></span><code><span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+    <span class="kd">id: myItem</span>
+    <span class="k">implicitWidth:</span> <span class="mi">100</span>
+    <span class="k">implicitHeight:</span> <span class="mi">50</span>
+    <span class="k">border.width:</span> <span class="mi">1</span>
+    <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+
+    <span class="nx">Text</span> <span class="p">{</span>
+        <span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
+        <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>and the entire QML should look like this:</p>
+<p><img alt="" src="../assets/2025-02-24T17%3A42%3A05.926610.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+<span class="kr">import</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">labs</span><span class="p">.</span><span class="nx">qmlmodels</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="nx">property</span> <span class="kr">int</span> <span class="k">focusBorderWidth:</span> <span class="mi">10</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="nx">component</span> <span class="k">MyTableModel:</span> <span class="nx">TableModel</span> <span class="p">{</span>
+            <span class="nx">TableModelColumn</span> <span class="p">{</span>
+                <span class="k">display:</span> <span class="s2">&quot;name&quot;</span>
+            <span class="p">}</span>
+            <span class="nx">TableModelColumn</span> <span class="p">{</span>
+                <span class="k">display:</span> <span class="s2">&quot;color&quot;</span>
+            <span class="p">}</span>
+
+            <span class="k">rows:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;black&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;brown&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;bird&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;white&quot;</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+
+    <span class="nx">component</span> <span class="k">MyTable:</span> <span class="nx">TableView</span> <span class="p">{</span>
+        <span class="k">columnSpacing:</span> <span class="mi">1</span>
+        <span class="k">rowSpacing:</span> <span class="mi">1</span>
+        <span class="k">clip:</span> <span class="kc">true</span>
+        <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+        <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">contentWidth</span><span class="p">)</span>
+        <span class="k">height:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">contentHeight</span><span class="p">)</span>
+
+        <span class="k">model:</span> <span class="nx">MyTableModel</span> <span class="p">{}</span>
+
+        <span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: myItem</span>
+            <span class="k">implicitWidth:</span> <span class="mi">100</span>
+            <span class="k">implicitHeight:</span> <span class="mi">50</span>
+            <span class="k">border.width:</span> <span class="mi">1</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+
+            <span class="nx">Text</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="k">border.width:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">component</span> <span class="k">FocusableRectangle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="k">focus:</span> <span class="kc">true</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_1</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;red&quot;</span>
+            <span class="nx">Label</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="s2">&quot;Left&quot;</span>
+                <span class="k">color:</span> <span class="s2">&quot;blue&quot;</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">font.pixelSize:</span> <span class="mi">36</span>
+                <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_2</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="nx">MyTable</span> <span class="p">{}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="adding-keybindings">Adding Keybindings<a class="headerlink" href="#adding-keybindings" title="Permanent link">&para;</a></h2>
+<p>In order to benefit from keybindings, one must create an <code>ItemSelectionModel</code>, with this the user can move through the cells of a table when it is active and press enter to print the value of the current cell:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">MyTable:</span> <span class="nx">TableView</span> <span class="p">{</span>
+        <span class="kd">id: tableView</span>
+        <span class="k">columnSpacing:</span> <span class="mi">1</span>
+        <span class="k">rowSpacing:</span> <span class="mi">1</span>
+        <span class="c1">// clip: true</span>
+        <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+        <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">contentWidth</span><span class="p">)</span>
+        <span class="k">height:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">contentHeight</span><span class="p">)</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+
+        <span class="k">model:</span> <span class="nx">MyTableModel</span> <span class="p">{}</span>
+
+        <span class="c1">// Create a Selection Model</span>
+        <span class="k">selectionModel:</span> <span class="nx">ItemSelectionModel</span> <span class="p">{</span>
+            <span class="k">model:</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Allow the user to interact with an index</span>
+        <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Return</span> <span class="o">||</span> <span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Space</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Get the cell content</span>
+                <span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentRow</span><span class="p">;</span>
+                <span class="kd">let</span> <span class="nx">column</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentColumn</span><span class="p">;</span>
+                <span class="kd">let</span> <span class="nx">cellContent</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">rows</span><span class="p">[</span><span class="nx">row</span><span class="p">][</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">rows</span><span class="p">[</span><span class="nx">row</span><span class="p">])[</span><span class="nx">column</span><span class="p">]];</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Cell content:&quot;</span><span class="p">,</span> <span class="nx">cellContent</span><span class="p">);</span>
+
+                <span class="c1">// Get the current index</span>
+                <span class="kd">let</span> <span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">tableView</span><span class="p">.</span><span class="nx">currentRow</span><span class="p">,</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentColumn</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Current Index:&quot;</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">);</span>
+
+                <span class="nx">selectionModel</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">currentIndex</span><span class="p">,</span> <span class="nx">ItemSelectionModel</span><span class="p">.</span><span class="nx">Toggle</span><span class="p">);</span>
+                <span class="c1">// This is required, otherwise Tab just moves between cells and the user</span>
+                <span class="c1">// cannot move between widgets after getting trapped in the table</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Tab</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">modifiers</span> <span class="o">&amp;</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">ShiftModifier</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="c1">// Shift+Tab: move focus to previous item</span>
+                    <span class="nx">tableView</span><span class="p">.</span><span class="nx">nextItemInFocusChain</span><span class="p">(</span><span class="kc">false</span><span class="p">).</span><span class="nx">forceActiveFocus</span><span class="p">();</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="c1">// Tab: move focus to next item</span>
+                    <span class="nx">tableView</span><span class="p">.</span><span class="nx">nextItemInFocusChain</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">forceActiveFocus</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: myItem</span>
+            <span class="k">implicitWidth:</span> <span class="mi">100</span>
+            <span class="k">implicitHeight:</span> <span class="mi">50</span>
+            <span class="k">border.width:</span> <span class="mi">1</span>
+            <span class="c1">// Required Properties for selectable Cells</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">selected</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">current</span>
+
+            <span class="c1">// Color the current cell</span>
+            <span class="k">color:</span> <span class="nx">selected</span> <span class="o">?</span> <span class="k">Material.accent :</span> <span class="p">(</span><span class="nx">current</span> <span class="o">?</span> <span class="k">Material.highlightedRippleColor :</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
+
+            <span class="nx">Text</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">color:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">selected</span> <span class="o">?</span> <span class="s2">&quot;white&quot;</span> <span class="o">:</span> <span class="s2">&quot;black&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<h2 id="handling-focus">Handling Focus<a class="headerlink" href="#handling-focus" title="Permanent link">&para;</a></h2>
+<p>The Table can't fill a split view like a <a href="../list/">ListView</a> can, instead we set the border to be coloured when the child is active:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_1</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;purple&quot;</span>
+            <span class="nx">Label</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="s2">&quot;Left&quot;</span>
+                <span class="k">color:</span> <span class="s2">&quot;white&quot;</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">font.pixelSize:</span> <span class="mi">36</span>
+                <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_2</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="k">border.width:</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="nx">MyTable</span> <span class="p">{</span>
+                <span class="kd">id: theTableView</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<h2 id="all-together">All Together<a class="headerlink" href="#all-together" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+<h2 id="basic-table">Basic Table<a class="headerlink" href="#basic-table" title="Permanent link">&para;</a></h2>
+<p><img alt="" src="../assets/2025-02-24T17%3A34%3A30.853174.png" /></p>
+<h3 id="code">Code<a class="headerlink" href="#code" title="Permanent link">&para;</a></h3>
+<h4 id="python">Python<a class="headerlink" href="#python" title="Permanent link">&para;</a></h4>
+<h5 id="table-manager">Table Manager<a class="headerlink" href="#table-manager" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="c1"># example_table_model.py</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">final</span><span class="p">,</span> <span class="n">override</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QAbstractTableModel</span><span class="p">,</span>
+    <span class="n">QModelIndex</span><span class="p">,</span>
+    <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+    <span class="n">Qt</span><span class="p">,</span>
+    <span class="n">QObject</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="nd">@final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExampleTableModel</span><span class="p">(</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="c1"># Sample data for the table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;A1&quot;</span><span class="p">,</span> <span class="s2">&quot;B1&quot;</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;A2&quot;</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;A3&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;A4&quot;</span><span class="p">,</span> <span class="s2">&quot;B4&quot;</span><span class="p">,</span> <span class="s2">&quot;C4&quot;</span><span class="p">],</span>
+        <span class="p">]</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rowCount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">columnCount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">headerData</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">section</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">orientation</span><span class="p">:</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Column </span><span class="si">{</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Row </span><span class="si">{</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h5 id="mainpy">Main.py<a class="headerlink" href="#mainpy" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QGuiApplication</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtQml</span><span class="w"> </span><span class="kn">import</span> <span class="n">QQmlApplicationEngine</span><span class="p">,</span> <span class="n">qmlRegisterType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">example_table_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExampleTableModel</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QGuiApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_DFL</span><span class="p">)</span>
+
+    <span class="n">qml_import_name</span> <span class="o">=</span> <span class="s2">&quot;TableManager&quot;</span>
+    <span class="n">qmlRegisterType</span><span class="p">(</span><span class="n">ExampleTableModel</span><span class="p">,</span> <span class="n">qml_import_name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ExampleTableModel&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore</span>
+
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">QQmlApplicationEngine</span><span class="p">()</span>
+
+    <span class="n">qml_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;main.qml&quot;</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">qml_file</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span><span class="o">.</span><span class="n">rootObjects</span><span class="p">():</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec</span><span class="p">())</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="qml">QML<a class="headerlink" href="#qml" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+<span class="kr">import</span> <span class="nx">TableManager</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="nx">property</span> <span class="kr">int</span> <span class="k">focusBorderWidth:</span> <span class="mi">10</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_1</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;red&quot;</span>
+            <span class="nx">Label</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="s2">&quot;Left&quot;</span>
+                <span class="k">color:</span> <span class="s2">&quot;blue&quot;</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">font.pixelSize:</span> <span class="mi">36</span>
+                <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="nx">Item</span> <span class="p">{</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="nx">TableView</span> <span class="p">{</span>
+                    <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                    <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">contentWidth</span><span class="p">)</span>
+                    <span class="k">height:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">contentHeight</span><span class="p">)</span>
+                    <span class="k">columnSpacing:</span> <span class="mi">1</span>
+                    <span class="k">rowSpacing:</span> <span class="mi">1</span>
+                    <span class="k">clip:</span> <span class="kc">true</span>
+
+                    <span class="k">model:</span> <span class="nx">ExampleTableModel</span> <span class="p">{}</span>
+
+                    <span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+                        <span class="kd">id: myItem</span>
+                        <span class="k">implicitWidth:</span> <span class="mi">100</span>
+                        <span class="k">implicitHeight:</span> <span class="mi">50</span>
+                        <span class="k">border.width:</span> <span class="mi">1</span>
+                        <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+
+                        <span class="nx">Text</span> <span class="p">{</span>
+                            <span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
+                            <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>There's a few things to note here:</p>
+<ul>
+<li>
+<p>Use <code>myItem.display</code>  and avoid unqalified access to <code>display</code></p>
+<ul>
+<li>The table will appear empty unless the following is included in the delegate rectangle:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+</code></pre></div>
+</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1740376766">
+<p><a href="https://doc.qt.io/qt-6/qml-qtquick-tableview.html">TableView QML Type | Qt Quick 6.8.2</a>&#160;<a class="footnote-backref" href="#fnref:1740376766" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+      
+        
+      
+    </article>
+  </div>
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "search.suggest", "navigation.path", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+        <script src="../javascripts/katex_conf.js"></script>
+      
+        <script src="../javascripts/katex.min.js_0.16.11"></script>
+      
+        <script src="../javascripts/auto-render.min.js.16.11"></script>
+      
+    
+  </body>
+</html>

@@ -12,6 +12,8 @@
         <link rel="prev" href="../home/">
       
       
+        <link rel="next" href="../table/">
+      
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
@@ -271,6 +273,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../combining_list_and_table_sns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Table View
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../creating-a-menu-bar/" class="md-nav__link">
         
   
@@ -402,6 +425,27 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../table/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Table View
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -1650,6 +1694,37 @@ nvim<span class="w"> </span>main.py
         <span class="k">delegate:</span> <span class="nx">ContactDelegate</span> <span class="p">{}</span>
     <span class="p">}</span>
 </code></pre></div>
+<p>No, wait the delegate needs to be changed too. It's important to use <code>required property string name</code> for each additional role.</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">ContactDelegate:</span> <span class="nx">Item</span> <span class="p">{</span>
+        <span class="kd">id: myItem</span>
+        <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">name</span>
+        <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">number</span>
+        <span class="nx">required</span> <span class="nx">property</span> <span class="kr">int</span> <span class="nx">index</span>
+        <span class="k">width:</span> <span class="mi">180</span>
+        <span class="k">height:</span> <span class="mi">40</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="k">color:</span> <span class="nx">mouseArea</span><span class="p">.</span><span class="nx">containsMouse</span> <span class="o">?</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">lighter</span><span class="p">(</span><span class="s2">&quot;lightsteelblue&quot;</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span> <span class="o">:</span> <span class="s2">&quot;transparent&quot;</span>
+
+            <span class="nx">Column</span> <span class="p">{</span>
+                <span class="nx">Text</span> <span class="p">{</span>
+                    <span class="k">text:</span> <span class="s1">&#39;&lt;b&gt;Name:&lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">name</span>
+                <span class="p">}</span>
+                <span class="nx">Text</span> <span class="p">{</span>
+                    <span class="k">text:</span> <span class="s1">&#39;&lt;b&gt;Number:&lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">number</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="nx">MouseArea</span> <span class="p">{</span>
+                <span class="kd">id: mouseArea</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">hoverEnabled:</span> <span class="kc">true</span>
+                <span class="k">onClicked:</span> <span class="nx">ListView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">index</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
 <h2 id="all-the-code">All the Code<a class="headerlink" href="#all-the-code" title="Permanent link">&para;</a></h2>
 <h3 id="mainpy">Main.py<a class="headerlink" href="#mainpy" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
@@ -1961,7 +2036,12 @@ nvim<span class="w"> </span>main.py
 
                 
       
-        
+        <h2>Backlinks:</h2>
+        <ul>
+          
+            <li><a href="/combining_list_and_table_sns/">Table View</a></li>
+          
+        </ul>
       
     </article>
   </div>
