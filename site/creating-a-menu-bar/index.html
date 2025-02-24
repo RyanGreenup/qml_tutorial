@@ -1,0 +1,1071 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../chapter_1/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+    
+    
+      
+        <title>Creating a Menu Bar - My Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://unpkg.com/katex@0/dist/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#creating-a-menu-bar" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="My Docs" class="md-header__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            My Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Creating a Menu Bar
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="My Docs" class="md-nav__button md-logo" aria-label="My Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    My Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../SUMMARY/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Summary
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter_1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chapter 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Creating a Menu Bar
+    
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+  <div class="md-content" data-md-component="content">
+    <article class="md-content__inner md-typeset">
+      
+                  
+
+
+
+<h1 id="creating-a-menu-bar">Creating a Menu Bar<a class="headerlink" href="#creating-a-menu-bar" title="Permanent link">&para;</a></h1>
+<p>The <code>ApplicationWindow</code> item supports a Menu bar, Header and Footer:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="k">menuBar:</span> <span class="nx">Label</span> <span class="p">{</span><span class="k">text:</span> <span class="s2">&quot;Menu&quot;</span><span class="p">}</span>
+    <span class="k">header:</span> <span class="nx">Label</span> <span class="p">{</span><span class="k">text:</span> <span class="s2">&quot;Header&quot;</span><span class="p">}</span>
+    <span class="k">footer:</span> <span class="nx">Label</span> <span class="p">{</span><span class="k">text:</span> <span class="s2">&quot;Footer&quot;</span><span class="p">}</span>
+
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>Run this with:</p>
+<div class="highlight"><pre><span></span><code>qml6 /path/to/main.qml
+</code></pre></div>
+<p><img alt="" src="../assets/initial_desktop_application.png" /></p>
+<p>Some things to discuss later:</p>
+<ul>
+<li>Label<ul>
+<li>This lets us add text</li>
+</ul>
+</li>
+<li>Rectangle vs Item<ul>
+<li>Like a Div in HTML, let's us encapsulate text, Rectangle is an Item with a background color</li>
+</ul>
+</li>
+<li>anchors<ul>
+<li>This is explained well in the book, for now, anchors.fill: parent means that this item spans the entire parent</li>
+</ul>
+</li>
+</ul>
+<p>We can create menu items:</p>
+<p><img alt="" src="../assets/2025-02-24T12%3A35%3A14.598790.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="k">menuBar:</span> <span class="nx">MenuBar</span> <span class="p">{</span>
+        <span class="kd">id: menuBar</span>
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuFile</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;File&quot;</span><span class="p">)</span>
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;New&quot;</span><span class="p">)</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+N&quot;</span>
+                <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;New File Triggered&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuEdit</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Edit&quot;</span><span class="p">)</span>
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Undo&quot;</span><span class="p">)</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+U&quot;</span>
+                <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Undo Triggered&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="k">header:</span> <span class="nx">Label</span> <span class="p">{</span><span class="k">text:</span> <span class="s2">&quot;Header&quot;</span><span class="p">}</span>
+    <span class="k">footer:</span> <span class="nx">Label</span> <span class="p">{</span><span class="k">text:</span> <span class="s2">&quot;Footer&quot;</span><span class="p">}</span>
+
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>From here we can create a Toolbar:</p>
+<p><img alt="" src="../assets/2025-02-24T12%3A37%3A10.915896.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="k">menuBar:</span> <span class="nx">MenuBar</span> <span class="p">{</span>
+        <span class="kd">id: menuBar</span>
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuFile</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;File&quot;</span><span class="p">)</span>
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;New&quot;</span><span class="p">)</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+N&quot;</span>
+                <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;New File Triggered&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuEdit</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Edit&quot;</span><span class="p">)</span>
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Undo&quot;</span><span class="p">)</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+U&quot;</span>
+                <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Undo Triggered&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+
+    <span class="k">header:</span> <span class="nx">ToolBar</span> <span class="p">{</span>
+        <span class="kd">id: toolBar</span>
+        <span class="k">visible:</span> <span class="kc">true</span>
+        <span class="nx">RowLayout</span> <span class="p">{</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="nx">ToolButton</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Toolbar Button&quot;</span><span class="p">)</span>
+                <span class="k">onClicked:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Clicked Toolbar&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">footer:</span> <span class="nx">Label</span> <span class="p">{</span><span class="k">text:</span> <span class="s2">&quot;Footer&quot;</span><span class="p">}</span>
+
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>This is where we can start playing with some benefits of QML over widgets.</p>
+<ol>
+<li>
+<p>when properties are assigned with <code>:</code> we create a contract, e.g.:</p>
+<div class="highlight"><pre><span></span><code><span class="k">header:</span> <span class="nx">ToolBar</span> <span class="p">{</span>
+    <span class="kd">id: toolBar</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This means if the visible property changes, the header will actually disappear</p>
+</li>
+</ol>
+<p>So we can create an action like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">Action</span> <span class="p">{</span>
+    <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Hide &amp;Toolbar&quot;</span><span class="p">)</span>
+    <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+Alt+B&quot;</span>
+    <span class="k">onTriggered:</span> <span class="nx">toolBar</span><span class="p">.</span><span class="nx">visible</span> <span class="o">=</span> <span class="o">!</span><span class="nx">toolBar</span><span class="p">.</span><span class="nx">visible</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>which will toggle the toolbar. We could also use the toolbar for tabs, in this next code chunk I show how to use tabs in the footer, although they don't do anything yet, just for show:</p>
+<p><img alt="" src="../assets/2025-02-24T12%3A39%3A22.112116.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="k">menuBar:</span> <span class="nx">MenuBar</span> <span class="p">{</span>
+        <span class="kd">id: menuBar</span>
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuFile</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;File&quot;</span><span class="p">)</span>
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;New&quot;</span><span class="p">)</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+N&quot;</span>
+                <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;New File Triggered&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuEdit</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Edit&quot;</span><span class="p">)</span>
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Undo&quot;</span><span class="p">)</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+U&quot;</span>
+                <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Undo Triggered&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="nx">Menu</span> <span class="p">{</span>
+                <span class="kd">id: menuEditExtra</span>
+                <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Extra&quot;</span><span class="p">)</span>
+                <span class="nx">Action</span> <span class="p">{</span>
+                    <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Something&quot;</span><span class="p">)</span>
+                    <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+E&quot;</span>
+                    <span class="k">onTriggered:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Edit &gt; Extra &gt; Something Triggered&quot;</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Menu</span> <span class="p">{</span>
+            <span class="kd">id: menuView</span>
+            <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;View&quot;</span><span class="p">)</span>
+            <span class="nx">Menu</span> <span class="p">{</span>
+                <span class="kd">id: menuViewToggle</span>
+                <span class="k">title:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Toggle&quot;</span><span class="p">)</span>
+                <span class="nx">Action</span> <span class="p">{</span>
+                    <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Hide &amp;Toolbar&quot;</span><span class="p">)</span>
+                    <span class="k">shortcut:</span> <span class="s2">&quot;Ctrl+Alt+B&quot;</span>
+                    <span class="k">onTriggered:</span> <span class="nx">toolBar</span><span class="p">.</span><span class="nx">visible</span> <span class="o">=</span> <span class="o">!</span><span class="nx">toolBar</span><span class="p">.</span><span class="nx">visible</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">header:</span> <span class="nx">ToolBar</span> <span class="p">{</span>
+        <span class="kd">id: toolBar</span>
+        <span class="k">visible:</span> <span class="kc">true</span>
+        <span class="nx">RowLayout</span> <span class="p">{</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="nx">ToolButton</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Toolbar Button&quot;</span><span class="p">)</span>
+                <span class="k">onClicked:</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Clicked Toolbar&quot;</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">footer:</span> <span class="nx">TabBar</span> <span class="p">{</span>
+        <span class="kd">id: statusBar</span>
+        <span class="nx">TabButton</span> <span class="p">{</span>
+            <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Home&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nx">TabButton</span> <span class="p">{</span>
+            <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Discover&quot;</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>The next thing to cover is creating modular code.</p>
+<p>If you create two files:</p>
+<ol>
+<li>
+<p>AppMenuBar.qml
+    containing:</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">menuBar:</span> <span class="nx">MenuBar</span> <span class="p">{</span>
+    <span class="kd">id: menuBar</span>
+    <span class="nx">Menu</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+        <span class="c1">// ...</span>
+</code></pre></div>
+2. main.qml
+containing as above.</p>
+</li>
+</ol>
+<p>then you can move all items into modular files which we've done below:</p>
+<p>split view, I'll omit the me</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="k">menuBar:</span> <span class="nx">AppMenuBar</span> <span class="p">{</span> <span class="p">}</span>
+
+    <span class="k">header:</span> <span class="nx">AppToolBar</span> <span class="p">{</span> <span class="p">}</span>
+    <span class="k">footer:</span> <span class="nx">AppTabBar</span> <span class="p">{</span> <span class="p">}</span>
+
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p><img alt="" src="../assets/2025-02-24T12%3A40%3A51.655411.png" /></p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="c1">// Not important here</span>
+    <span class="c1">// menuBar: AppMenuBar { }</span>
+    <span class="c1">// header: AppToolBar { }</span>
+    <span class="c1">// footer: AppTabBar { }</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+            <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+                <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="p">}</span>
+            <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+                <span class="k">color:</span> <span class="s2">&quot;lightgreen&quot;</span>
+            <span class="p">}</span>
+            <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+                <span class="nx">SplitView</span> <span class="p">{</span>
+                    <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                    <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Vertical</span>
+                    <span class="nx">Rectangle</span> <span class="p">{</span>
+                        <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                        <span class="k">color:</span> <span class="s2">&quot;orange&quot;</span>
+                    <span class="p">}</span>
+                    <span class="nx">Rectangle</span> <span class="p">{</span>
+                        <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                        <span class="k">color:</span> <span class="s2">&quot;purple&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p>Typically in Qt Widgets we can focus items, this needs to be enabled in QML, this is because QML is more general than  QtWidgets so it can be used to write for touch centric or small screen high dpi displays like the steam deck or even android.</p>
+<p>To Enable tabbing between:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="c1">// Custom handle component for SplitView</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Basidc Desktop Application Example&quot;</span>
+
+    <span class="c1">// Not important here</span>
+    <span class="c1">// menuBar: AppMenuBar { }</span>
+    <span class="c1">// header: AppToolBar { }</span>
+    <span class="c1">// footer: AppTabBar { }</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="k">focus:</span> <span class="kc">true</span>
+            <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>  <span class="c1">// Add this line</span>
+        <span class="p">}</span>
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightgreen&quot;</span>
+            <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="k">focus:</span> <span class="kc">true</span>
+            <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>  <span class="c1">// Add this line</span>
+        <span class="p">}</span>
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="nx">SplitView</span> <span class="p">{</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Vertical</span>
+                <span class="nx">Rectangle</span> <span class="p">{</span>
+                    <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">color:</span> <span class="s2">&quot;orange&quot;</span>
+                <span class="p">}</span>
+                <span class="nx">Rectangle</span> <span class="p">{</span>
+                    <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">color:</span> <span class="s2">&quot;purple&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Now we can make an inline component for this:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="c1">// Custom handle component for SplitView</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="nx">component</span> <span class="k">FocusableRectangle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="k">focus:</span> <span class="kc">true</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Not important here</span>
+    <span class="c1">// menuBar: AppMenuBar { }</span>
+    <span class="c1">// header: AppToolBar { }</span>
+    <span class="c1">// footer: AppTabBar { }</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightgreen&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="nx">SplitView</span> <span class="p">{</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Vertical</span>
+                <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+                    <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">color:</span> <span class="s2">&quot;orange&quot;</span>
+                <span class="p">}</span>
+                <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+                    <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">color:</span> <span class="s2">&quot;purple&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The handles themselves are described by rectangles, so we can create a customHandle like so:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">CustomHandle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">implicitWidth:</span> <span class="mi">6</span>
+        <span class="k">implicitHeight:</span> <span class="mi">6</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>Which can then be used like so:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">handle:</span> <span class="nx">CustomHandle</span> <span class="p">{}</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>This can be extended to change colour on focus and animated (this will be discussed later):</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">CustomHandle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">implicitWidth:</span> <span class="mi">6</span>
+        <span class="k">implicitHeight:</span> <span class="mi">6</span>
+        <span class="k">color:</span> <span class="nx">SplitHandle</span><span class="p">.</span><span class="nx">pressed</span> <span class="o">?</span> <span class="k">Material.accent</span>
+<span class="k">             :</span> <span class="nx">SplitHandle</span><span class="p">.</span><span class="nx">hovered</span> <span class="o">?</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">lighter</span><span class="p">(</span><span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+             <span class="o">:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="nx">Behavior</span> <span class="nx">on</span> <span class="nx">color</span> <span class="p">{</span> <span class="nx">ColorAnimation</span> <span class="p">{</span> <span class="k">duration:</span> <span class="mi">150</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>Here's an example</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="c1">// Custom handle component for SplitView</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="nx">component</span> <span class="k">CustomHandle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">implicitWidth:</span> <span class="mi">6</span>
+        <span class="k">implicitHeight:</span> <span class="mi">6</span>
+        <span class="k">color:</span> <span class="nx">SplitHandle</span><span class="p">.</span><span class="nx">pressed</span> <span class="o">?</span> <span class="k">Material.accent</span>
+<span class="k">             :</span> <span class="nx">SplitHandle</span><span class="p">.</span><span class="nx">hovered</span> <span class="o">?</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">lighter</span><span class="p">(</span><span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+             <span class="o">:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="nx">Behavior</span> <span class="nx">on</span> <span class="nx">color</span> <span class="p">{</span> <span class="nx">ColorAnimation</span> <span class="p">{</span> <span class="k">duration:</span> <span class="mi">150</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nx">component</span> <span class="k">FocusableRectangle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="k">focus:</span> <span class="kc">true</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+
+    <span class="nx">component</span> <span class="k">SplitViewWithCustomHandle:</span> <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">handle:</span> <span class="nx">CustomHandle</span> <span class="p">{}</span>
+    <span class="p">}</span>
+
+
+    <span class="c1">// Not important here</span>
+    <span class="c1">// menuBar: AppMenuBar { }</span>
+    <span class="c1">// header: AppToolBar { }</span>
+    <span class="c1">// footer: AppTabBar { }</span>
+
+    <span class="nx">SplitViewWithCustomHandle</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightgreen&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="nx">SplitViewWithCustomHandle</span> <span class="p">{</span>
+                <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Vertical</span>
+                <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+                    <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">color:</span> <span class="s2">&quot;orange&quot;</span>
+                <span class="p">}</span>
+                <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+                    <span class="k">SplitView.preferredHeight:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="k">color:</span> <span class="s2">&quot;purple&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Now obviously we don't want to use the mouse to resize the splits, so we can create keybindings for our rectangles like so:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">FocusableRectangle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="k">focus:</span> <span class="kc">true</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+
+        <span class="k">Keys.onPressed:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">modifiers</span> <span class="o">&amp;</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">ControlModifier</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kr">const</span> <span class="nx">step</span> <span class="o">=</span> <span class="mi">20</span>
+                <span class="k">switch</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">case</span> <span class="k">Qt.Key_Left:</span>
+                        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+                        <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredWidth</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredWidth</span> <span class="o">-</span> <span class="nx">step</span><span class="p">)</span>
+                        <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span>
+                        <span class="k">break</span>
+                    <span class="k">case</span> <span class="k">Qt.Key_Right:</span>
+                        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+                        <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredWidth</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">-</span> <span class="mi">50</span><span class="p">,</span> <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredWidth</span> <span class="o">+</span> <span class="nx">step</span><span class="p">)</span>
+                        <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span>
+                        <span class="k">break</span>
+                    <span class="k">case</span> <span class="k">Qt.Key_Up:</span>
+                        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;up&quot;</span><span class="p">)</span>
+                        <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredHeight</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredHeight</span> <span class="o">-</span> <span class="nx">step</span><span class="p">)</span>
+                        <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span>
+                        <span class="k">break</span>
+                    <span class="k">case</span> <span class="k">Qt.Key_Down:</span>
+                        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;down&quot;</span><span class="p">)</span>
+                        <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredHeight</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">-</span> <span class="mi">50</span><span class="p">,</span> <span class="nx">SplitView</span><span class="p">.</span><span class="nx">preferredHeight</span> <span class="o">+</span> <span class="nx">step</span><span class="p">)</span>
+                        <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span>
+                        <span class="k">break</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>here's an example with a delegate</p>
+<p>Next we need to make the handles bigger:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Fusion</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+
+    <span class="c1">// Not important here</span>
+    <span class="c1">// menuBar: AppMenuBar { }</span>
+    <span class="c1">// header: AppToolBar { }</span>
+    <span class="c1">// footer: AppTabBar { }</span>
+
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+            <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+                <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="p">}</span>
+            <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+                <span class="k">color:</span> <span class="s2">&quot;lightgreen&quot;</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="p">}</span>
+            <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">3</span>
+                <span class="k">color:</span> <span class="s2">&quot;lightred&quot;</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Make a couple arbitrary splits</span>
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="nx">Repeater</span> <span class="p">{</span>
+            <span class="k">model:</span> <span class="mi">5</span>
+            <span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+                <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">5</span>
+                <span class="nx">Label</span> <span class="p">{</span>
+                    <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                    <span class="k">text:</span> <span class="s2">&quot;Split: &quot;</span> <span class="o">+</span> <span class="nx">index</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Later we will discuss animations, here's how to get a handle that highlights on hover:</p>
+<div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">CustomHandle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">implicitWidth:</span> <span class="mi">6</span>
+        <span class="k">implicitHeight:</span> <span class="mi">6</span>
+        <span class="k">color:</span> <span class="nx">SplitHandle</span><span class="p">.</span><span class="nx">pressed</span> <span class="o">?</span> <span class="k">Material.accent</span>
+<span class="k">             :</span> <span class="nx">SplitHandle</span><span class="p">.</span><span class="nx">hovered</span> <span class="o">?</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">lighter</span><span class="p">(</span><span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+             <span class="o">:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)</span>
+        <span class="nx">Behavior</span> <span class="nx">on</span> <span class="nx">color</span> <span class="p">{</span> <span class="nx">ColorAnimation</span> <span class="p">{</span> <span class="k">duration:</span> <span class="mi">150</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+      
+        <h2>Backlinks:</h2>
+        <ul>
+          
+            <li><a href="/SUMMARY/">Summary</a></li>
+          
+        </ul>
+      
+    </article>
+  </div>
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "search.suggest", "navigation.path", "content.code.annotate", "content.tooltips", "navigation.instant.preview"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+        <script src="../javascripts/katex_conf.js"></script>
+      
+        <script src="../javascripts/katex.min.js_0.16.11"></script>
+      
+        <script src="../javascripts/auto-render.min.js.16.11"></script>
+      
+    
+  </body>
+</html>
