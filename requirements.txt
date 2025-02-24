@@ -1,0 +1,6 @@
+mkdocs
+mkdocs-callouts
+mkdocs-jupyter
+mkdocs-material
+mkdocs-backlinks
+pip-chill

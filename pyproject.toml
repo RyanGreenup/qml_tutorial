@@ -1,0 +1,13 @@
+[project]
+name = "qml-desktop-guide-book"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mkdocs>=1.6.1",
+    "mkdocs-backlinks>=0.9.1",
+    "mkdocs-callouts>=1.16.0",
+    "mkdocs-jupyter>=0.25.1",
+    "mkdocs-material>=9.6.5",
+]

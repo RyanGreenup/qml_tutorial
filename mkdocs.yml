@@ -1,0 +1,92 @@
+site_name: My Docs
+validation:
+  absolute_links: ignore
+plugins:
+  # - glightbox
+  - search
+  # - mkdocs-jupyter:
+  #     ignore_h1_titles: true
+  #     execute: false
+  #     allow_errors: true
+  #     # For Plotly
+  #     include_requirejs: true
+  - callouts
+  # This requires adding to the template, see docs.
+  - mkdocs-backlinks:
+      ignored_pages: ['Tags', 'Home']
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - search.suggest
+    - navigation.path
+    - content.code.annotate
+    - content.tooltips
+    # This gives hover
+    - navigation.instant.preview
+#   - navigation.tabs
+#   - navigation.tabs.sticky
+  plugins:
+    - tags
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_javascript:
+  - javascripts/katex_conf.js
+# - assets/js/katex.js
+# - assets/js/katex.min.js_0.16.11
+  - javascripts/katex.min.js_0.16.11
+# - https://unpkg.com/katex@0/dist/katex.min.js
+# - assets/js/auto-render.min.js.16.11
+  - javascripts/auto-render.min.js.16.11
+# - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
+
+extra_css:
+  - https://unpkg.com/katex@0/dist/katex.min.css
