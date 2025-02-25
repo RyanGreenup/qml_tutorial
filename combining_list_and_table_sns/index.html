@@ -2016,520 +2016,516 @@
 </code></pre></div>
 <p>Overall the delegate should look like this:</p>
 <p><img alt="" src="../assets/2025-02-24T20%3A07%3A15.408321.png" /></p>
-<p>````qml
-    component MyTable: TableView {
-        id: tableView
-        columnSpacing: 1
-        rowSpacing: 1
-        // clip: true
-        anchors.centerIn: parent
-        width: Math.min(parent.width, contentWidth)
-        height: Math.min(parent.height, contentHeight)
-        activeFocusOnTab: true</p>
-<div class="highlight"><pre><span></span><code>    model: ExampleTableModel {}
+<div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">MyTable:</span> <span class="nx">TableView</span> <span class="p">{</span>
+        <span class="kd">id: tableView</span>
+        <span class="k">columnSpacing:</span> <span class="mi">1</span>
+        <span class="k">rowSpacing:</span> <span class="mi">1</span>
+        <span class="c1">// clip: true</span>
+        <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+        <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">contentWidth</span><span class="p">)</span>
+        <span class="k">height:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">contentHeight</span><span class="p">)</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
 
-    // Create a Selection Model
-    selectionModel: ItemSelectionModel {
-        model: tableView.model
-    }
+        <span class="k">model:</span> <span class="nx">ExampleTableModel</span> <span class="p">{}</span>
 
-    // Allow the user to interact with an index
-    Keys.onPressed: function (event) {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
-            // Get the current cell information
-            let row = tableView.currentRow;
-            let column = tableView.currentColumn;
-            console.log(&quot;Row:&quot;, row, &quot;Column:&quot;, column);
+        <span class="c1">// Create a Selection Model</span>
+        <span class="k">selectionModel:</span> <span class="nx">ItemSelectionModel</span> <span class="p">{</span>
+            <span class="k">model:</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span>
+        <span class="p">}</span>
 
-            // Get the cell content using the model&#39;s data method
-            let cellContent = tableView.model.data(tableView.model.index(row, column));
-            console.log(&quot;Cell content:&quot;, cellContent);
+        <span class="c1">// Allow the user to interact with an index</span>
+        <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Return</span> <span class="o">||</span> <span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Space</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Get the current cell information</span>
+                <span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentRow</span><span class="p">;</span>
+                <span class="kd">let</span> <span class="nx">column</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentColumn</span><span class="p">;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Row:&quot;</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="s2">&quot;Column:&quot;</span><span class="p">,</span> <span class="nx">column</span><span class="p">);</span>
 
-            // Get the current index for selection
-            let currentIndex = tableView.model.index(tableView.currentRow, tableView.currentColumn);
-            console.log(&quot;Current Index:&quot;, currentIndex);
+                <span class="c1">// Get the cell content using the model&#39;s data method</span>
+                <span class="kd">let</span> <span class="nx">cellContent</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">));</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Cell content:&quot;</span><span class="p">,</span> <span class="nx">cellContent</span><span class="p">);</span>
 
-            selectionModel.select(currentIndex, ItemSelectionModel.Toggle);
-            // This is required, otherwise Tab just moves between cells and the user
-            // cannot move between widgets after getting trapped in the table
-        } else if (event.key === Qt.Key_Tab) {
-            if (event.modifiers &amp; Qt.ShiftModifier) {
-                // Shift+Tab: move focus to previous item
-                tableView.nextItemInFocusChain(false).forceActiveFocus();
-            } else {
-                // Tab: move focus to next item
-                tableView.nextItemInFocusChain(true).forceActiveFocus();
-            }
-            event.accepted = true;
-        }
-    }
+                <span class="c1">// Get the current index for selection</span>
+                <span class="kd">let</span> <span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">tableView</span><span class="p">.</span><span class="nx">currentRow</span><span class="p">,</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentColumn</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Current Index:&quot;</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">);</span>
 
-    delegate: Rectangle {
-        id: myItem
-        implicitWidth: 100
-        implicitHeight: 50
-        border.width: 1
-        // Required Properties for selectable Cells
-        required property string display
-        required property bool selected
-        required property bool current
-        // Required Properties for Editable Cells
-        required property int row
-        required property int column
-        required property bool editing
+                <span class="nx">selectionModel</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">currentIndex</span><span class="p">,</span> <span class="nx">ItemSelectionModel</span><span class="p">.</span><span class="nx">Toggle</span><span class="p">);</span>
+                <span class="c1">// This is required, otherwise Tab just moves between cells and the user</span>
+                <span class="c1">// cannot move between widgets after getting trapped in the table</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Tab</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">modifiers</span> <span class="o">&amp;</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">ShiftModifier</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="c1">// Shift+Tab: move focus to previous item</span>
+                    <span class="nx">tableView</span><span class="p">.</span><span class="nx">nextItemInFocusChain</span><span class="p">(</span><span class="kc">false</span><span class="p">).</span><span class="nx">forceActiveFocus</span><span class="p">();</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="c1">// Tab: move focus to next item</span>
+                    <span class="nx">tableView</span><span class="p">.</span><span class="nx">nextItemInFocusChain</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">forceActiveFocus</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        // Color the current cell
-        color: selected ? Material.accent : (current ? Material.highlightedRippleColor : &quot;white&quot;)
+        <span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: myItem</span>
+            <span class="k">implicitWidth:</span> <span class="mi">100</span>
+            <span class="k">implicitHeight:</span> <span class="mi">50</span>
+            <span class="k">border.width:</span> <span class="mi">1</span>
+            <span class="c1">// Required Properties for selectable Cells</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">selected</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">current</span>
+            <span class="c1">// Required Properties for Editable Cells</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="kr">int</span> <span class="nx">row</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="kr">int</span> <span class="nx">column</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">editing</span>
 
-        // Text in the cell
-        Text {
-            text: myItem.display
+            <span class="c1">// Color the current cell</span>
+            <span class="k">color:</span> <span class="nx">selected</span> <span class="o">?</span> <span class="k">Material.accent :</span> <span class="p">(</span><span class="nx">current</span> <span class="o">?</span> <span class="k">Material.highlightedRippleColor :</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
-            // Must have this for editing, requires property above
-            visible: !myItem.editing
+            <span class="c1">// Text in the cell</span>
+            <span class="nx">Text</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
 
-            // Must have these four for text wrapping
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.Wrap
+                <span class="c1">// Must have this for editing, requires property above</span>
+                <span class="k">visible:</span> <span class="o">!</span><span class="nx">myItem</span><span class="p">.</span><span class="nx">editing</span>
 
-            // Change the colour of the text when selected
-            color: myItem.selected ? &quot;white&quot; : &quot;black&quot;
+                <span class="c1">// Must have these four for text wrapping</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">horizontalAlignment:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">AlignHCenter</span>
+                <span class="k">verticalAlignment:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">AlignVCenter</span>
+                <span class="k">wrapMode:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">Wrap</span>
 
-            // Consider clipping or eliding if not wrapping
-            clip: true
-            // elide: Text.ElideMiddle
-        }
+                <span class="c1">// Change the colour of the text when selected</span>
+                <span class="k">color:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">selected</span> <span class="o">?</span> <span class="s2">&quot;white&quot;</span> <span class="o">:</span> <span class="s2">&quot;black&quot;</span>
 
-        // Logic to Trigger a Cell Edit
-        function edit_cell() {
-            let index = myItem.TableView.view.model.index(myItem.row, myItem.column);
-            myItem.TableView.view.edit(index);
-        }
+                <span class="c1">// Consider clipping or eliding if not wrapping</span>
+                <span class="k">clip:</span> <span class="kc">true</span>
+                <span class="c1">// elide: Text.ElideMiddle</span>
+            <span class="p">}</span>
 
-        MouseArea {
-            anchors.fill: parent
-            onDoubleClicked: myItem.edit_cell()
-        }
+            <span class="c1">// Logic to Trigger a Cell Edit</span>
+            <span class="kd">function</span> <span class="nx">edit_cell</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">myItem</span><span class="p">.</span><span class="nx">row</span><span class="p">,</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">column</span><span class="p">);</span>
+                <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">edit</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+            <span class="p">}</span>
 
-        Keys.onPressed: function (event) {
-            if (event.key === Qt.Key_F2) {
-                edit_cell()
-            }
-        }
+            <span class="nx">MouseArea</span> <span class="p">{</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">onDoubleClicked:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">edit_cell</span><span class="p">()</span>
+            <span class="p">}</span>
 
-        // Display the editing
-        TableView.editDelegate: TextField {
-            required property string display
-            anchors.fill: parent
-            text: display
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            Component.onCompleted: selectAll()
+            <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_F2</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">edit_cell</span><span class="p">()</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
 
-            TableView.onCommit: {
-                // &#39;display = text&#39; is short-hand for:
-                // let index = TableView.view.index(row, column)
-                // TableView.view.model.setData(index, &quot;display&quot;, text)
-                let index = myItem.TableView.view.model.index(row, column);
-                myItem.TableView.view.model.setData(index, text, Qt.EditRole);
-            }
+            <span class="c1">// Display the editing</span>
+            <span class="k">TableView.editDelegate:</span> <span class="nx">TextField</span> <span class="p">{</span>
+                <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">text:</span> <span class="nx">display</span>
+                <span class="k">horizontalAlignment:</span> <span class="nx">TextInput</span><span class="p">.</span><span class="nx">AlignHCenter</span>
+                <span class="k">verticalAlignment:</span> <span class="nx">TextInput</span><span class="p">.</span><span class="nx">AlignVCenter</span>
+                <span class="k">Component.onCompleted:</span> <span class="nx">selectAll</span><span class="p">()</span>
 
-            Keys.onPressed: function (event) {
-                if (event.key === Qt.Key_Escape) {
-                    myItem.TableView.view.closeEditor();
-                }
-            }
-        }
-    }
-}
+                <span class="k">TableView.onCommit:</span> <span class="p">{</span>
+                    <span class="c1">// &#39;display = text&#39; is short-hand for:</span>
+                    <span class="c1">// let index = TableView.view.index(row, column)</span>
+                    <span class="c1">// TableView.view.model.setData(index, &quot;display&quot;, text)</span>
+                    <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">);</span>
+                    <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">EditRole</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Escape</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">closeEditor</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p>```</p>
 <h3 id="all-the-code">All the code<a class="headerlink" href="#all-the-code" title="Permanent link">&para;</a></h3>
 <h4 id="python_2">Python<a class="headerlink" href="#python_2" title="Permanent link">&para;</a></h4>
-<p>```python</p>
-<p>from typing import final, override
-from PySide6.QtCore import (
-    QAbstractTableModel,
-    QModelIndex,
-    QPersistentModelIndex,
-    Qt,
-    QObject,
-)</p>
-<p>@final
-class ExampleTableModel(QAbstractTableModel):
-    def <strong>init</strong>(self, parent: QObject | None = None):
-        super().<strong>init</strong>(parent)
-        # Sample data for the table
-        self._data = [
-            ["A1", "B1", "C1"],
-            ["A2", "B2", "C2"],
-            ["A3", "B3", "C3"],
-            ["A4", "B4", "C4"],
-        ]</p>
-<div class="highlight"><pre><span></span><code>@override
-def rowCount(
-    self, parent: QModelIndex | QPersistentModelIndex | None = None
-) -&gt; int:
-    if parent is None:
-        parent = QModelIndex()
-    if parent.isValid():
-        return 0
-    return len(self._data)
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">final</span><span class="p">,</span> <span class="n">override</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QAbstractTableModel</span><span class="p">,</span>
+    <span class="n">QModelIndex</span><span class="p">,</span>
+    <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+    <span class="n">Qt</span><span class="p">,</span>
+    <span class="n">QObject</span><span class="p">,</span>
+<span class="p">)</span>
 
-@override
-def columnCount(
-    self, parent: QModelIndex | QPersistentModelIndex | None = None
-) -&gt; int:
-    if parent is None:
-        parent = QModelIndex()
-    if parent.isValid():
-        return 0
-    return len(self._data[0]) if self._data else 0
 
-@override
-def data(
-    self,
-    index: QModelIndex | QPersistentModelIndex,
-    role: int = Qt.ItemDataRole.DisplayRole,
-) -&gt; str | None:
-    if not index.isValid():
-        return None
+<span class="nd">@final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExampleTableModel</span><span class="p">(</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="c1"># Sample data for the table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s2">&quot;A1&quot;</span><span class="p">,</span> <span class="s2">&quot;B1&quot;</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;A2&quot;</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;A3&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;A4&quot;</span><span class="p">,</span> <span class="s2">&quot;B4&quot;</span><span class="p">,</span> <span class="s2">&quot;C4&quot;</span><span class="p">],</span>
+        <span class="p">]</span>
 
-    if role == Qt.ItemDataRole.DisplayRole:
-        row = index.row()
-        col = index.column()
-        if 0 &lt;= row &lt; len(self._data) and 0 &lt;= col &lt; len(self._data[0]):
-            return self._data[row][col]
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rowCount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
 
-    return None
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">columnCount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="k">else</span> <span class="mi">0</span>
 
-@override
-def headerData(
-    self,
-    section: int,
-    orientation: Qt.Orientation,
-    role: int = Qt.ItemDataRole.DisplayRole,
-) -&gt; str | None:
-    if role != Qt.ItemDataRole.DisplayRole:
-        return None
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
-    if orientation == Qt.Orientation.Horizontal:
-        return f&quot;Column {section + 1}&quot;
-    else:
-        return f&quot;Row {section + 1}&quot;
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
 
-@override
-def flags(self, index: QModelIndex) -&gt; Qt.ItemFlags:
-    if not index.isValid():
-        return Qt.ItemFlag.NoItemFlags
-    return Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEditable
+        <span class="k">return</span> <span class="kc">None</span>
 
-@override
-def setData(
-    self,
-    index: QModelIndex,
-    value: str,
-    role: int = Qt.ItemDataRole.EditRole,
-) -&gt; bool:
-    if not index.isValid():
-        return False
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">headerData</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">section</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">orientation</span><span class="p">:</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
 
-    if role == Qt.ItemDataRole.EditRole:
-        row = index.row()
-        col = index.column()
-        if 0 &lt;= row &lt; len(self._data) and 0 &lt;= col &lt; len(self._data[0]):
-            # Ensure value is converted to string
-            self._data[row][col] = str(value)
-            # Emit for both Edit and Display roles since they share the same data
-            self.dataChanged.emit(index, index, [Qt.ItemDataRole.EditRole, Qt.ItemDataRole.DisplayRole])
-            return True
+        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Column </span><span class="si">{</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Row </span><span class="si">{</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    return False
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlags</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">NoItemFlags</span>
+        <span class="k">return</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">ItemIsEnabled</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">ItemIsSelectable</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">ItemIsEditable</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setData</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">,</span>
+        <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="c1"># Ensure value is converted to string</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">row</span><span class="p">][</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="c1"># Emit for both Edit and Display roles since they share the same data</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="p">[</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">])</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
 </code></pre></div>
-<p>```</p>
 <h4 id="qml_2">QML<a class="headerlink" href="#qml_2" title="Permanent link">&para;</a></h4>
-<p>```qml</p>
-<p>import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
-import QtQuick.Controls.Material
-import TableManager
-import Qt.labs.qmlmodels</p>
-<p>ApplicationWindow {
-    id: root
-    property int focusBorderWidth: 10
-    width: 640
-    height: 480
-    visible: true
-    title: "Animated Rectangle Demo"</p>
-<div class="highlight"><pre><span></span><code>component MyTableModel: TableModel {
-    TableModelColumn {
-        display: &quot;name&quot;
-    }
-    TableModelColumn {
-        display: &quot;color&quot;
-    }
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Material</span>
+<span class="kr">import</span> <span class="nx">TableManager</span>
+<span class="kr">import</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">labs</span><span class="p">.</span><span class="nx">qmlmodels</span>
 
-    rows: [
-        {
-            &quot;name&quot;: &quot;cat&quot;,
-            &quot;color&quot;: &quot;black&quot;
-        },
-        {
-            &quot;name&quot;: &quot;dog&quot;,
-            &quot;color&quot;: &quot;brown&quot;
-        },
-        {
-            &quot;name&quot;: &quot;bird&quot;,
-            &quot;color&quot;: &quot;white&quot;
-        }
-    ]
-}
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="nx">property</span> <span class="kr">int</span> <span class="k">focusBorderWidth:</span> <span class="mi">10</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
 
-component MyTable: TableView {
-    id: tableView
-    columnSpacing: 1
-    rowSpacing: 1
-    // clip: true
-    anchors.centerIn: parent
-    width: Math.min(parent.width, contentWidth)
-    height: Math.min(parent.height, contentHeight)
-    activeFocusOnTab: true
+    <span class="nx">component</span> <span class="k">MyTableModel:</span> <span class="nx">TableModel</span> <span class="p">{</span>
+        <span class="nx">TableModelColumn</span> <span class="p">{</span>
+            <span class="k">display:</span> <span class="s2">&quot;name&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">TableModelColumn</span> <span class="p">{</span>
+            <span class="k">display:</span> <span class="s2">&quot;color&quot;</span>
+        <span class="p">}</span>
 
-    model: ExampleTableModel {}
+        <span class="k">rows:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;black&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;brown&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;bird&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;white&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
 
-    // Create a Selection Model
-    selectionModel: ItemSelectionModel {
-        model: tableView.model
-    }
+    <span class="nx">component</span> <span class="k">MyTable:</span> <span class="nx">TableView</span> <span class="p">{</span>
+        <span class="kd">id: tableView</span>
+        <span class="k">columnSpacing:</span> <span class="mi">1</span>
+        <span class="k">rowSpacing:</span> <span class="mi">1</span>
+        <span class="c1">// clip: true</span>
+        <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+        <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">contentWidth</span><span class="p">)</span>
+        <span class="k">height:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">height</span><span class="p">,</span> <span class="nx">contentHeight</span><span class="p">)</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
 
-    // Allow the user to interact with an index
-    Keys.onPressed: function (event) {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
-            // Get the current cell information
-            let row = tableView.currentRow;
-            let column = tableView.currentColumn;
-            console.log(&quot;Row:&quot;, row, &quot;Column:&quot;, column);
+        <span class="k">model:</span> <span class="nx">ExampleTableModel</span> <span class="p">{}</span>
 
-            // Get the cell content using the model&#39;s data method
-            let cellContent = tableView.model.data(tableView.model.index(row, column));
-            console.log(&quot;Cell content:&quot;, cellContent);
+        <span class="c1">// Create a Selection Model</span>
+        <span class="k">selectionModel:</span> <span class="nx">ItemSelectionModel</span> <span class="p">{</span>
+            <span class="k">model:</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span>
+        <span class="p">}</span>
 
-            // Get the current index for selection
-            let currentIndex = tableView.model.index(tableView.currentRow, tableView.currentColumn);
-            console.log(&quot;Current Index:&quot;, currentIndex);
+        <span class="c1">// Allow the user to interact with an index</span>
+        <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Return</span> <span class="o">||</span> <span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Space</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Get the current cell information</span>
+                <span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentRow</span><span class="p">;</span>
+                <span class="kd">let</span> <span class="nx">column</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentColumn</span><span class="p">;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Row:&quot;</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="s2">&quot;Column:&quot;</span><span class="p">,</span> <span class="nx">column</span><span class="p">);</span>
 
-            selectionModel.select(currentIndex, ItemSelectionModel.Toggle);
-            // This is required, otherwise Tab just moves between cells and the user
-            // cannot move between widgets after getting trapped in the table
-        } else if (event.key === Qt.Key_Tab) {
-            if (event.modifiers &amp; Qt.ShiftModifier) {
-                // Shift+Tab: move focus to previous item
-                tableView.nextItemInFocusChain(false).forceActiveFocus();
-            } else {
-                // Tab: move focus to next item
-                tableView.nextItemInFocusChain(true).forceActiveFocus();
-            }
-            event.accepted = true;
-        }
-    }
+                <span class="c1">// Get the cell content using the model&#39;s data method</span>
+                <span class="kd">let</span> <span class="nx">cellContent</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">));</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Cell content:&quot;</span><span class="p">,</span> <span class="nx">cellContent</span><span class="p">);</span>
 
-    delegate: Rectangle {
-        id: myItem
-        implicitWidth: 100
-        implicitHeight: 50
-        border.width: 1
-        // Required Properties for selectable Cells
-        required property string display
-        required property bool selected
-        required property bool current
-        // Required Properties for Editable Cells
-        required property int row
-        required property int column
-        required property bool editing
+                <span class="c1">// Get the current index for selection</span>
+                <span class="kd">let</span> <span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">tableView</span><span class="p">.</span><span class="nx">currentRow</span><span class="p">,</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">currentColumn</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Current Index:&quot;</span><span class="p">,</span> <span class="nx">currentIndex</span><span class="p">);</span>
 
-        // Color the current cell
-        color: selected ? Material.accent : (current ? Material.highlightedRippleColor : &quot;white&quot;)
+                <span class="nx">selectionModel</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="nx">currentIndex</span><span class="p">,</span> <span class="nx">ItemSelectionModel</span><span class="p">.</span><span class="nx">Toggle</span><span class="p">);</span>
+                <span class="c1">// This is required, otherwise Tab just moves between cells and the user</span>
+                <span class="c1">// cannot move between widgets after getting trapped in the table</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Tab</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">modifiers</span> <span class="o">&amp;</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">ShiftModifier</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="c1">// Shift+Tab: move focus to previous item</span>
+                    <span class="nx">tableView</span><span class="p">.</span><span class="nx">nextItemInFocusChain</span><span class="p">(</span><span class="kc">false</span><span class="p">).</span><span class="nx">forceActiveFocus</span><span class="p">();</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="c1">// Tab: move focus to next item</span>
+                    <span class="nx">tableView</span><span class="p">.</span><span class="nx">nextItemInFocusChain</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">forceActiveFocus</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="nx">event</span><span class="p">.</span><span class="nx">accepted</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        // Text in the cell
-        Text {
-            text: myItem.display
+        <span class="k">delegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: myItem</span>
+            <span class="k">implicitWidth:</span> <span class="mi">100</span>
+            <span class="k">implicitHeight:</span> <span class="mi">50</span>
+            <span class="k">border.width:</span> <span class="mi">1</span>
+            <span class="c1">// Required Properties for selectable Cells</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">selected</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">current</span>
+            <span class="c1">// Required Properties for Editable Cells</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="kr">int</span> <span class="nx">row</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="kr">int</span> <span class="nx">column</span>
+            <span class="nx">required</span> <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">editing</span>
 
-            // Must have this for editing, requires property above
-            visible: !myItem.editing
+            <span class="c1">// Color the current cell</span>
+            <span class="k">color:</span> <span class="nx">selected</span> <span class="o">?</span> <span class="k">Material.accent :</span> <span class="p">(</span><span class="nx">current</span> <span class="o">?</span> <span class="k">Material.highlightedRippleColor :</span> <span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
-            // Must have these four for text wrapping
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.Wrap
+            <span class="c1">// Text in the cell</span>
+            <span class="nx">Text</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">display</span>
 
-            // Change the colour of the text when selected
-            color: myItem.selected ? &quot;white&quot; : &quot;black&quot;
+                <span class="c1">// Must have this for editing, requires property above</span>
+                <span class="k">visible:</span> <span class="o">!</span><span class="nx">myItem</span><span class="p">.</span><span class="nx">editing</span>
 
-            // Consider clipping or eliding if not wrapping
-            clip: true
-            // elide: Text.ElideMiddle
-        }
+                <span class="c1">// Must have these four for text wrapping</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">horizontalAlignment:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">AlignHCenter</span>
+                <span class="k">verticalAlignment:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">AlignVCenter</span>
+                <span class="k">wrapMode:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">Wrap</span>
 
-        // Logic to Trigger a Cell Edit
-        function edit_cell() {
-            let index = myItem.TableView.view.model.index(myItem.row, myItem.column);
-            myItem.TableView.view.edit(index);
-        }
+                <span class="c1">// Change the colour of the text when selected</span>
+                <span class="k">color:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">selected</span> <span class="o">?</span> <span class="s2">&quot;white&quot;</span> <span class="o">:</span> <span class="s2">&quot;black&quot;</span>
 
-        MouseArea {
-            anchors.fill: parent
-            onDoubleClicked: myItem.edit_cell()
-        }
+                <span class="c1">// Consider clipping or eliding if not wrapping</span>
+                <span class="k">clip:</span> <span class="kc">true</span>
+                <span class="c1">// elide: Text.ElideMiddle</span>
+            <span class="p">}</span>
 
-        Keys.onPressed: function (event) {
-            if (event.key === Qt.Key_F2) {
-                edit_cell()
-            }
-        }
+            <span class="c1">// Logic to Trigger a Cell Edit</span>
+            <span class="kd">function</span> <span class="nx">edit_cell</span><span class="p">()</span> <span class="p">{</span>
+                <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">myItem</span><span class="p">.</span><span class="nx">row</span><span class="p">,</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">column</span><span class="p">);</span>
+                <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">edit</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+            <span class="p">}</span>
 
-        // Display the editing
-        TableView.editDelegate: TextField {
-            required property string display
-            anchors.fill: parent
-            text: display
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            Component.onCompleted: selectAll()
+            <span class="nx">MouseArea</span> <span class="p">{</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">onDoubleClicked:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">edit_cell</span><span class="p">()</span>
+            <span class="p">}</span>
 
-            TableView.onCommit: {
-                // &#39;display = text&#39; is short-hand for:
-                // let index = TableView.view.index(row, column)
-                // TableView.view.model.setData(index, &quot;display&quot;, text)
-                let index = myItem.TableView.view.model.index(row, column);
-                myItem.TableView.view.model.setData(index, text, Qt.EditRole);
-            }
+            <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_F2</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">edit_cell</span><span class="p">()</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
 
-            Keys.onPressed: function (event) {
-                if (event.key === Qt.Key_Escape) {
-                    myItem.TableView.view.closeEditor();
-                }
-            }
-        }
-    }
-}
+            <span class="c1">// Display the editing</span>
+            <span class="k">TableView.editDelegate:</span> <span class="nx">TextField</span> <span class="p">{</span>
+                <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">text:</span> <span class="nx">display</span>
+                <span class="k">horizontalAlignment:</span> <span class="nx">TextInput</span><span class="p">.</span><span class="nx">AlignHCenter</span>
+                <span class="k">verticalAlignment:</span> <span class="nx">TextInput</span><span class="p">.</span><span class="nx">AlignVCenter</span>
+                <span class="k">Component.onCompleted:</span> <span class="nx">selectAll</span><span class="p">()</span>
 
-component FocusableRectangle: Rectangle {
-    border.width: activeFocus ? 10 : 0
-    border.color: Material.accent
-    focus: true
-    activeFocusOnTab: true
-}
+                <span class="k">TableView.onCommit:</span> <span class="p">{</span>
+                    <span class="c1">// &#39;display = text&#39; is short-hand for:</span>
+                    <span class="c1">// let index = TableView.view.index(row, column)</span>
+                    <span class="c1">// TableView.view.model.setData(index, &quot;display&quot;, text)</span>
+                    <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">);</span>
+                    <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">setData</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">EditRole</span><span class="p">);</span>
+                <span class="p">}</span>
 
-SplitView {
-    orientation: Qt.Horizontal
-    anchors.fill: parent
+                <span class="k">Keys.onPressed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Key_Escape</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="nx">myItem</span><span class="p">.</span><span class="nx">TableView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">closeEditor</span><span class="p">();</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    FocusableRectangle {
-        id: rect_1
-        SplitView.preferredWidth: 0.4 * parent.width
-        color: &quot;purple&quot;
-        Label {
-            text: &quot;Left&quot;
-            color: &quot;white&quot;
-            anchors.centerIn: parent
-            font.pixelSize: 36
-            font.bold: true
-        }
-    }
+    <span class="nx">component</span> <span class="k">FocusableRectangle:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="k">focus:</span> <span class="kc">true</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="p">}</span>
 
-    Rectangle {
-        id: rect_2
-        SplitView.preferredWidth: 0.4 * parent.width
-        focus: false
-        color: &quot;lightblue&quot;
-        border.width: theTableView.activeFocus ? 10 : 0
-        border.color: Material.accent
-        MyTable {
-            id: theTableView
-        }
-    }
-}
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+
+        <span class="nx">FocusableRectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_1</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">color:</span> <span class="s2">&quot;purple&quot;</span>
+            <span class="nx">Label</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="s2">&quot;Left&quot;</span>
+                <span class="k">color:</span> <span class="s2">&quot;white&quot;</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">font.pixelSize:</span> <span class="mi">36</span>
+                <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_2</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="k">border.width:</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="nx">MyTable</span> <span class="p">{</span>
+                <span class="kd">id: theTableView</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>}</p>
-<p>```</p>
 <h3 id="going-further">Going Further<a class="headerlink" href="#going-further" title="Permanent link">&para;</a></h3>
 <h4 id="animations">Animations<a class="headerlink" href="#animations" title="Permanent link">&para;</a></h4>
 <p>One of the big advantages of qml is animations for free. Right click the table and it will spin around which is neat:</p>
-<p>```qml
-component AnimatedTableView: TableView {
-        id: tableView
-        // Transform properties for animations
-        transform: [
-            Rotation {
-                id: tableRotation
-                origin.x: tableView.width / 2
-                origin.y: tableView.height / 2
-                axis {
-                    x: 0
-                    y: 1
-                    z: 0
-                }
-            },
-            Translate {
-                id: tableTranslate
-                y: 0
-            }
-        ]</p>
-<div class="highlight"><pre><span></span><code>    // Animations
-    ParallelAnimation {
-        id: tableAnimation
-        SequentialAnimation {
-            NumberAnimation {
-                target: tableTranslate
-                property: &quot;y&quot;
-                to: -50
-                duration: 300
-                easing.type: Easing.OutQuad
-            }
-            NumberAnimation {
-                target: tableTranslate
-                property: &quot;y&quot;
-                to: 0
-                duration: 300
-                easing.type: Easing.InQuad
-            }
-        }
-        NumberAnimation {
-            target: tableRotation
-            property: &quot;angle&quot;
-            from: 0
-            to: 360
-            duration: 600
-            easing.type: Easing.InOutQuad
-        }
-    }
+<div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">AnimatedTableView:</span> <span class="nx">TableView</span> <span class="p">{</span>
+        <span class="kd">id: tableView</span>
+        <span class="c1">// Transform properties for animations</span>
+        <span class="k">transform:</span> <span class="p">[</span>
+            <span class="nx">Rotation</span> <span class="p">{</span>
+                <span class="kd">id: tableRotation</span>
+                <span class="k">origin.x:</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="k">origin.y:</span> <span class="nx">tableView</span><span class="p">.</span><span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span>
+                <span class="nx">axis</span> <span class="p">{</span>
+                    <span class="k">x:</span> <span class="mi">0</span>
+                    <span class="k">y:</span> <span class="mi">1</span>
+                    <span class="k">z:</span> <span class="mi">0</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nx">Translate</span> <span class="p">{</span>
+                <span class="kd">id: tableTranslate</span>
+                <span class="k">y:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
 
-    // Mouse area for right-click detection
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.RightButton
-        onClicked: function (mouse) {
-            if (mouse.button === Qt.RightButton) {
-                tableAnimation.start();
-            }
-        }
-    }
-}
+        <span class="c1">// Animations</span>
+        <span class="nx">ParallelAnimation</span> <span class="p">{</span>
+            <span class="kd">id: tableAnimation</span>
+            <span class="nx">SequentialAnimation</span> <span class="p">{</span>
+                <span class="nx">NumberAnimation</span> <span class="p">{</span>
+                    <span class="k">target:</span> <span class="nx">tableTranslate</span>
+                    <span class="k">property:</span> <span class="s2">&quot;y&quot;</span>
+                    <span class="k">to:</span> <span class="o">-</span><span class="mi">50</span>
+                    <span class="k">duration:</span> <span class="mi">300</span>
+                    <span class="k">easing.type:</span> <span class="nx">Easing</span><span class="p">.</span><span class="nx">OutQuad</span>
+                <span class="p">}</span>
+                <span class="nx">NumberAnimation</span> <span class="p">{</span>
+                    <span class="k">target:</span> <span class="nx">tableTranslate</span>
+                    <span class="k">property:</span> <span class="s2">&quot;y&quot;</span>
+                    <span class="k">to:</span> <span class="mi">0</span>
+                    <span class="k">duration:</span> <span class="mi">300</span>
+                    <span class="k">easing.type:</span> <span class="nx">Easing</span><span class="p">.</span><span class="nx">InQuad</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="nx">NumberAnimation</span> <span class="p">{</span>
+                <span class="k">target:</span> <span class="nx">tableRotation</span>
+                <span class="k">property:</span> <span class="s2">&quot;angle&quot;</span>
+                <span class="k">from:</span> <span class="mi">0</span>
+                <span class="k">to:</span> <span class="mi">360</span>
+                <span class="k">duration:</span> <span class="mi">600</span>
+                <span class="k">easing.type:</span> <span class="nx">Easing</span><span class="p">.</span><span class="nx">InOutQuad</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Mouse area for right-click detection</span>
+        <span class="nx">MouseArea</span> <span class="p">{</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="k">acceptedButtons:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">RightButton</span>
+            <span class="k">onClicked:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">mouse</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">mouse</span><span class="p">.</span><span class="nx">button</span> <span class="o">===</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">RightButton</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">tableAnimation</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p>```</p>
 <p>Then just change the <code>TableView</code> for <code>AnimatedTableView</code></p>
-<p>```diff
-1c1
-&lt; component MyTable: TableView {</p>
-<hr />
-<blockquote>
-<p>component MyTable: AnimatedTableView {
-```</p>
-</blockquote>
+<div class="highlight"><pre><span></span><code><span class="gu">1c1</span>
+<span class="gd">&lt; component MyTable: TableView {</span>
+<span class="gs">---</span>
+<span class="gi">&gt; component MyTable: AnimatedTableView {</span>
+</code></pre></div>
 <h2 id="dynamic-table">Dynamic Table<a class="headerlink" href="#dynamic-table" title="Permanent link">&para;</a></h2>
 <h3 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h3>
 <p>Let's now create a list on the left that changes the type of the table displayed on the right side.</p>
@@ -2539,413 +2535,404 @@ component AnimatedTableView: TableView {
 <p>First create a  listView as shown in <a href="../list/">List</a>:</p>
 <ul>
 <li>Model
-    <code>qml
-    component TablePrefixModel: ListModel {
-        ListElement {
-            name: "Letter A"
-            prefix: "A"
-        }
-        ListElement {
-            name: "Letter B"
-            prefix: "B"
-        }
-        ListElement {
-            name: "Letter C"
-            prefix: "C"
-        }
-    }</code></li>
+    <div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">TablePrefixModel:</span> <span class="nx">ListModel</span> <span class="p">{</span>
+    <span class="nx">ListElement</span> <span class="p">{</span>
+        <span class="k">name:</span> <span class="s2">&quot;Letter A&quot;</span>
+        <span class="k">prefix:</span> <span class="s2">&quot;A&quot;</span>
+    <span class="p">}</span>
+    <span class="nx">ListElement</span> <span class="p">{</span>
+        <span class="k">name:</span> <span class="s2">&quot;Letter B&quot;</span>
+        <span class="k">prefix:</span> <span class="s2">&quot;B&quot;</span>
+    <span class="p">}</span>
+    <span class="nx">ListElement</span> <span class="p">{</span>
+        <span class="k">name:</span> <span class="s2">&quot;Letter C&quot;</span>
+        <span class="k">prefix:</span> <span class="s2">&quot;C&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></li>
 <li>
 <p>Delegate</p>
 <p>Note here that the mouseArea onClicked simply changes the current item, the change in current item will later be used to emit a signal</p>
-<p>```qml
-    component ListDelegate: Item {
-        id: myItem
-        required property string prefix
-        required property int index
-        width: 180
-        height: 40</p>
-<div class="highlight"><pre><span></span><code>    Rectangle {
-        anchors.fill: parent
-        color: mouseArea.containsMouse ? Qt.lighter(&quot;lightsteelblue&quot;, 1.1) : &quot;transparent&quot;
+<p><div class="highlight"><pre><span></span><code>    <span class="nx">component</span> <span class="k">ListDelegate:</span> <span class="nx">Item</span> <span class="p">{</span>
+        <span class="kd">id: myItem</span>
+        <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">prefix</span>
+        <span class="nx">required</span> <span class="nx">property</span> <span class="kr">int</span> <span class="nx">index</span>
+        <span class="k">width:</span> <span class="mi">180</span>
+        <span class="k">height:</span> <span class="mi">40</span>
 
-        Column {
-            Text {
-                text: &#39;&lt;b&gt;Letter: &lt;/b&gt; &#39; + myItem.prefix
-            }
-        }
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="k">color:</span> <span class="nx">mouseArea</span><span class="p">.</span><span class="nx">containsMouse</span> <span class="o">?</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">lighter</span><span class="p">(</span><span class="s2">&quot;lightsteelblue&quot;</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span> <span class="o">:</span> <span class="s2">&quot;transparent&quot;</span>
 
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: myItem.ListView.view.currentIndex = myItem.index
-        }
-    }
-}
+            <span class="nx">Column</span> <span class="p">{</span>
+                <span class="nx">Text</span> <span class="p">{</span>
+                    <span class="k">text:</span> <span class="s1">&#39;&lt;b&gt;Letter: &lt;/b&gt; &#39;</span> <span class="o">+</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">prefix</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="nx">MouseArea</span> <span class="p">{</span>
+                <span class="kd">id: mouseArea</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">hoverEnabled:</span> <span class="kc">true</span>
+                <span class="k">onClicked:</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">ListView</span><span class="p">.</span><span class="nx">view</span><span class="p">.</span><span class="nx">currentIndex</span> <span class="o">=</span> <span class="nx">myItem</span><span class="p">.</span><span class="nx">index</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p><code>- View</code>qml
-component TablePrefixListView: ListView {
-    id: myList
-    width: 180
-    height: 200
-    activeFocusOnTab: true
-    highlight: Rectangle {
-        color: "lightsteelblue"
-        radius: 5
-    }
-    highlightFollowsCurrentItem: true
-    highlightMoveDuration: 500
-    keyNavigationWraps: true</p>
-<div class="highlight"><pre><span></span><code>model: TablePrefixModel {}
-focus: true
-delegate: ListDelegate {}
-</code></pre></div>
-<p>}
-```</p>
+- View
+<div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">TablePrefixListView:</span> <span class="nx">ListView</span> <span class="p">{</span>
+    <span class="kd">id: myList</span>
+    <span class="k">width:</span> <span class="mi">180</span>
+    <span class="k">height:</span> <span class="mi">200</span>
+    <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="k">highlight:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightsteelblue&quot;</span>
+        <span class="k">radius:</span> <span class="mi">5</span>
+    <span class="p">}</span>
+    <span class="k">highlightFollowsCurrentItem:</span> <span class="kc">true</span>
+    <span class="k">highlightMoveDuration:</span> <span class="mi">500</span>
+    <span class="k">keyNavigationWraps:</span> <span class="kc">true</span>
+
+    <span class="k">model:</span> <span class="nx">TablePrefixModel</span> <span class="p">{}</span>
+    <span class="k">focus:</span> <span class="kc">true</span>
+    <span class="k">delegate:</span> <span class="nx">ListDelegate</span> <span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div></p>
 </li>
 </ul>
 <h3 id="add-the-list-to-the-main-view">Add the list to the main View<a class="headerlink" href="#add-the-list-to-the-main-view" title="Permanent link">&para;</a></h3>
-<p>````qml
-SplitView {
-        id: mainSplit
-        orientation: Qt.Horizontal
-        anchors.fill: parent
-        property int focusBorderWidth: 10</p>
-<div class="highlight"><pre><span></span><code>    Rectangle {
-        focus: false
-        border.width: leftList.activeFocus ? mainSplit.focusBorderWidth : 0
-        border.color: Material.accent
-        SplitView.preferredWidth: 0.4 * parent.width
-        TablePrefixListView {
-            id: leftList
-            anchors.fill: parent
-            topMargin: mainSplit.focusBorderWidth + 2
-            leftMargin: mainSplit.focusBorderWidth + 2
-        }
-    }
+<div class="highlight"><pre><span></span><code><span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="kd">id: mainSplit</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="nx">property</span> <span class="kr">int</span> <span class="k">focusBorderWidth:</span> <span class="mi">10</span>
 
-    Rectangle {
-        id: rect_2
-        SplitView.preferredWidth: 0.4 * parent.width
-        focus: false
-        color: &quot;lightblue&quot;
-        border.width: theTableView.activeFocus ? 10 : 0
-        border.color: Material.accent
-        MyTable {
-            id: theTableView
-        }
-    }
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">border.width:</span> <span class="nx">leftList</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="k">mainSplit.focusBorderWidth :</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="nx">TablePrefixListView</span> <span class="p">{</span>
+                <span class="kd">id: leftList</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">topMargin:</span> <span class="nx">mainSplit</span><span class="p">.</span><span class="nx">focusBorderWidth</span> <span class="o">+</span> <span class="mi">2</span>
+                <span class="k">leftMargin:</span> <span class="nx">mainSplit</span><span class="p">.</span><span class="nx">focusBorderWidth</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_2</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="k">border.width:</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="nx">MyTable</span> <span class="p">{</span>
+                <span class="kd">id: theTableView</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>}
-```</p>
 <h3 id="emit-a-signal-when-list-item-changes">Emit a signal when List item changes<a class="headerlink" href="#emit-a-signal-when-list-item-changes" title="Permanent link">&para;</a></h3>
 <p>Emit a signal when the current index changes:</p>
-<p>````qml
-component TablePrefixListView: ListView {
-        id: myList
-        width: 180
-        height: 200
-        activeFocusOnTab: true
-        highlight: Rectangle {
-            color: "lightsteelblue"
-            radius: 5
-        }
-        highlightFollowsCurrentItem: true
-        highlightMoveDuration: 500
-        keyNavigationWraps: true</p>
-<div class="highlight"><pre><span></span><code>    signal itemSelected(string prefix)
+<div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">TablePrefixListView:</span> <span class="nx">ListView</span> <span class="p">{</span>
+        <span class="kd">id: myList</span>
+        <span class="k">width:</span> <span class="mi">180</span>
+        <span class="k">height:</span> <span class="mi">200</span>
+        <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+        <span class="k">highlight:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightsteelblue&quot;</span>
+            <span class="k">radius:</span> <span class="mi">5</span>
+        <span class="p">}</span>
+        <span class="k">highlightFollowsCurrentItem:</span> <span class="kc">true</span>
+        <span class="k">highlightMoveDuration:</span> <span class="mi">500</span>
+        <span class="k">keyNavigationWraps:</span> <span class="kc">true</span>
 
-    model: TablePrefixModel {}
-    focus: true
-    delegate: ListDelegate {}
+        <span class="nx">signal</span> <span class="nx">itemSelected</span><span class="p">(</span><span class="nx">string</span> <span class="nx">prefix</span><span class="p">)</span>
 
-    onCurrentIndexChanged: {
-        if (currentIndex &gt;= 0 &amp;&amp; currentItem) {
-            // The following works too
-            // currentItem.prefix
-            let prefix = model.get(currentIndex).prefix;
-            console.log(&quot;Printing prefix: &quot; + prefix);
-            // Emit the signal
-            itemSelected(prefix);
-        }
-    }
-}
+        <span class="k">model:</span> <span class="nx">TablePrefixModel</span> <span class="p">{}</span>
+        <span class="k">focus:</span> <span class="kc">true</span>
+        <span class="k">delegate:</span> <span class="nx">ListDelegate</span> <span class="p">{}</span>
+
+        <span class="k">onCurrentIndexChanged:</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">currentIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">currentItem</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// The following works too</span>
+                <span class="c1">// currentItem.prefix</span>
+                <span class="kd">let</span> <span class="nx">prefix</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">currentIndex</span><span class="p">).</span><span class="nx">prefix</span><span class="p">;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Printing prefix: &quot;</span> <span class="o">+</span> <span class="nx">prefix</span><span class="p">);</span>
+                <span class="c1">// Emit the signal</span>
+                <span class="nx">itemSelected</span><span class="p">(</span><span class="nx">prefix</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p>```</p>
 <p>Next connect that signal using:</p>
-<p><code>qml
-Connections {
-        target: leftList
-        function onitemSelected(prefix) {
-            console.log("Signal Connected to slot:", prefix);
-        }
-    }</code></p>
+<div class="highlight"><pre><span></span><code><span class="nx">Connections</span> <span class="p">{</span>
+        <span class="k">target:</span> <span class="nx">leftList</span>
+        <span class="kd">function</span> <span class="nx">onitemSelected</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Signal Connected to slot:&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
 <p>So all the main content should look like this:</p>
-<p>```qml
-SplitView {
-        id: mainSplit
-        orientation: Qt.Horizontal
-        anchors.fill: parent
-        property int focusBorderWidth: 10</p>
-<div class="highlight"><pre><span></span><code>    Rectangle {
-        focus: false
-        border.width: leftList.activeFocus ? mainSplit.focusBorderWidth : 0
-        border.color: Material.accent
-        SplitView.preferredWidth: 0.4 * parent.width
-        TablePrefixListView {
-            id: leftList
-            anchors.fill: parent
-            topMargin: mainSplit.focusBorderWidth + 2
-            leftMargin: mainSplit.focusBorderWidth + 2
-        }
-    }
-    Connections {
-        target: leftList
-        function onitemSelected(prefix) {
-            console.log(&quot;Signal Connected to slot:&quot;, prefix);
-        }
-    }
+<div class="highlight"><pre><span></span><code><span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="kd">id: mainSplit</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="nx">property</span> <span class="kr">int</span> <span class="k">focusBorderWidth:</span> <span class="mi">10</span>
 
-    Rectangle {
-        id: rect_2
-        SplitView.preferredWidth: 0.4 * parent.width
-        focus: false
-        color: &quot;lightblue&quot;
-        border.width: theTableView.activeFocus ? 10 : 0
-        border.color: Material.accent
-        MyTable {
-            id: theTableView
-        }
-    }
-}
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">border.width:</span> <span class="nx">leftList</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="k">mainSplit.focusBorderWidth :</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="nx">TablePrefixListView</span> <span class="p">{</span>
+                <span class="kd">id: leftList</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">topMargin:</span> <span class="nx">mainSplit</span><span class="p">.</span><span class="nx">focusBorderWidth</span> <span class="o">+</span> <span class="mi">2</span>
+                <span class="k">leftMargin:</span> <span class="nx">mainSplit</span><span class="p">.</span><span class="nx">focusBorderWidth</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nx">Connections</span> <span class="p">{</span>
+            <span class="k">target:</span> <span class="nx">leftList</span>
+            <span class="kd">function</span> <span class="nx">onitemSelected</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Signal Connected to slot:&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_2</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+            <span class="k">border.width:</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+            <span class="nx">MyTable</span> <span class="p">{</span>
+                <span class="kd">id: theTableView</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p>```</p>
 <h3 id="allow-the-table-model-to-be-dynamic">Allow the Table Model to be Dynamic<a class="headerlink" href="#allow-the-table-model-to-be-dynamic" title="Permanent link">&para;</a></h3>
-<p><code>qml
-Connections {
-    target: leftList
-    function onitemSelected(prefix) {
-        console.log("Signal Connected to slot:", prefix);
-        theTableView.model.setPrefix(prefix);
-    }
-}</code></p>
-<p>Now that slot simply needs to be exposed in Python:</p>
-<p>```python
-class ExampleTableModel(QAbstractTableModel):
-    def <strong>init</strong>(self, parent: QObject | None = None):
-        super().<strong>init</strong>(parent)
-        self._prefix = "A"  # Default prefix
-        self._all_data = {
-            "A": [
-                ["A1 the quick brown fox jumped over the lazy dogs", "B1", "C1"],
-                ["A2", "B2", "C2"],
-                ["A3", "B3", "C3"],
-                ["A4", "B4", "C4"],
-            ],
-            "B": [
-                ["B1 jumped over", "B1", "C1"],
-                ["B2", "B2", "C2"],
-                ["B3", "B3", "C3"],
-            ],
-            "C": [
-                ["C1 the lazy", "B1", "C1"],
-                ["C2", "B2", "C2"],
-                ["C3", "B3", "C3"],
-                ["C4", "B4", "C4"],
-                ["C5", "B5", "C5"],
-            ]
-        }
-        self._data = self._all_data[self._prefix]</p>
-<div class="highlight"><pre><span></span><code>@Slot(str)
-def setPrefix(self, prefix: str) -&gt; None:
-    &quot;&quot;&quot;Update the table data based on the selected prefix&quot;&quot;&quot;
-    if prefix in self._all_data and prefix != self._prefix:
-        self.beginResetModel()
-        self._prefix = prefix
-        self._data = self._all_data[prefix]
-        self.endResetModel()
+<div class="highlight"><pre><span></span><code><span class="nx">Connections</span> <span class="p">{</span>
+    <span class="k">target:</span> <span class="nx">leftList</span>
+    <span class="kd">function</span> <span class="nx">onitemSelected</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Signal Connected to slot:&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
+        <span class="nx">theTableView</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">setPrefix</span><span class="p">(</span><span class="nx">prefix</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>```</p>
+<p>Now that slot simply needs to be exposed in Python:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ExampleTableModel</span><span class="p">(</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>  <span class="c1"># Default prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;A1 the quick brown fox jumped over the lazy dogs&quot;</span><span class="p">,</span> <span class="s2">&quot;B1&quot;</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;A2&quot;</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;A3&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;A4&quot;</span><span class="p">,</span> <span class="s2">&quot;B4&quot;</span><span class="p">,</span> <span class="s2">&quot;C4&quot;</span><span class="p">],</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;B1 jumped over&quot;</span><span class="p">,</span> <span class="s2">&quot;B1&quot;</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">],</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">[</span><span class="s2">&quot;C1 the lazy&quot;</span><span class="p">,</span> <span class="s2">&quot;B1&quot;</span><span class="p">,</span> <span class="s2">&quot;C1&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;C2&quot;</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;C3&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;C4&quot;</span><span class="p">,</span> <span class="s2">&quot;B4&quot;</span><span class="p">,</span> <span class="s2">&quot;C4&quot;</span><span class="p">],</span>
+                <span class="p">[</span><span class="s2">&quot;C5&quot;</span><span class="p">,</span> <span class="s2">&quot;B5&quot;</span><span class="p">,</span> <span class="s2">&quot;C5&quot;</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">]</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setPrefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the table data based on the selected prefix&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_data</span> <span class="ow">and</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beginResetModel</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_data</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">endResetModel</span><span class="p">()</span>
+</code></pre></div>
 <p>Now when the user moves between items in the list the table will change.</p>
 <h3 id="extending-this-example">Extending this Example<a class="headerlink" href="#extending-this-example" title="Permanent link">&para;</a></h3>
 <p>One could also display Seaborn Dataframes like so:</p>
 <ul>
 <li>
 <p>Python
-    ```python
-    @final
-    class ExampleTableModel(QAbstractTableModel):
-        def <strong>init</strong>(self, parent: QObject | None = None):
-            super().<strong>init</strong>(parent)
-            self._prefix = "iris"  # Default prefix
-            self._data = sns.load_dataset(self._prefix).to_numpy().tolist()
-            self.datasets = [
-                "anagrams",
-                "anscombe",
-                "attention",
-                "brain_networks",
-                "car_crashes",
-                "diamonds",
-                "dots",
-                "dowjones",
-                "exercise",
-                "flights",
-                "fmri",
-                "geyser",
-                "glue",
-                "healthexp",
-                "iris",
-                "mpg",
-                "penguins",
-                "planets",
-                "seaice",
-                "taxis",
-                "tips",
-                "titanic",
-            ]</p>
-<div class="highlight"><pre><span></span><code>@Slot(str)
-def setPrefix(self, prefix: str) -&gt; None:
-    &quot;&quot;&quot;Update the table data based on the selected prefix&quot;&quot;&quot;
-    if prefix in self.datasets and prefix != self._prefix:
-        self.beginResetModel()
-        self._prefix = prefix
-        print(&quot;I am: &quot;, prefix)
-        self._data = sns.load_dataset(prefix).to_numpy().tolist()
-        self.endResetModel()
-</code></pre></div>
-<p>```</p>
+    <div class="highlight"><pre><span></span><code><span class="nd">@final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExampleTableModel</span><span class="p">(</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="s2">&quot;iris&quot;</span>  <span class="c1"># Default prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;anagrams&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;anscombe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;attention&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;brain_networks&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;car_crashes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;diamonds&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dots&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dowjones&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exercise&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;flights&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fmri&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;geyser&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;glue&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;healthexp&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;iris&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mpg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;penguins&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;planets&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;seaice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;taxis&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tips&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;titanic&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setPrefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the table data based on the selected prefix&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">datasets</span> <span class="ow">and</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">beginResetModel</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I am: &quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">endResetModel</span><span class="p">()</span>
+</code></pre></div></p>
 </li>
 <li>
 <p>QML
-    <code>qml
-    component TablePrefixModel: ListModel {
-            ListElement {
-                name: "Iris"
-                prefix: "iris"
-            }
-            ListElement {
-                name: "Diamonds"
-                prefix: "diamonds"
-            }
-            ListElement {
-                name: "Titanic"
-                prefix: "titanic"
-            }
-        }</code></p>
+    <div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">TablePrefixModel:</span> <span class="nx">ListModel</span> <span class="p">{</span>
+        <span class="nx">ListElement</span> <span class="p">{</span>
+            <span class="k">name:</span> <span class="s2">&quot;Iris&quot;</span>
+            <span class="k">prefix:</span> <span class="s2">&quot;iris&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">ListElement</span> <span class="p">{</span>
+            <span class="k">name:</span> <span class="s2">&quot;Diamonds&quot;</span>
+            <span class="k">prefix:</span> <span class="s2">&quot;diamonds&quot;</span>
+        <span class="p">}</span>
+        <span class="nx">ListElement</span> <span class="p">{</span>
+            <span class="k">name:</span> <span class="s2">&quot;Titanic&quot;</span>
+            <span class="k">prefix:</span> <span class="s2">&quot;titanic&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></p>
 <p>Also Consider adding scrollbars:</p>
-<p>```qml
-component MyTable: AnimatedTableView {
-    id: tableView
-    columnSpacing: 1
-    rowSpacing: 1
-    // clip: true</p>
-<div class="highlight"><pre><span></span><code>// Add Scrollbars
-anchors.centerIn: parent
-width: Math.min(parent.width, contentWidth)
-height: parent.height
-activeFocusOnTab: true
-ScrollBar.vertical: ScrollBar {}
-ScrollBar.horizontal: ScrollBar {}
+<div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">MyTable:</span> <span class="nx">AnimatedTableView</span> <span class="p">{</span>
+    <span class="kd">id: tableView</span>
+    <span class="k">columnSpacing:</span> <span class="mi">1</span>
+    <span class="k">rowSpacing:</span> <span class="mi">1</span>
+    <span class="c1">// clip: true</span>
 
-model: ExampleTableModel {}
+    <span class="c1">// Add Scrollbars</span>
+    <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+    <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">contentWidth</span><span class="p">)</span>
+    <span class="k">height:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span>
+    <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="k">ScrollBar.vertical:</span> <span class="nx">ScrollBar</span> <span class="p">{}</span>
+    <span class="k">ScrollBar.horizontal:</span> <span class="nx">ScrollBar</span> <span class="p">{}</span>
+
+    <span class="k">model:</span> <span class="nx">ExampleTableModel</span> <span class="p">{}</span>
 </code></pre></div>
-<p>```</p>
 </li>
 </ul>
 <h3 id="todo-saving-file-on-edit-call-slot">TODO Saving file on Edit (call Slot)<a class="headerlink" href="#todo-saving-file-on-edit-call-slot" title="Permanent link">&para;</a></h3>
 <h3 id="todo-including-a-table-header">TODO Including a Table Header<a class="headerlink" href="#todo-including-a-table-header" title="Permanent link">&para;</a></h3>
 <p>Headers on table are also a bit of an afterthought in QML. The <a href="https://doc.qt.io/qt-6/qml-qtquick-tableview.html">TableView QML Type | Qt Quick 6.8.2</a> docs provide that <a href="https://doc.qt.io/qt-6/qml-qtquick-controls-horizontalheaderview.html">HorizontalHeaderView QML Type | Qt Quick Controls 6.8.2</a> can be used.</p>
 <p>first create a header delegate:</p>
-<p>```qml
-component HeaderDelegate: Rectangle {
-        id: headerItem
-        implicitWidth: 100
-        implicitHeight: 30
-        color: "#e0e0e0"
-        border.width: 1
-        border.color: "#c0c0c0"</p>
-<div class="highlight"><pre><span></span><code>    // Required property for header delegate
-    required property string display
+<div class="highlight"><pre><span></span><code><span class="nx">component</span> <span class="k">HeaderDelegate:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="kd">id: headerItem</span>
+        <span class="k">implicitWidth:</span> <span class="mi">100</span>
+        <span class="k">implicitHeight:</span> <span class="mi">30</span>
+        <span class="k">color:</span> <span class="s2">&quot;#e0e0e0&quot;</span>
+        <span class="k">border.width:</span> <span class="mi">1</span>
+        <span class="k">border.color:</span> <span class="s2">&quot;#c0c0c0&quot;</span>
 
-    Text {
-        text: headerItem.display
-        anchors.fill: parent
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-        font.bold: true
-    }
-}
+        <span class="c1">// Required property for header delegate</span>
+        <span class="nx">required</span> <span class="nx">property</span> <span class="nx">string</span> <span class="nx">display</span>
+
+        <span class="nx">Text</span> <span class="p">{</span>
+            <span class="k">text:</span> <span class="nx">headerItem</span><span class="p">.</span><span class="nx">display</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="k">horizontalAlignment:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">AlignHCenter</span>
+            <span class="k">verticalAlignment:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">AlignVCenter</span>
+            <span class="k">elide:</span> <span class="nx">Text</span><span class="p">.</span><span class="nx">ElideRight</span>
+            <span class="k">font.bold:</span> <span class="kc">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p>```</p>
 <p>then connect that to the pre-existing table like so:</p>
-<p>```qml
-Rectangle {
-        id: rect_2
-        SplitView.preferredWidth: 0.4 * parent.width
-        focus: false
-        color: "lightblue"
-        border.width: theTableView.activeFocus ? 10 : 0
-        border.color: Material.accent</p>
-<div class="highlight"><pre><span></span><code>    Item {
-        id: tableContainer
-        anchors.fill: parent
-        anchors.margins: 10
+<div class="highlight"><pre><span></span><code><span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="kd">id: rect_2</span>
+        <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+        <span class="k">focus:</span> <span class="kc">false</span>
+        <span class="k">color:</span> <span class="s2">&quot;lightblue&quot;</span>
+        <span class="k">border.width:</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
 
-        Item {
-            id: tableWrapper
-            anchors.centerIn: parent
-            width: Math.min(parent.width, theTableView.contentWidth + 2) // +2 for border
-            height: horizontalHeader.height + theTableView.contentHeight + 1 // +1 for the gap
+        <span class="nx">Item</span> <span class="p">{</span>
+            <span class="kd">id: tableContainer</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+            <span class="k">anchors.margins:</span> <span class="mi">10</span>
 
-            HorizontalHeaderView {
-                id: horizontalHeader
-                syncView: theTableView
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                height: 30
-                delegate: HeaderDelegate {}
-            }
+            <span class="nx">Item</span> <span class="p">{</span>
+                <span class="kd">id: tableWrapper</span>
+                <span class="k">anchors.centerIn:</span> <span class="nx">parent</span>
+                <span class="k">width:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">parent</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">contentWidth</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">// +2 for border</span>
+                <span class="k">height:</span> <span class="nx">horizontalHeader</span><span class="p">.</span><span class="nx">height</span> <span class="o">+</span> <span class="nx">theTableView</span><span class="p">.</span><span class="nx">contentHeight</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1">// +1 for the gap</span>
 
-            MyTable {
-                id: theTableView
-                anchors.top: horizontalHeader.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.topMargin: 1 // Small gap between header and table
-                width: parent.width
-                height: parent.height - horizontalHeader.height - 1
-            }
-        }
-    }
-}
+                <span class="nx">HorizontalHeaderView</span> <span class="p">{</span>
+                    <span class="kd">id: horizontalHeader</span>
+                    <span class="k">syncView:</span> <span class="nx">theTableView</span>
+                    <span class="k">anchors.top:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">top</span>
+                    <span class="k">anchors.left:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">left</span>
+                    <span class="k">anchors.right:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">right</span>
+                    <span class="k">height:</span> <span class="mi">30</span>
+                    <span class="k">delegate:</span> <span class="nx">HeaderDelegate</span> <span class="p">{}</span>
+                <span class="p">}</span>
+
+                <span class="nx">MyTable</span> <span class="p">{</span>
+                    <span class="kd">id: theTableView</span>
+                    <span class="k">anchors.top:</span> <span class="nx">horizontalHeader</span><span class="p">.</span><span class="nx">bottom</span>
+                    <span class="k">anchors.left:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">left</span>
+                    <span class="k">anchors.right:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">right</span>
+                    <span class="k">anchors.bottom:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">bottom</span>
+                    <span class="k">anchors.topMargin:</span> <span class="mi">1</span> <span class="c1">// Small gap between header and table</span>
+                    <span class="k">width:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+                    <span class="k">height:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">height</span> <span class="o">-</span> <span class="nx">horizontalHeader</span><span class="p">.</span><span class="nx">height</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
-<p>```</p>
 <p>The header data is provided by the model from python like so:</p>
-<p>```python
-@final
-class ExampleTableModel(QAbstractTableModel):
-    # ...
-    # ...
-    # ...</p>
-<div class="highlight"><pre><span></span><code>@override
-def headerData(
-    self,
-    section: int,
-    orientation: Qt.Orientation,
-    role: int = Qt.ItemDataRole.DisplayRole,
-) -&gt; str | None:
-    if role != Qt.ItemDataRole.DisplayRole:
-        return None
+<div class="highlight"><pre><span></span><code><span class="nd">@final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExampleTableModel</span><span class="p">(</span><span class="n">QAbstractTableModel</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># ...</span>
 
-    if orientation == Qt.Orientation.Horizontal:
-        return f&quot;Column {section + 1}&quot;
-    else:
-        return f&quot;Row {section + 1}&quot;
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">headerData</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">section</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">orientation</span><span class="p">:</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">Horizontal</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Column </span><span class="si">{</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Row </span><span class="si">{</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
-<p>```</p>
 <div class="footnote">
 <hr />
 <ol>
