@@ -551,6 +551,57 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#dynamic-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic Table
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a List
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-the-list-to-the-main-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add the list to the main View
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emit-a-signal-when-list-item-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emit a signal when List item changes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -892,6 +943,57 @@
         
       </ul>
     </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dynamic-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dynamic Table
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Table">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a List
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-the-list-to-the-main-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add the list to the main View
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emit-a-signal-when-list-item-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Emit a signal when List item changes
+    </span>
+  </a>
   
 </li>
         
@@ -2285,22 +2387,27 @@ SplitView {
 <h3 id="going-further">Going Further<a class="headerlink" href="#going-further" title="Permanent link">&para;</a></h3>
 <h4 id="animations">Animations<a class="headerlink" href="#animations" title="Permanent link">&para;</a></h4>
 <p>One of the big advantages of qml is animations for free. Right click the table and it will spin around which is neat:</p>
-<p>```qml</p>
-<div class="highlight"><pre><span></span><code>    // Transform properties for animations
-    transform: [
-        Rotation {
-            id: tableRotation
-            origin.x: tableView.width/2
-            origin.y: tableView.height/2
-            axis { x: 0; y: 1; z: 0 }
-        },
-        Translate {
-            id: tableTranslate
-            y: 0
-        }
-    ]
-
-    // Animations
+<p>```qml
+component AnimatedTableView: TableView {
+        id: tableView
+        // Transform properties for animations
+        transform: [
+            Rotation {
+                id: tableRotation
+                origin.x: tableView.width / 2
+                origin.y: tableView.height / 2
+                axis {
+                    x: 0
+                    y: 1
+                    z: 0
+                }
+            },
+            Translate {
+                id: tableTranslate
+                y: 0
+            }
+        ]</p>
+<div class="highlight"><pre><span></span><code>    // Animations
     ParallelAnimation {
         id: tableAnimation
         SequentialAnimation {
@@ -2333,194 +2440,161 @@ SplitView {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
-        onClicked: function(mouse) {
+        onClicked: function (mouse) {
             if (mouse.button === Qt.RightButton) {
-                tableAnimation.start()
+                tableAnimation.start();
             }
         }
     }
+}
 </code></pre></div>
 <p>```</p>
-<p>All together:</p>
+<p>Then just change the <code>TableView</code> for <code>AnimatedTableView</code></p>
+<p>```diff
+1c1
+&lt; component MyTable: TableView {</p>
+<hr />
+<blockquote>
+<p>component MyTable: AnimatedTableView {
+```</p>
+</blockquote>
+<h2 id="dynamic-table">Dynamic Table<a class="headerlink" href="#dynamic-table" title="Permanent link">&para;</a></h2>
+<h3 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h3>
+<p>Let's now create a list on the left that changes the type of the table displayed on the right side.</p>
+<p>For now, let's just set a prefix value.</p>
+<h3 id="create-a-list">Create a List<a class="headerlink" href="#create-a-list" title="Permanent link">&para;</a></h3>
+<p><img alt="" src="../assets/2025-02-25T13%3A34%3A58.555671.png" /></p>
+<p>First create a  listView as shown in <a href="../list/">List</a>:</p>
+<ul>
+<li>Model
+    <code>qml
+    component TablePrefixModel: ListModel {
+        ListElement {
+            name: "Letter A"
+            prefix: "A"
+        }
+        ListElement {
+            name: "Letter B"
+            prefix: "B"
+        }
+        ListElement {
+            name: "Letter C"
+            prefix: "C"
+        }
+    }</code></li>
+<li>
+<p>Delegate</p>
+<p>Note here that the mouseArea onClicked simply changes the current item, the change in current item will later be used to emit a signal</p>
 <p>```qml
-component MyTable: TableView {
-        id: tableView
-        columnSpacing: 1
-        rowSpacing: 1
-        // clip: true
-        anchors.centerIn: parent
-        width: Math.min(parent.width, contentWidth)
-        height: Math.min(parent.height, contentHeight)
-        activeFocusOnTab: true</p>
-<div class="highlight"><pre><span></span><code>    // Transform properties for animations
-    transform: [
-        Rotation {
-            id: tableRotation
-            origin.x: tableView.width/2
-            origin.y: tableView.height/2
-            axis { x: 0; y: 1; z: 0 }
-        },
-        Translate {
-            id: tableTranslate
-            y: 0
-        }
-    ]
-
-    // Animations
-    ParallelAnimation {
-        id: tableAnimation
-        SequentialAnimation {
-            NumberAnimation {
-                target: tableTranslate
-                property: &quot;y&quot;
-                to: -50
-                duration: 300
-                easing.type: Easing.OutQuad
-            }
-            NumberAnimation {
-                target: tableTranslate
-                property: &quot;y&quot;
-                to: 0
-                duration: 300
-                easing.type: Easing.InQuad
-            }
-        }
-        NumberAnimation {
-            target: tableRotation
-            property: &quot;angle&quot;
-            from: 0
-            to: 360
-            duration: 600
-            easing.type: Easing.InOutQuad
-        }
-    }
-
-    // Mouse area for right-click detection
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.RightButton
-        onClicked: function(mouse) {
-            if (mouse.button === Qt.RightButton) {
-                tableAnimation.start()
-            }
-        }
-    }
-
-    model: ExampleTableModel {}
-
-    // Create a Selection Model
-    selectionModel: ItemSelectionModel {
-        model: tableView.model
-    }
-
-    // Allow the user to interact with an index
-    Keys.onPressed: function (event) {
-        if (event.key === Qt.Key_Return || event.key === Qt.Key_Space) {
-            // Get the current cell information
-            let row = tableView.currentRow;
-            let column = tableView.currentColumn;
-            console.log(&quot;Row:&quot;, row, &quot;Column:&quot;, column);
-
-            // Get the cell content using the model&#39;s data method
-            let cellContent = tableView.model.data(tableView.model.index(row, column));
-            console.log(&quot;Cell content:&quot;, cellContent);
-
-            // Get the current index for selection
-            let currentIndex = tableView.model.index(tableView.currentRow, tableView.currentColumn);
-            console.log(&quot;Current Index:&quot;, currentIndex);
-
-            selectionModel.select(currentIndex, ItemSelectionModel.Toggle);
-            // This is required, otherwise Tab just moves between cells and the user
-            // cannot move between widgets after getting trapped in the table
-        } else if (event.key === Qt.Key_Tab) {
-            if (event.modifiers &amp; Qt.ShiftModifier) {
-                // Shift+Tab: move focus to previous item
-                tableView.nextItemInFocusChain(false).forceActiveFocus();
-            } else {
-                // Tab: move focus to next item
-                tableView.nextItemInFocusChain(true).forceActiveFocus();
-            }
-            event.accepted = true;
-        }
-    }
-
-    delegate: Rectangle {
+    component ListDelegate: Item {
         id: myItem
-        implicitWidth: 100
-        implicitHeight: 50
-        border.width: 1
-        // Required Properties for selectable Cells
-        required property string display
-        required property bool selected
-        required property bool current
-        // Required Properties for Editable Cells
-        required property int row
-        required property int column
-        required property bool editing
+        required property string prefix
+        required property int index
+        width: 180
+        height: 40</p>
+<div class="highlight"><pre><span></span><code>    Rectangle {
+        anchors.fill: parent
+        color: mouseArea.containsMouse ? Qt.lighter(&quot;lightsteelblue&quot;, 1.1) : &quot;transparent&quot;
 
-        // Color the current cell
-        color: selected ? Material.accent : (current ? Material.highlightedRippleColor : &quot;white&quot;)
-
-        // Text in the cell
-        Text {
-            text: myItem.display
-            anchors.centerIn: parent
-
-            // Must have this for editing, requires property above
-            visible: !myItem.editing
-
-            // Must have these four for text wrapping
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.Wrap
-
-            // Change the colour of the text when selected
-            color: myItem.selected ? &quot;white&quot; : &quot;black&quot;
-
-            // Consider clipping or eliding if not wrapping
-            clip: true
-        }
-
-        // Logic to Trigger a Cell Edit
-        function edit_cell() {
-            let index = myItem.TableView.view.model.index(myItem.row, myItem.column);
-            myItem.TableView.view.edit(index);
+        Column {
+            Text {
+                text: &#39;&lt;b&gt;Letter: &lt;/b&gt; &#39; + myItem.prefix
+            }
         }
 
         MouseArea {
+            id: mouseArea
             anchors.fill: parent
-            onDoubleClicked: myItem.edit_cell()
+            hoverEnabled: true
+            onClicked: myItem.ListView.view.currentIndex = myItem.index
         }
-
-        Keys.onPressed: function (event) {
-            if (event.key === Qt.Key_F2) {
-                edit_cell()
-            }
-        }
-
-        // Display the editing
-        TableView.editDelegate: TextField {
-            required property string display
+    }
+}
+</code></pre></div>
+<p><code>- View</code>qml
+component TablePrefixListView: ListView {
+    id: myList
+    width: 180
+    height: 200
+    activeFocusOnTab: true
+    highlight: Rectangle {
+        color: "lightsteelblue"
+        radius: 5
+    }
+    highlightFollowsCurrentItem: true
+    highlightMoveDuration: 500
+    keyNavigationWraps: true</p>
+<div class="highlight"><pre><span></span><code>model: TablePrefixModel {}
+focus: true
+delegate: ListDelegate {}
+</code></pre></div>
+<p>}
+```</p>
+</li>
+</ul>
+<h3 id="add-the-list-to-the-main-view">Add the list to the main View<a class="headerlink" href="#add-the-list-to-the-main-view" title="Permanent link">&para;</a></h3>
+<p>````qml
+SplitView {
+        id: mainSplit
+        orientation: Qt.Horizontal
+        anchors.fill: parent
+        property int focusBorderWidth: 10</p>
+<div class="highlight"><pre><span></span><code>    Rectangle {
+        focus: false
+        border.width: leftList.activeFocus ? mainSplit.focusBorderWidth : 0
+        border.color: Material.accent
+        SplitView.preferredWidth: 0.4 * parent.width
+        TablePrefixListView {
+            id: leftList
             anchors.fill: parent
-            text: display
-            horizontalAlignment: TextInput.AlignHCenter
-            verticalAlignment: TextInput.AlignVCenter
-            Component.onCompleted: selectAll()
+            topMargin: mainSplit.focusBorderWidth + 2
+            leftMargin: mainSplit.focusBorderWidth + 2
+        }
+    }
 
-            TableView.onCommit: {
-                // &#39;display = text&#39; is short-hand for:
-                // let index = TableView.view.index(row, column)
-                // TableView.view.model.setData(index, &quot;display&quot;, text)
-                let index = myItem.TableView.view.model.index(row, column);
-                myItem.TableView.view.model.setData(index, text, Qt.EditRole);
-            }
+    Rectangle {
+        id: rect_2
+        SplitView.preferredWidth: 0.4 * parent.width
+        focus: false
+        color: &quot;lightblue&quot;
+        border.width: theTableView.activeFocus ? 10 : 0
+        border.color: Material.accent
+        MyTable {
+            id: theTableView
+        }
+    }
+</code></pre></div>
+<p>}
+```</p>
+<h3 id="emit-a-signal-when-list-item-changes">Emit a signal when List item changes<a class="headerlink" href="#emit-a-signal-when-list-item-changes" title="Permanent link">&para;</a></h3>
+<p>Emit a signal when the current index changes:</p>
+<p>````qml
+component TablePrefixListView: ListView {
+        id: myList
+        width: 180
+        height: 200
+        activeFocusOnTab: true
+        highlight: Rectangle {
+            color: "lightsteelblue"
+            radius: 5
+        }
+        highlightFollowsCurrentItem: true
+        highlightMoveDuration: 500
+        keyNavigationWraps: true</p>
+<div class="highlight"><pre><span></span><code>    signal itemSelected(prefix string)
 
-            Keys.onPressed: function (event) {
-                if (event.key === Qt.Key_Escape) {
-                    myItem.TableView.view.closeEditor();
-                }
-            }
+    model: TablePrefixModel {}
+    focus: true
+    delegate: ListDelegate {}
+
+    onCurrentIndexChanged: {
+        if (currentIndex &gt;= 0 &amp;&amp; currentItem) {
+            // The following works too
+            // currentItem.prefix
+            let prefix = model.get(currentIndex).prefix;
+            console.log(&quot;Printing prefix: &quot; + prefix);
+            // Emit the signal
+            itemSelected(prefix);
         }
     }
 }

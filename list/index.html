@@ -887,22 +887,40 @@
             <span class="k">color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">background</span>
         <span class="p">}</span>
     <span class="p">}</span>
-<span class="p">}</span><span class="err">```</span>
-
-
-
-<span class="nx">The</span> <span class="nx">listview</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">have</span> <span class="nx">a</span> <span class="nx">border</span><span class="p">,</span> <span class="nx">only</span> <span class="nx">the</span> <span class="nx">rectangle</span> <span class="nx">does</span><span class="p">.</span> <span class="nx">we</span> <span class="nx">could</span> <span class="nx">use</span> <span class="err">`</span><span class="k">anchors.fill:</span> <span class="nx">parent</span><span class="err">`</span> <span class="nx">to</span> <span class="nx">fill</span> <span class="nx">out</span> <span class="nx">a</span> <span class="k">rectangle:</span>
-
-<span class="err">```</span><span class="nx">qml</span>
-<span class="nx">FocusableRectangle</span> <span class="p">{</span>
-            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="mf">0.39</span>
-            <span class="nx">ContactView</span> <span class="p">{</span>
-                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
-            <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The listview does not have a border, only the rectangle does. we could use <code>anchors.fill: parent</code> to fill out a rectangle:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">FocusableRectangle</span> <span class="p">{</span>
+        <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="mf">0.39</span>
+        <span class="nx">ContactView</span> <span class="p">{</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
         <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre></div>
 <p>However, this selects the rectangle and the list isn't in focus, the user must press tab again which selects the list but indicates nothing to the user.</p>
-<p>To solve this, we instead create a rectangle <strong>inside</strong> the List, don't allow the rectangle to take focus but do give it a border in the same way:</p>
+<p>To solve this, we could do something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">SplitView</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+    <span class="nx">Rectangle</span> <span class="p">{</span>
+        <span class="c1">// Don&#39;t allow this to take focus</span>
+        <span class="k">focus:</span> <span class="kc">false</span>
+        <span class="c1">// Set the color of the border when focused</span>
+        <span class="k">border.color:</span> <span class="nx">Material</span><span class="p">.</span><span class="nx">accent</span>
+        <span class="c1">// Set border when the contact view is focused</span>
+        <span class="k">border.width:</span> <span class="nx">contactList</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+        <span class="c1">// Set the split</span>
+        <span class="k">SplitView.preferredWidth:</span> <span class="mf">0.4</span> <span class="o">*</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span>
+        <span class="nx">ContactView</span> <span class="p">{</span>
+            <span class="c1">// Set the id from above</span>
+            <span class="kd">id: contactList</span>
+            <span class="c1">// Fill the parent rectangle</span>
+            <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>We could also take a different approach, which we will do instead simply for the sake of example.</p>
+<p>We instead create a rectangle <strong>inside</strong> the List, don't allow the rectangle to take focus but do give it a border in the same way:</p>
 <div class="highlight"><pre><span></span><code><span class="nx">pragma</span> <span class="k">ComponentBehavior:</span> <span class="nx">Bound</span>
 
 <span class="nx">ApplicationWindow</span> <span class="p">{</span>
