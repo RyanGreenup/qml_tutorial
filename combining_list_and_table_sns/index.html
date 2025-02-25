@@ -597,6 +597,42 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#allow-the-table-model-to-be-dynamic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allow the Table Model to be Dynamic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extending-this-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extending this Example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#todo-saving-file-on-edit-call-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      TODO Saving file on Edit (call Slot)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#todo-including-a-table-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      TODO Including a Table Header
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -992,6 +1028,42 @@
   <a href="#emit-a-signal-when-list-item-changes" class="md-nav__link">
     <span class="md-ellipsis">
       Emit a signal when List item changes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allow-the-table-model-to-be-dynamic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Allow the Table Model to be Dynamic
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extending-this-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extending this Example
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#todo-saving-file-on-edit-call-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      TODO Saving file on Edit (call Slot)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#todo-including-a-table-header" class="md-nav__link">
+    <span class="md-ellipsis">
+      TODO Including a Table Header
     </span>
   </a>
   
@@ -2581,7 +2653,7 @@ component TablePrefixListView: ListView {
         highlightFollowsCurrentItem: true
         highlightMoveDuration: 500
         keyNavigationWraps: true</p>
-<div class="highlight"><pre><span></span><code>    signal itemSelected(prefix string)
+<div class="highlight"><pre><span></span><code>    signal itemSelected(string prefix)
 
     model: TablePrefixModel {}
     focus: true
@@ -2598,6 +2670,280 @@ component TablePrefixListView: ListView {
         }
     }
 }
+</code></pre></div>
+<p>```</p>
+<p>Next connect that signal using:</p>
+<p><code>qml
+Connections {
+        target: leftList
+        function onitemSelected(prefix) {
+            console.log("Signal Connected to slot:", prefix);
+        }
+    }</code></p>
+<p>So all the main content should look like this:</p>
+<p>```qml
+SplitView {
+        id: mainSplit
+        orientation: Qt.Horizontal
+        anchors.fill: parent
+        property int focusBorderWidth: 10</p>
+<div class="highlight"><pre><span></span><code>    Rectangle {
+        focus: false
+        border.width: leftList.activeFocus ? mainSplit.focusBorderWidth : 0
+        border.color: Material.accent
+        SplitView.preferredWidth: 0.4 * parent.width
+        TablePrefixListView {
+            id: leftList
+            anchors.fill: parent
+            topMargin: mainSplit.focusBorderWidth + 2
+            leftMargin: mainSplit.focusBorderWidth + 2
+        }
+    }
+    Connections {
+        target: leftList
+        function onitemSelected(prefix) {
+            console.log(&quot;Signal Connected to slot:&quot;, prefix);
+        }
+    }
+
+    Rectangle {
+        id: rect_2
+        SplitView.preferredWidth: 0.4 * parent.width
+        focus: false
+        color: &quot;lightblue&quot;
+        border.width: theTableView.activeFocus ? 10 : 0
+        border.color: Material.accent
+        MyTable {
+            id: theTableView
+        }
+    }
+}
+</code></pre></div>
+<p>```</p>
+<h3 id="allow-the-table-model-to-be-dynamic">Allow the Table Model to be Dynamic<a class="headerlink" href="#allow-the-table-model-to-be-dynamic" title="Permanent link">&para;</a></h3>
+<p><code>qml
+Connections {
+    target: leftList
+    function onitemSelected(prefix) {
+        console.log("Signal Connected to slot:", prefix);
+        theTableView.model.setPrefix(prefix);
+    }
+}</code></p>
+<p>Now that slot simply needs to be exposed in Python:</p>
+<p>```python
+class ExampleTableModel(QAbstractTableModel):
+    def <strong>init</strong>(self, parent: QObject | None = None):
+        super().<strong>init</strong>(parent)
+        self._prefix = "A"  # Default prefix
+        self._all_data = {
+            "A": [
+                ["A1 the quick brown fox jumped over the lazy dogs", "B1", "C1"],
+                ["A2", "B2", "C2"],
+                ["A3", "B3", "C3"],
+                ["A4", "B4", "C4"],
+            ],
+            "B": [
+                ["B1 jumped over", "B1", "C1"],
+                ["B2", "B2", "C2"],
+                ["B3", "B3", "C3"],
+            ],
+            "C": [
+                ["C1 the lazy", "B1", "C1"],
+                ["C2", "B2", "C2"],
+                ["C3", "B3", "C3"],
+                ["C4", "B4", "C4"],
+                ["C5", "B5", "C5"],
+            ]
+        }
+        self._data = self._all_data[self._prefix]</p>
+<div class="highlight"><pre><span></span><code>@Slot(str)
+def setPrefix(self, prefix: str) -&gt; None:
+    &quot;&quot;&quot;Update the table data based on the selected prefix&quot;&quot;&quot;
+    if prefix in self._all_data and prefix != self._prefix:
+        self.beginResetModel()
+        self._prefix = prefix
+        self._data = self._all_data[prefix]
+        self.endResetModel()
+</code></pre></div>
+<p>```</p>
+<p>Now when the user moves between items in the list the table will change.</p>
+<h3 id="extending-this-example">Extending this Example<a class="headerlink" href="#extending-this-example" title="Permanent link">&para;</a></h3>
+<p>One could also display Seaborn Dataframes like so:</p>
+<ul>
+<li>
+<p>Python
+    ```python
+    @final
+    class ExampleTableModel(QAbstractTableModel):
+        def <strong>init</strong>(self, parent: QObject | None = None):
+            super().<strong>init</strong>(parent)
+            self._prefix = "iris"  # Default prefix
+            self._data = sns.load_dataset(self._prefix).to_numpy().tolist()
+            self.datasets = [
+                "anagrams",
+                "anscombe",
+                "attention",
+                "brain_networks",
+                "car_crashes",
+                "diamonds",
+                "dots",
+                "dowjones",
+                "exercise",
+                "flights",
+                "fmri",
+                "geyser",
+                "glue",
+                "healthexp",
+                "iris",
+                "mpg",
+                "penguins",
+                "planets",
+                "seaice",
+                "taxis",
+                "tips",
+                "titanic",
+            ]</p>
+<div class="highlight"><pre><span></span><code>@Slot(str)
+def setPrefix(self, prefix: str) -&gt; None:
+    &quot;&quot;&quot;Update the table data based on the selected prefix&quot;&quot;&quot;
+    if prefix in self.datasets and prefix != self._prefix:
+        self.beginResetModel()
+        self._prefix = prefix
+        print(&quot;I am: &quot;, prefix)
+        self._data = sns.load_dataset(prefix).to_numpy().tolist()
+        self.endResetModel()
+</code></pre></div>
+<p>```</p>
+</li>
+<li>
+<p>QML
+    <code>qml
+    component TablePrefixModel: ListModel {
+            ListElement {
+                name: "Iris"
+                prefix: "iris"
+            }
+            ListElement {
+                name: "Diamonds"
+                prefix: "diamonds"
+            }
+            ListElement {
+                name: "Titanic"
+                prefix: "titanic"
+            }
+        }</code></p>
+<p>Also Consider adding scrollbars:</p>
+<p>```qml
+component MyTable: AnimatedTableView {
+    id: tableView
+    columnSpacing: 1
+    rowSpacing: 1
+    // clip: true</p>
+<div class="highlight"><pre><span></span><code>// Add Scrollbars
+anchors.centerIn: parent
+width: Math.min(parent.width, contentWidth)
+height: parent.height
+activeFocusOnTab: true
+ScrollBar.vertical: ScrollBar {}
+ScrollBar.horizontal: ScrollBar {}
+
+model: ExampleTableModel {}
+</code></pre></div>
+<p>```</p>
+</li>
+</ul>
+<h3 id="todo-saving-file-on-edit-call-slot">TODO Saving file on Edit (call Slot)<a class="headerlink" href="#todo-saving-file-on-edit-call-slot" title="Permanent link">&para;</a></h3>
+<h3 id="todo-including-a-table-header">TODO Including a Table Header<a class="headerlink" href="#todo-including-a-table-header" title="Permanent link">&para;</a></h3>
+<p>Headers on table are also a bit of an afterthought in QML. The <a href="https://doc.qt.io/qt-6/qml-qtquick-tableview.html">TableView QML Type | Qt Quick 6.8.2</a> docs provide that <a href="https://doc.qt.io/qt-6/qml-qtquick-controls-horizontalheaderview.html">HorizontalHeaderView QML Type | Qt Quick Controls 6.8.2</a> can be used.</p>
+<p>first create a header delegate:</p>
+<p>```qml
+component HeaderDelegate: Rectangle {
+        id: headerItem
+        implicitWidth: 100
+        implicitHeight: 30
+        color: "#e0e0e0"
+        border.width: 1
+        border.color: "#c0c0c0"</p>
+<div class="highlight"><pre><span></span><code>    // Required property for header delegate
+    required property string display
+
+    Text {
+        text: headerItem.display
+        anchors.fill: parent
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        elide: Text.ElideRight
+        font.bold: true
+    }
+}
+</code></pre></div>
+<p>```</p>
+<p>then connect that to the pre-existing table like so:</p>
+<p>```qml
+Rectangle {
+        id: rect_2
+        SplitView.preferredWidth: 0.4 * parent.width
+        focus: false
+        color: "lightblue"
+        border.width: theTableView.activeFocus ? 10 : 0
+        border.color: Material.accent</p>
+<div class="highlight"><pre><span></span><code>    Item {
+        id: tableContainer
+        anchors.fill: parent
+        anchors.margins: 10
+
+        Item {
+            id: tableWrapper
+            anchors.centerIn: parent
+            width: Math.min(parent.width, theTableView.contentWidth + 2) // +2 for border
+            height: horizontalHeader.height + theTableView.contentHeight + 1 // +1 for the gap
+
+            HorizontalHeaderView {
+                id: horizontalHeader
+                syncView: theTableView
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 30
+                delegate: HeaderDelegate {}
+            }
+
+            MyTable {
+                id: theTableView
+                anchors.top: horizontalHeader.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.topMargin: 1 // Small gap between header and table
+                width: parent.width
+                height: parent.height - horizontalHeader.height - 1
+            }
+        }
+    }
+}
+</code></pre></div>
+<p>```</p>
+<p>The header data is provided by the model from python like so:</p>
+<p>```python
+@final
+class ExampleTableModel(QAbstractTableModel):
+    # ...
+    # ...
+    # ...</p>
+<div class="highlight"><pre><span></span><code>@override
+def headerData(
+    self,
+    section: int,
+    orientation: Qt.Orientation,
+    role: int = Qt.ItemDataRole.DisplayRole,
+) -&gt; str | None:
+    if role != Qt.ItemDataRole.DisplayRole:
+        return None
+
+    if orientation == Qt.Orientation.Horizontal:
+        return f&quot;Column {section + 1}&quot;
+    else:
+        return f&quot;Row {section + 1}&quot;
 </code></pre></div>
 <p>```</p>
 <div class="footnote">

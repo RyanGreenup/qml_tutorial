@@ -431,6 +431,24 @@
 <li>SQL Tables</li>
 <li>File Trees</li>
 </ul>
+<p>Widgets are quicker to develop a keyboard centric desktop application that does what one might expect out of the box quickly. qss can style the application.</p>
+<p>QML will provide conventions around code style that make it easier to maintain and easier to polish. Animations are easy and I've generally found performance in QML to be better than qt widgets in PySide6.</p>
+<p>So:</p>
+<ol>
+<li>Template in QT Widgets<ul>
+<li>Investigate how the application will be used and refine:<ul>
+<li>Animations</li>
+<li>Keyboard shortcuts and navigation</li>
+<li>Missing Features</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Rewrite in QML<ul>
+<li>Also provides an opportunity to write data handlers in Rust with pyO3 which may (or may not) offer benefits in terms of correctness, performance and portability (e.g. write the API in Rust then share with a tui in TUI-rs or a web app with Axum and minijinja or leptos)</li>
+</ul>
+</li>
+</ol>
 
 
 
