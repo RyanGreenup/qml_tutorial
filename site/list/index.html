@@ -12,7 +12,7 @@
         <link rel="prev" href="../home/">
       
       
-        <link rel="next" href="../table/">
+        <link rel="next" href="../menu-with-keyboard-shortcuts/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -315,6 +315,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../dark_mode/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dark Mode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../home/" class="md-nav__link">
         
   
@@ -436,11 +457,53 @@
   
   
     <li class="md-nav__item">
-      <a href="../table/" class="md-nav__link">
+      <a href="../menu-with-keyboard-shortcuts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Table View
+    Menu Bar with Keyboard Shortcut Labels
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trees-with-sqlite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trees with SQLite
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trees/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trees
     
   </span>
   
@@ -1006,6 +1069,7 @@
 - JS has no types, it quickly gets very confusing, use docstrings for your own health and wellbeing</p>
 </li>
 </ol>
+<p>One should also set the <code>margin.width</code> of views inside a rectangle to something relative to the margin width. One could also set the <code>margin.width</code> to depend on the parent <code>border.width</code> so that it adjusts when focused to make room for the border.</p>
 <p>The use of a function here could be valid, but it depends. This tightly couples all of the components together meaning one cannot easily move things around which usually comes to be a pain later. it may be better to set a property with a default value and overwrite it later:</p>
 <div class="highlight"><pre><span></span><code><span class="nx">pragma</span> <span class="k">ComponentBehavior:</span> <span class="nx">Bound</span>
 <span class="kr">import</span> <span class="nx">QtQuick</span>
