@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../menu-with-keyboard-shortcuts/">
+        <link rel="prev" href="../trees-with-sqlite/">
       
       
       
@@ -394,6 +394,27 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../trees-with-sqlite/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trees with SQLite
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -695,6 +716,39 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#rename-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rename Nodes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rename Nodes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python-model_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python Model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qml_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#create-new-data" class="md-nav__link">
     <span class="md-ellipsis">
       Create New Data
@@ -715,15 +769,6 @@
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rename-nodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rename Nodes
-    </span>
-  </a>
   
 </li>
         
@@ -1212,6 +1257,39 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#rename-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rename Nodes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rename Nodes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python-model_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python Model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qml_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#create-new-data" class="md-nav__link">
     <span class="md-ellipsis">
       Create New Data
@@ -1232,15 +1310,6 @@
         
       </ul>
     </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rename-nodes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Rename Nodes
-    </span>
-  </a>
   
 </li>
         
@@ -1474,7 +1543,7 @@
 <h2 id="read-only">Read Only<a class="headerlink" href="#read-only" title="Permanent link">&para;</a></h2>
 <h3 id="basic-example">Basic Example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h3>
 <h4 id="python-model">Python Model<a class="headerlink" href="#python-model" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QAbstractItemModel</span><span class="p">,</span> <span class="n">QByteArray</span><span class="p">,</span> <span class="n">QModelIndex</span><span class="p">,</span> <span class="n">Qt</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QAbstractItemModel</span><span class="p">,</span> <span class="n">QByteArray</span><span class="p">,</span> <span class="n">QModelIndex</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QPersistentModelIndex</span><span class="p">,</span> <span class="n">QModelIndex</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 
 
@@ -1525,15 +1594,30 @@
             <span class="k">return</span> <span class="n">parent</span><span class="o">.</span><span class="n">internalPointer</span><span class="p">()</span><span class="o">.</span><span class="n">columnCount</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span><span class="o">.</span><span class="n">columnCount</span><span class="p">()</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeItem</span><span class="p">:</span>
+        <span class="n">untyped_item</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">internalPointer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">untyped_item</span><span class="p">,</span> <span class="n">TreeItem</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error, Item in Tree has wrong type, this is a bug!&quot;</span><span class="p">,</span> <span class="n">file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="n">item</span><span class="p">:</span> <span class="n">TreeItem</span> <span class="o">=</span> <span class="n">untyped_item</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">)):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span> <span class="ow">and</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">UserRole</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span>
+            <span class="ow">and</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">UserRole</span>
+            <span class="ow">and</span> <span class="n">role</span> <span class="o">!=</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span>
+        <span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">item</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">internalPointer</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">())</span>
+        <span class="n">column</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+        <span class="n">row</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
@@ -3368,9 +3452,104 @@ See Generally <a href="https://www.qt.io/product/qt6/qml-book/ch19-python-build-
 <span class="p">}</span>
 </code></pre></div>
 <h2 id="editable">Editable<a class="headerlink" href="#editable" title="Permanent link">&para;</a></h2>
+<h3 id="rename-nodes">Rename Nodes<a class="headerlink" href="#rename-nodes" title="Permanent link">&para;</a></h3>
+<h4 id="python-model_1">Python Model<a class="headerlink" href="#python-model_1" title="Permanent link">&para;</a></h4>
+<p>The Python Model must have the following changes from the earlier model. Continued in <a href="../trees-with-sqlite/">Trees With SQLite</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="gh">diff --git a/treeModel.py b/treeModel.py</span>
+<span class="gh">index 97cd094..66ea4ea 100644</span>
+<span class="gd">--- a/treeModel.py</span>
+<span class="gi">+++ b/treeModel.py</span>
+<span class="gu">@@ -1,5 +1,5 @@</span>
+<span class="w"> </span>import sys
+<span class="gd">-from PySide6.QtCore import QAbstractItemModel, QByteArray, QModelIndex, Qt, Slot</span>
+<span class="gi">+from PySide6.QtCore import QAbstractItemModel, QByteArray, QModelIndex, Qt, Slot, Signal</span>
+<span class="w"> </span>from typing import override
+<span class="w"> </span>from hash_helper import calculate_hash
+
+<span class="gu">@@ -51,11 +51,14 @@ class TreeModel(QAbstractItemModel):</span>
+<span class="w"> </span>            return parent.internalPointer().columnCount()
+<span class="w"> </span>        return self.root_item.columnCount()
+
+<span class="gi">+    # Signal to notify when an item has been renamed</span>
+<span class="gi">+    itemRenamed = Signal(int, int, str)</span>
+<span class="gi">+</span>
+<span class="w"> </span>    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+<span class="w"> </span>        if not index.isValid():
+<span class="w"> </span>            return None
+
+<span class="gd">-        if role != Qt.ItemDataRole.DisplayRole and role != Qt.ItemDataRole.UserRole:</span>
+<span class="gi">+        if role != Qt.ItemDataRole.DisplayRole and role != Qt.ItemDataRole.UserRole and role != Qt.ItemDataRole.EditRole:</span>
+<span class="w"> </span>            return None
+
+<span class="w"> </span>        item = index.internalPointer()
+<span class="gu">@@ -65,7 +68,7 @@ class TreeModel(QAbstractItemModel):</span>
+<span class="w"> </span>        if not index.isValid():
+<span class="w"> </span>            return Qt.ItemFlag.NoItemFlags
+
+<span class="gd">-        return Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable</span>
+<span class="gi">+        return Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEditable</span>
+
+<span class="w"> </span>    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+<span class="w"> </span>        if (
+<span class="gu">@@ -120,6 +123,7 @@ class TreeModel(QAbstractItemModel):</span>
+<span class="w"> </span>        roles = {
+<span class="w"> </span>            Qt.ItemDataRole.DisplayRole: QByteArray(b&quot;display&quot;),
+<span class="w"> </span>            Qt.ItemDataRole.UserRole: QByteArray(b&quot;userData&quot;),
+<span class="gi">+            Qt.ItemDataRole.EditRole: QByteArray(b&quot;edit&quot;),</span>
+<span class="w"> </span>        }
+<span class="w"> </span>        r: dict[int, QByteArray] = roles  # pyright: ignore [reportAssignmentType]
+<span class="w"> </span>        return r
+<span class="gu">@@ -173,6 +177,46 @@ class TreeModel(QAbstractItemModel):</span>
+<span class="w"> </span>        return item_text_str
+
+
+<span class="gi">+    @override</span>
+<span class="gi">+    def setData(self, index, value, role=Qt.ItemDataRole.EditRole):</span>
+<span class="gi">+        if not index.isValid() or role != Qt.ItemDataRole.EditRole:</span>
+<span class="gi">+            return False</span>
+<span class="gi">+</span>
+<span class="gi">+        item = index.internalPointer()</span>
+<span class="gi">+        if not item:</span>
+<span class="gi">+            return False</span>
+<span class="gi">+</span>
+<span class="gi">+        # Update the item data</span>
+<span class="gi">+        item.item_data[index.column()] = value</span>
+<span class="gi">+</span>
+<span class="gi">+        # Emit dataChanged signal</span>
+<span class="gi">+        self.dataChanged.emit(index, index, [role])</span>
+<span class="gi">+</span>
+<span class="gi">+        # Emit our custom signal</span>
+<span class="gi">+        self.itemRenamed.emit(index.row(), index.column(), value)</span>
+<span class="gi">+</span>
+<span class="gi">+        return True</span>
+<span class="gi">+</span>
+<span class="gi">+    @Slot(int, int, str)</span>
+<span class="gi">+    def renameItem(self, row, column, newName):</span>
+<span class="gi">+        &quot;&quot;&quot;</span>
+<span class="gi">+        Rename an item at the given row and column.</span>
+<span class="gi">+        This method is exposed to QML.</span>
+<span class="gi">+</span>
+<span class="gi">+        Args:</span>
+<span class="gi">+            row: The row of the item</span>
+<span class="gi">+            column: The column of the item</span>
+<span class="gi">+            newName: The new name for the item</span>
+<span class="gi">+</span>
+<span class="gi">+        Returns:</span>
+<span class="gi">+            True if successful, False otherwise</span>
+<span class="gi">+        &quot;&quot;&quot;</span>
+<span class="gi">+        index = self.index(row, column)</span>
+<span class="gi">+        if not index.isValid():</span>
+<span class="gi">+            return False</span>
+<span class="gi">+</span>
+<span class="gi">+        return self.setData(index, newName, Qt.ItemDataRole.EditRole)</span>
+<span class="gi">+</span>
+<span class="w"> </span>    @Slot(int, int, result=str)
+<span class="w"> </span>    def getItemStats(self, row, column):
+<span class="w"> </span>        &quot;&quot;&quot;
+</code></pre></div>
+<h4 id="qml_2">QML<a class="headerlink" href="#qml_2" title="Permanent link">&para;</a></h4>
 <h3 id="create-new-data">Create New Data<a class="headerlink" href="#create-new-data" title="Permanent link">&para;</a></h3>
 <h4 id="context-menu_1">Context Menu<a class="headerlink" href="#context-menu_1" title="Permanent link">&para;</a></h4>
-<h3 id="rename-nodes">Rename Nodes<a class="headerlink" href="#rename-nodes" title="Permanent link">&para;</a></h3>
 <h3 id="move-nodes">Move Nodes<a class="headerlink" href="#move-nodes" title="Permanent link">&para;</a></h3>
 <h3 id="delete-nodes">Delete Nodes<a class="headerlink" href="#delete-nodes" title="Permanent link">&para;</a></h3>
 <h2 id="animated">Animated<a class="headerlink" href="#animated" title="Permanent link">&para;</a></h2>
