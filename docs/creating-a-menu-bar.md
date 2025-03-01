@@ -1,5 +1,9 @@
 # Creating a Menu Bar
 
+## Desktop Centric Application
+
+### Minimum QML File
+
 The `ApplicationWindow` item supports a Menu bar, Header and Footer:
 
 ```qml
@@ -27,6 +31,7 @@ ApplicationWindow {
 
 }
 ```
+### Running QML
 
 Run this with:
 
@@ -46,6 +51,7 @@ Some things to discuss later:
 - anchors
     - This is explained well in the book, for now, anchors.fill: parent means that this item spans the entire parent
 
+### Creating Menu Items
 
 We can create menu items:
 
@@ -99,6 +105,8 @@ ApplicationWindow {
 }
 
 ```
+
+### Toolbar
 
 From here we can create a Toolbar:
 
@@ -163,6 +171,8 @@ ApplicationWindow {
 
 ```
 
+### Responsive Actions with Properties
+
 This is where we can start playing with some benefits of QML over widgets.
 
 1. when properties are assigned with `:` we create a contract, e.g.:
@@ -189,7 +199,11 @@ Action {
 }
 ```
 
-which will toggle the toolbar. We could also use the toolbar for tabs, in this next code chunk I show how to use tabs in the footer, although they don't do anything yet, just for show:
+which will toggle the toolbar. We could also use the toolbar for tabs,
+
+### Different Widgets in the Status Bar or Toolbar
+
+ in this next code chunk I show how to use tabs in the footer, although they don't do anything yet, just for show:
 
 ![](./assets/2025-02-24T12:39:22.112116.png)
 
@@ -282,6 +296,9 @@ ApplicationWindow {
 
 }
 ```
+
+
+## Modules
 
 The next thing to cover is creating modular code.
 
