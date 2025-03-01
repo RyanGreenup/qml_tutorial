@@ -674,9 +674,18 @@
                 <span class="p">}</span>
 
                 <span class="nx">Text</span> <span class="p">{</span>
-                    <span class="k">text:</span> <span class="nx">control</span><span class="p">.</span><span class="nx">action</span><span class="p">.</span><span class="nx">shortcut</span>
+                    <span class="kd">function</span> <span class="nx">get_shortcut_text</span><span class="p">()</span> <span class="p">{</span>
+                        <span class="kr">const</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">control</span><span class="p">.</span><span class="nx">action</span><span class="p">.</span><span class="nx">shortcut</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">s</span>  <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">return</span> <span class="nx">s</span>
+                        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+                        <span class="p">}</span>
+
+                    <span class="p">}</span>
+                    <span class="k">text:</span> <span class="nx">get_shortcut_text</span><span class="p">()</span>
                     <span class="k">anchors.right:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">right</span>
-                    <span class="c1">// color: &quot;white&quot;</span>
+                    <span class="k">color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">foreground</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>

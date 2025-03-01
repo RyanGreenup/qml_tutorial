@@ -564,11 +564,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#displaying-note-content" class="md-nav__link">
+  <a href="#displaying-note-content-with-signals" class="md-nav__link">
     <span class="md-ellipsis">
-      Displaying Note Content
+      Displaying Note Content With Signals
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Displaying Note Content With Signals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a Slot
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Create a Slot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treeview" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeView
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -829,11 +859,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#displaying-note-content" class="md-nav__link">
+  <a href="#displaying-note-content-with-signals" class="md-nav__link">
     <span class="md-ellipsis">
-      Displaying Note Content
+      Displaying Note Content With Signals
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Displaying Note Content With Signals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-slot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a Slot
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Create a Slot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treeview" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeView
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -960,8 +1020,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QGuiApplication</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtQml</span><span class="w"> </span><span class="kn">import</span> <span class="n">QQmlApplicationEngine</span><span class="p">,</span> <span class="n">qmlRegisterType</span><span class="p">,</span> <span class="n">QQmlContext</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QApplication</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">example_table_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExampleTableModel</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">treeModel</span><span class="w"> </span><span class="kn">import</span> <span class="n">TreeModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tree_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">TreeModel</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">key_emitter</span><span class="w"> </span><span class="kn">import</span> <span class="n">KeyEmitter</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
 
@@ -1052,15 +1111,8 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="c1"># Use QApplication instead of QGuiApplication to support QKeyEvent</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
     <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIG_DFL</span><span class="p">)</span>
-
-    <span class="n">qml_import_name</span> <span class="o">=</span> <span class="s2">&quot;TableManager&quot;</span>
-    <span class="n">qmlRegisterType</span><span class="p">(</span><span class="n">ExampleTableModel</span><span class="p">,</span> <span class="n">qml_import_name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;ExampleTableModel&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore</span>
-
-    <span class="c1"># Register the TreeModel</span>
-    <span class="n">qmlRegisterType</span><span class="p">(</span><span class="n">TreeModel</span><span class="p">,</span> <span class="n">qml_import_name</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;TreeModel&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore</span>
 
     <span class="n">engine</span> <span class="o">=</span> <span class="n">QQmlApplicationEngine</span><span class="p">()</span>
 
@@ -1083,7 +1135,7 @@
     <span class="n">key_emitter</span> <span class="o">=</span> <span class="n">KeyEmitter</span><span class="p">()</span>
     <span class="n">engine</span><span class="o">.</span><span class="n">rootContext</span><span class="p">()</span><span class="o">.</span><span class="n">setContextProperty</span><span class="p">(</span><span class="s2">&quot;keyEmitter&quot;</span><span class="p">,</span> <span class="n">key_emitter</span><span class="p">)</span>
 
-    <span class="n">qml_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;main.qml&quot;</span>
+    <span class="n">qml_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;qml&quot;</span> <span class="o">/</span> <span class="s2">&quot;main.qml&quot;</span>
     <span class="n">engine</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">qml_file</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span><span class="o">.</span><span class="n">rootObjects</span><span class="p">():</span>
@@ -1935,7 +1987,206 @@ The <code>parent</code> method, conversely to <code>index()</code>, returns the 
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h2 id="displaying-note-content">Displaying Note Content<a class="headerlink" href="#displaying-note-content" title="Permanent link">&para;</a></h2>
+<h2 id="displaying-note-content-with-signals">Displaying Note Content With Signals<a class="headerlink" href="#displaying-note-content-with-signals" title="Permanent link">&para;</a></h2>
+<p>Currently the application does nothing, next we need to emit a signal that contains the note content.</p>
+<h3 id="create-a-slot">Create a Slot<a class="headerlink" href="#create-a-slot" title="Permanent link">&para;</a></h3>
+<h4 id="treeview">TreeView<a class="headerlink" href="#treeview" title="Permanent link">&para;</a></h4>
+<p>In the Treeview the SelectionModel has the <code>onCurrentChanged</code> field <sup id="fnref:1740820703"><a class="footnote-ref" href="#fn:1740820703">5</a></sup></p>
+<p><div class="highlight"><pre><span></span><code>    <span class="k">selectionModel:</span> <span class="nx">ItemSelectionModel</span> <span class="p">{</span>
+        <span class="k">onCurrentChanged:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">current</span><span class="p">,</span> <span class="nx">previous</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// `current` is expected to be of type QModelIndex</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">valid</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Get details from the model and emit the signal</span>
+                <span class="kd">let</span> <span class="nx">details</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">getItemDetails</span><span class="p">(</span><span class="nx">current</span><span class="p">);</span>
+                <span class="nx">treeView</span><span class="p">.</span><span class="nx">currentItemChanged</span><span class="p">(</span><span class="nx">details</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div>
+Here we know the index, so in the TreeModel we need to create a slot that takes in the QModelIndex and returns a string <code>@Slot(QModelIndex, result=str)</code>, in this case:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">getItemDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get details for the selected item (note body or folder info)&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s2">&quot;No item selected&quot;</span>
+
+    <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Invalid item&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Note</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">body</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Folder</span><span class="p">):</span>
+        <span class="c1"># For folders, return some basic info</span>
+        <span class="n">child_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Folder: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="se">\n</span><span class="s2">Contains </span><span class="si">{</span><span class="n">child_count</span><span class="si">}</span><span class="s2"> items&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Unknown item type&quot;</span>
+</code></pre></div>
+<p>Now the second rectangle can be improved to display the content and respond to that signal:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">Rectangle</span> <span class="p">{</span>
+    <span class="kd">id: detailsRect</span>
+    <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="mf">0.61</span>
+    <span class="k">color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">background</span>
+
+    <span class="c1">// Allow Focus</span>
+    <span class="k">focus:</span> <span class="kc">true</span>
+    <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+    <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+    <span class="k">border.color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">accent</span>
+
+    <span class="c1">// Display area for the current item statistics</span>
+    <span class="nx">ColumnLayout</span> <span class="p">{</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="k">anchors.margins:</span> <span class="mi">10</span>
+
+        <span class="nx">Label</span> <span class="p">{</span>
+            <span class="k">text:</span> <span class="s2">&quot;TODO Note Title&quot;</span>
+            <span class="k">font.bold:</span> <span class="kc">true</span>
+            <span class="k">font.pointSize:</span> <span class="mi">12</span>
+        <span class="p">}</span>
+
+        <span class="nx">ScrollView</span> <span class="p">{</span>
+            <span class="k">Layout.fillWidth:</span> <span class="kc">true</span>
+            <span class="k">Layout.fillHeight:</span> <span class="kc">true</span>
+
+            <span class="nx">TextArea</span> <span class="p">{</span>
+                <span class="kd">id: noteBody</span>
+                <span class="k">readOnly:</span> <span class="kc">true</span>
+                <span class="k">wrapMode:</span> <span class="nx">TextEdit</span><span class="p">.</span><span class="nx">Wrap</span>
+                <span class="k">text:</span> <span class="s2">&quot;Select an item in the tree to view statistics&quot;</span>
+
+                <span class="k">background:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+                    <span class="k">color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">background</span>
+                    <span class="k">border.color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">accent</span>
+                    <span class="k">border.width:</span> <span class="mi">1</span>
+                    <span class="k">radius:</span> <span class="mi">4</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Connect to the tree view&#39;s signal</span>
+    <span class="nx">Connections</span> <span class="p">{</span>
+        <span class="k">target:</span> <span class="nx">treeView</span>
+        <span class="cm">/**</span>
+<span class="cm">         * Updates the text of the noteBody element with the provided note body text.</span>
+<span class="cm">         *</span>
+<span class="cm">         * @param {string} note_body_text - The text to be set as the note body.</span>
+<span class="cm">         */</span>
+        <span class="kd">function</span> <span class="nx">onCurrentItemChanged</span><span class="p">(</span><span class="nx">note_body</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">noteBody</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">note_body</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>So overall the <code>main.qml</code> would be:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">import</span> <span class="nx">QtQuick</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Window</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Controls</span><span class="p">.</span><span class="nx">Universal</span>
+<span class="kr">import</span> <span class="nx">QtQuick</span><span class="p">.</span><span class="nx">Layouts</span>
+
+<span class="nx">ApplicationWindow</span> <span class="p">{</span>
+    <span class="kd">id: root</span>
+    <span class="c1">// Custom handle component for SplitView</span>
+    <span class="k">width:</span> <span class="mi">640</span>
+    <span class="k">height:</span> <span class="mi">480</span>
+    <span class="k">visible:</span> <span class="kc">true</span>
+    <span class="k">title:</span> <span class="s2">&quot;Animated Rectangle Demo&quot;</span>
+    <span class="nx">property</span> <span class="kr">int</span> <span class="nx">border_width</span>
+    <span class="nx">property</span> <span class="nx">bool</span> <span class="nx">dark_mode</span>
+    <span class="k">Universal.theme:</span> <span class="nx">root</span><span class="p">.</span><span class="nx">dark_mode</span> <span class="o">?</span> <span class="k">Universal.Dark :</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">Light</span>
+
+    <span class="c1">// Menu Bar</span>
+    <span class="k">menuBar:</span> <span class="nx">AppMenu</span> <span class="p">{}</span>
+
+    <span class="c1">// The Main View</span>
+    <span class="nx">SplitView</span> <span class="p">{</span>
+        <span class="k">orientation:</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">Horizontal</span>
+        <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: rect_1</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="mf">0.39</span>
+            <span class="k">color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">background</span>
+            <span class="k">border.color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">accent</span>
+
+            <span class="c1">// Make sure to only focus treeView</span>
+            <span class="k">border.width:</span> <span class="nx">treeView</span><span class="p">.</span><span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">focus:</span> <span class="kc">false</span>
+            <span class="k">activeFocusOnTab:</span> <span class="kc">false</span>
+
+            <span class="nx">MyTreeView</span> <span class="p">{</span>
+                <span class="kd">id: treeView</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">topMargin:</span> <span class="nx">root</span><span class="p">.</span><span class="nx">border_width</span> <span class="o">+</span> <span class="mi">2</span>
+                <span class="k">leftMargin:</span> <span class="nx">root</span><span class="p">.</span><span class="nx">border_width</span> <span class="o">+</span> <span class="mi">2</span>
+
+                <span class="c1">// Connect to the signal to log statistics when item changes</span>
+                <span class="k">onCurrentItemChanged:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">note_body</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Current item changed. Statistics:&quot;</span><span class="p">,</span> <span class="nx">note_body</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nx">Rectangle</span> <span class="p">{</span>
+            <span class="kd">id: detailsRect</span>
+            <span class="k">SplitView.preferredWidth:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">*</span> <span class="mf">0.61</span>
+            <span class="k">color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">background</span>
+
+            <span class="c1">// Allow Focus</span>
+            <span class="k">focus:</span> <span class="kc">true</span>
+            <span class="k">activeFocusOnTab:</span> <span class="kc">true</span>
+            <span class="k">border.width:</span> <span class="nx">activeFocus</span> <span class="o">?</span> <span class="mi">10</span> <span class="o">:</span> <span class="mi">0</span>
+            <span class="k">border.color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">accent</span>
+
+            <span class="c1">// Display area for the current item statistics</span>
+            <span class="nx">ColumnLayout</span> <span class="p">{</span>
+                <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+                <span class="k">anchors.margins:</span> <span class="mi">10</span>
+
+                <span class="nx">Label</span> <span class="p">{</span>
+                    <span class="k">text:</span> <span class="s2">&quot;TODO Note Title&quot;</span>
+                    <span class="k">font.bold:</span> <span class="kc">true</span>
+                    <span class="k">font.pointSize:</span> <span class="mi">12</span>
+                <span class="p">}</span>
+
+                <span class="nx">ScrollView</span> <span class="p">{</span>
+                    <span class="k">Layout.fillWidth:</span> <span class="kc">true</span>
+                    <span class="k">Layout.fillHeight:</span> <span class="kc">true</span>
+
+                    <span class="nx">TextArea</span> <span class="p">{</span>
+                        <span class="kd">id: noteBody</span>
+                        <span class="k">readOnly:</span> <span class="kc">true</span>
+                        <span class="k">wrapMode:</span> <span class="nx">TextEdit</span><span class="p">.</span><span class="nx">Wrap</span>
+                        <span class="k">text:</span> <span class="s2">&quot;Select an item in the tree to view statistics&quot;</span>
+
+                        <span class="k">background:</span> <span class="nx">Rectangle</span> <span class="p">{</span>
+                            <span class="k">color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">background</span>
+                            <span class="k">border.color:</span> <span class="nx">Universal</span><span class="p">.</span><span class="nx">accent</span>
+                            <span class="k">border.width:</span> <span class="mi">1</span>
+                            <span class="k">radius:</span> <span class="mi">4</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Connect to the tree view&#39;s signal</span>
+            <span class="nx">Connections</span> <span class="p">{</span>
+                <span class="k">target:</span> <span class="nx">treeView</span>
+                <span class="cm">/**</span>
+<span class="cm">                 * Updates the text of the noteBody element with the provided note body text.</span>
+<span class="cm">                 *</span>
+<span class="cm">                 * @param {string} note_body_text - The text to be set as the note body.</span>
+<span class="cm">                 */</span>
+                <span class="kd">function</span> <span class="nx">onCurrentItemChanged</span><span class="p">(</span><span class="nx">note_body</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">noteBody</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">note_body</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <h2 id="connecting-to-a-file-sqlite">Connecting to a File (Sqlite)<a class="headerlink" href="#connecting-to-a-file-sqlite" title="Permanent link">&para;</a></h2>
 <h3 id="create-a-file">Create a File<a class="headerlink" href="#create-a-file" title="Permanent link">&para;</a></h3>
 <h3 id="read-an-existing-file">Read an Existing File<a class="headerlink" href="#read-an-existing-file" title="Permanent link">&para;</a></h3>
@@ -1958,6 +2209,9 @@ The <code>parent</code> method, conversely to <code>index()</code>, returns the 
 </li>
 <li id="fn:1740816699">
 <p><a href="https://www.databasestar.com/hierarchical-data-sql/#Which_Method_Should_I_Use">Hierarchical Data in SQL: The Ultimate Guide - Database Star</a>&#160;<a class="footnote-backref" href="#fnref:1740816699" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:1740820703">
+<p>In fact, The treeView itself emits a <code>CurrentChanged</code> signal that the <code>ItemSelectionModel</code> is automatically connected to when assigned to the <code>selectionModel</code> field. We are emitting a new signal when we recieve that. This is another example of how QML differs from QTWidgets, it pushes you to create more signals and slots and helps limit dereferencing indicies that may not exist.&#160;<a class="footnote-backref" href="#fnref:1740820703" title="Jump back to footnote 5 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
