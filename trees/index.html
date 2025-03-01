@@ -2383,7 +2383,6 @@ Consider using the <code>MenuWithKbd</code> from <a href="../menu-with-keyboard-
 </code></pre></div>
 <p>If one wants to expose a property of the underlying item in the delegate, they can use a slot. The context Menu is a good place to start playing around with this.</p>
 <p>First create a slot in the model:</p>
-<p>NOTE, I think this is wrong, I think the selectionModel gives an Index</p>
 <div class="highlight"><pre><span></span><code>    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">getItemStats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2445,6 +2444,7 @@ Consider using the <code>MenuWithKbd</code> from <a href="../menu-with-keyboard-
         <span class="k">return</span> <span class="n">item_text_str</span>
 </code></pre></div>
 <p>Then access that slot in the delegate:</p>
+<p>Actually, I think this could be out of date, I believe now it should be <code>onCurrentChanged: function(current, previous) {</code> (see <a href="../trees-with-sqlite/">trees-with-sqlite</a> instead)</p>
 <div class="highlight"><pre><span></span><code>            <span class="nx">Action</span> <span class="p">{</span>
                 <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;Show &amp;Statistics&quot;</span><span class="p">)</span>
                 <span class="k">shortcut:</span> <span class="s2">&quot;S&quot;</span>
