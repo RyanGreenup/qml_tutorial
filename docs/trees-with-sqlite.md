@@ -1049,6 +1049,102 @@ ApplicationWindow {
 }
 ```
 
+#### Using Icons for Notes and Folders
+##### QML
+Modify the tree delegate to include a built in Icon:
+
+```qml
+        // Item type icon
+        Image {
+            id: itemIcon
+            x: padding + (tree_delegate.isTreeNode ? (tree_delegate.depth + 1) * tree_delegate.indentation : 0)
+            anchors.verticalCenter: parent.verticalCenter
+            width: 16
+            height: 16
+            source: {
+                // Use decoration role to determine icon
+                if (tree_delegate.decoration === "folder") {
+                    return "qrc:///qt-project.org/styles/commonstyle/images/standardbutton-open-16.png"
+                } else {
+                    return "qrc:///qt-project.org/styles/commonstyle/images/file-16.png"
+                }
+            }
+            opacity: tree_delegate.is_current_item() ? 1.0 : 0.8
+        }
+
+        Label {
+            id: label
+            x: itemIcon.x + itemIcon.width + 5 // Position after the icon with some spacing
+            anchors.verticalCenter: parent.verticalCenter
+            width: parent.width - padding - x
+            clip: true
+            text: tree_delegate.display // model.display works but qmlls doesn't like it.
+            font.pointSize: tree_delegate.is_current_item() ? 12 : 10
+
+            // Animate font size changes
+            Behavior on font.pointSize {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutQuad
+                }
+            }
+        }
+```
+
+
+And add a decoration role to the `data` method of the `treeModel` class:
+
+```python
+@final
+class TreeModel(QAbstractItemModel):
+    # ...
+    # ...
+    # ...
+    @override
+    def data(
+        self,
+        index: QModelIndex | QPersistentModelIndex,
+        role: int = int(
+            Qt.ItemDataRole.DisplayRole
+        ),  # pyright: ignore [reportCallInDefaultInitializer]
+    ):
+        if not index.isValid():
+            return None
+
+        if role not in [
+            Qt.ItemDataRole.DisplayRole,
+            Qt.ItemDataRole.UserRole,
+            Qt.ItemDataRole.EditRole,
+            Qt.ItemDataRole.DecorationRole,
+            ]:
+            return None
+
+        column: int = index.column()
+        row: int = index.row()
+        _ = row
+        item = self._get_item(index)
+
+        # Used to set an icon
+        if role == Qt.ItemDataRole.DecorationRole and column == 0:
+            return "folder" if isinstance(item, Folder) else "note"
+
+        if item is None:
+            return None
+        else:
+            match column:
+                case 0:
+                    return item.title
+                case 1:
+                    return item.id
+                case _:
+                    return None
+    # ...
+    # ...
+    # ...
+```
+
+
+
 ## Displaying Note Content With Signals
 Currently the application does nothing, next we need to emit a signal that contains the note content.
 
@@ -1267,6 +1363,649 @@ ApplicationWindow {
 See the full code on the `read_sqlite` branch of the git repository which corresponds to the code this far.
 
 
+## Creating New Items
+### Notes
+#### Add a Context Menu
+In the context menu add the following to pass the index into a slot of the model:
+
+```qml
+Action {
+                text: qsTr("Create &New Note")
+                enabled: true
+                onTriggered: {
+                    // WARNING: This will work only for the context menu
+                    // let index = tree_delegate.treeView.index(tree_delegate.row, tree_delegate.column);
+                    // This will work for both
+                    let index = tree_delegate.treeView.selectionModel.currentIndex
+                    // This type isn't available so it can't be `required`, however, it's passed to the delegate
+                    treeModel.createNewNote(index);
+                }
+                shortcut: "N"
+            }
+```
+
+#### Add a Slot
+In the model add a slot that will:
+
+1. Create a new note
+2. Insert an item into the tree
+
+One can also request the entire tree to be rebuilt, however, this requires tracking which items are folded and unfolded. In the past I experimented with tracking unfolded items with a `dict[id: str, folded: bool]`. I found this to be more complex that it was worth. I recommend inserting the item wherever and instead offering the user a refresh command to rebuild the tree, it's simpler.
+
+
+```python
+    @Slot(QModelIndex)
+    def createNewNote(self, parent_index: QModelIndex) -> None:
+        """Create a new note under the specified parent item"""
+        if not parent_index.isValid():
+            return
+
+        parent_item = self._get_item(parent_index)
+        if parent_item is None:
+            return
+
+        # Create a default title and body for the new note
+        new_title = "New Note"
+        new_body = "Enter your note here..."
+
+        # Begin inserting rows
+        parent_row = parent_index.row()
+        parent_parent = self.parent(parent_index)
+
+        # Get the position where the new note will be inserted
+        insert_position = len(parent_item.children)
+
+        # Begin inserting rows
+        self.beginInsertRows(parent_index, insert_position, insert_position)
+
+        # Create the new note in the database and get the Note object
+        new_note = self.db_handler.create_note(
+            title=new_title,
+            body=new_body,
+            parent=parent_item
+        )
+
+        # End inserting rows
+        self.endInsertRows()
+```
+
+#### Implement the Database Logic
+
+In the database, the following method will create a new note.
+
+```python
+    def create_note(
+        self,
+        title: str,
+        body: str,
+        parent: Note | Folder
+    ) -> Note:
+        """
+        Create a new note underneath a given parent item
+
+        Args:
+            title: Title of the new note
+            body: Content of the new note
+            parent: Parent item (Note or Folder) under which to create the note
+
+        Returns:
+            The newly created Note object
+        """
+        # Generate a unique ID for the new note
+        import uuid
+        note_id = str(uuid.uuid4())
+
+        # Get the current timestamp
+        now = datetime.now()
+
+        # Determine folder_id and parent_note_id based on parent type
+        folder_id = None
+        parent_note_id = None
+
+        if isinstance(parent, Folder):
+            folder_id = parent.id
+        elif isinstance(parent, Note):
+            folder_id = parent.folder_id
+            parent_note_id = parent.id
+        else:
+            raise TypeError("Parent must be either a Note or Folder")
+
+        # Insert the new note into the database
+        self.cursor.execute(
+            """
+            INSERT INTO notes (id, title, body, folder_id, parent_note_id, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (note_id, title, body, folder_id, parent_note_id, now, now)
+        )
+        self.connection.commit()
+
+        # Create and return the Note object
+        note = Note(
+            id=note_id,
+            title=title,
+            body=body,
+            folder_id=folder_id,
+            parent=parent,
+            created_at=now,
+            updated_at=now
+        )
+
+        # Add the new note to the parent's children
+        parent.children.append(note)
+
+        return note
+
+```
+
+#### Creating a Dialog
+Next, the user requires a dialog to enter the title for the new note
+
+##### Modify the View
+###### Create a Property to Store the ID
+In the treeView create a property to store the index details before the popup has occured (in which case the tree focus may change):
+
+```qml
+// Property to store the parent index for new notes
+property var currentParentIndex: null
+```
+
+###### Declare the Dialog
+Inside the tree, declare a new note dialog, we'll implement this in a moment, for now it's important to note that this must recieve a signal from the dialog to actually create the new note. This way the user can cancel the new note creation from the popup dialog:
+
+```qml
+NewNoteDialog {
+    id: newNoteDialog
+
+    onNoteCreated: function(title, body) {
+        if (treeView.currentParentIndex) {
+            treeModel.createNoteWithDetails(treeView.currentParentIndex, title, body);
+        }
+    }
+}
+
+```
+
+###### Context Menu
+The context menu should now have the following action
+
+```qml
+Action {
+    text: qsTr("Create &New Note")
+    enabled: true
+    onTriggered: {
+        // Get the current index
+        let index = tree_delegate.treeView.selectionModel.currentIndex
+
+        // Store the current index for later use
+        treeView.currentParentIndex = index
+
+        // Show the dialog
+        newNoteDialog.open()
+    }
+    shortcut: "N"
+}
+```
+
+
+##### Simple Dialog
+
+The dialog should emit a signal to create the new note, here is a simple example of such a popup dialog. Note the use of keybindings to accept and reject the dialog:
+
+```qml
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Universal
+import QtQuick.Layouts
+import QtQuick.Window
+
+Dialog {
+    // Remove explicit theme setting to inherit from parent
+    id: newNoteDialog
+    title: "Create New Note"
+    modal: true
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    width: Math.min(parent.width * 0.8, 500)
+    height: Math.min(parent.height * 0.8, 400)
+    anchors.centerIn: parent
+    focus: true
+
+    // Properties to store the input values
+    property string noteTitle: titleField.text
+    property string noteBody: bodyField.text
+
+    // Signal emitted when the dialog is accepted with valid data
+    signal noteCreated(string title, string body)
+
+    onAccepted: {
+        if (titleField.text.trim() !== "") {
+            noteCreated(titleField.text, bodyField.text);
+        }
+    }
+
+    // Handle key events for the dialog
+    Keys.onPressed: function (event) {
+        if (event.key === Qt.Key_Escape) {
+            reject();
+            event.accepted = true;
+        } else if (event.key === Qt.Key_Return && (event.modifiers & Qt.ControlModifier)) {
+            accept();
+            event.accepted = true;
+        }
+    }
+
+    // Add key handlers to the text fields as well
+    Shortcut {
+        sequence: StandardKey.Cancel
+        onActivated: newNoteDialog.reject()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Return"
+        onActivated: newNoteDialog.accept()
+    }
+
+    // Reset fields when dialog is opened
+    onOpened: {
+        titleField.text = "New Note";
+        bodyField.text = "Enter your note here...";
+        titleField.selectAll();
+        titleField.forceActiveFocus();
+    }
+
+    contentItem: ColumnLayout {
+        spacing: 10
+
+        Label {
+            text: "Title:"
+            Layout.fillWidth: true
+        }
+
+        TextField {
+            id: titleField
+            Layout.fillWidth: true
+            placeholderText: "Enter note title"
+            selectByMouse: true
+
+            // Select all text when focused
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    selectAll();
+                }
+            }
+
+            // Move to body field when Tab is pressed
+            Keys.onTabPressed: function(event) {
+                bodyField.forceActiveFocus();
+                event.accepted = true;
+            }
+        }
+
+        Label {
+            text: "Content:"
+            Layout.fillWidth: true
+        }
+
+        ScrollView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            TextArea {
+                id: bodyField
+                placeholderText: "Enter note content"
+                wrapMode: TextEdit.Wrap
+                selectByMouse: true
+
+                // Move to title field when Shift+Tab is pressed
+                Keys.onPressed: function (event) {
+                    if (event.key === Qt.Key_Tab && (event.modifiers & Qt.ShiftModifier)) {
+                        titleField.forceActiveFocus();
+                        event.accepted = true;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+
+##### Something more Sophisticated
+
+![](./assets/stylized_dialog.png)
+
+
+``` python
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Controls.Universal
+import QtQuick.Layouts
+import QtQuick.Window
+import QtQuick.Effects
+
+Dialog {
+    id: newNoteDialog
+    title: "Create New Note"
+    modal: true
+    closePolicy: Popup.CloseOnEscape
+    width: Math.min(parent.width * 0.8, 600)
+    height: Math.min(parent.height * 0.8, 500)
+    anchors.centerIn: parent
+    focus: true
+    padding: 20
+
+    // Some Custom Styling
+    background: Rectangle {
+        color: Universal.background
+        border.color: Universal.accent
+        border.width: 1
+        radius: 6
+
+        layer.enabled: true
+        layer.effect: MultiEffect {
+            shadowEnabled: true
+            shadowColor: "#80000000"
+            shadowHorizontalOffset: 0
+            shadowVerticalOffset: 3
+            shadowBlur: 12
+        }
+    }
+
+    // Blue header stripe
+    header: Rectangle {
+        color: Universal.accent
+        height: 50
+        radius: 5
+
+        Label {
+            text: newNoteDialog.title
+            color: "white"
+            font.pixelSize: 16
+            font.weight: Font.DemiBold
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+        }
+    }
+
+    // Store the input values
+    property string noteTitle: titleField.text
+    property string noteBody: bodyField.text
+    property bool isModified: false
+
+    // Signal emitted when the dialog is accepted
+    signal noteCreated(string title, string body)
+
+    // Custom footer; styled buttons
+    footer: DialogButtonBox {
+        alignment: Qt.AlignRight
+        background: Rectangle {
+            color: "transparent"
+        }
+
+        Button {
+            text: "Cancel"
+            DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
+            flat: true
+
+            contentItem: Text {
+                text: parent.text
+                font.pixelSize: 14
+                color: parent.hovered ? Universal.accent : Universal.foreground
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                implicitWidth: 100
+                implicitHeight: 40
+                color: parent.hovered ? Qt.lighter(Universal.background, 1.1) : "transparent"
+                border.color: parent.hovered ? Universal.accent : "transparent"
+                border.width: 1
+                radius: 4
+            }
+        }
+
+        Button {
+            id: saveButton
+            text: "Save Note"
+            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+            enabled: titleField.text.trim() !== ""
+
+            contentItem: Text {
+                text: parent.text
+                font.pixelSize: 14
+                font.weight: Font.Medium
+                color: parent.enabled ? "white" : Qt.darker("white", 1.5)
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                implicitWidth: 120
+                implicitHeight: 40
+                color: parent.enabled ? (parent.hovered ? Qt.lighter(Universal.accent, 1.1) : Universal.accent) : Qt.darker(Universal.accent, 1.5)
+                radius: 4
+
+                Behavior on color {
+                    ColorAnimation { duration: 150 }
+                }
+            }
+        }
+    }
+
+    onAccepted: {
+        if (titleField.text.trim() !== "") {
+            noteCreated(titleField.text, bodyField.text)
+        }
+    }
+
+    // Handle key events for the dialog
+    Keys.onPressed: function(event) {
+        if (event.key === Qt.Key_Escape) {
+            reject()
+            event.accepted = true
+        } else if (event.key === Qt.Key_Return && (event.modifiers & Qt.ControlModifier)) {
+            if (titleField.text.trim() !== "") {
+                accept()
+                event.accepted = true
+            }
+        }
+    }
+
+    // Add key handlers to the text fields as well
+    Shortcut {
+        sequence: StandardKey.Cancel
+        onActivated: newNoteDialog.reject()
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Return"
+        onActivated: {
+            if (titleField.text.trim() !== "") {
+                newNoteDialog.accept()
+            }
+        }
+    }
+
+    // Reset fields when dialog is opened
+    onOpened: {
+        titleField.text = "New Note"
+        bodyField.text = ""
+        isModified = false
+        titleField.selectAll()
+        titleField.forceActiveFocus()
+    }
+
+    contentItem: ColumnLayout {
+        spacing: 16
+
+        // Status bar showing keyboard shortcuts
+        Rectangle {
+            Layout.fillWidth: true
+            height: 30
+            color: Qt.rgba(Universal.accent.r, Universal.accent.g, Universal.accent.b, 0.1)
+            radius: 4
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
+
+                Label {
+                    text: "Ctrl+Enter to save • Esc to cancel"
+                    font.pixelSize: 12
+                    color: Universal.foreground
+                    opacity: 0.7
+                }
+
+                Item { Layout.fillWidth: true }
+
+                Label {
+                    text: isModified ? "Modified" : ""
+                    font.pixelSize: 12
+                    font.italic: true
+                    color: Universal.accent
+                }
+            }
+        }
+
+        Label {
+            text: "Title"
+            font.pixelSize: 14
+            font.weight: Font.Medium
+            Layout.fillWidth: true
+            Layout.topMargin: 10
+            color: Universal.foreground
+        }
+
+        TextField {
+            id: titleField
+            Layout.fillWidth: true
+            Layout.preferredHeight: 40
+            placeholderText: "Enter note title"
+            selectByMouse: true
+            font.pixelSize: 15
+
+            background: Rectangle {
+                color: titleField.activeFocus ? Qt.lighter(Universal.background, 1.1) : Universal.background
+                border.color: titleField.activeFocus ? Universal.accent : Qt.darker(Universal.background, 1.2)
+                border.width: 1
+                radius: 4
+
+                Behavior on border.color {
+                    ColorAnimation { duration: 150 }
+                }
+            }
+
+            onTextChanged: {
+                isModified = true
+            }
+
+            // Select all text when focused
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    selectAll()
+                }
+            }
+
+            // Move to body field when Tab is pressed
+            Keys.onTabPressed: {
+                bodyField.forceActiveFocus()
+                event.accepted = true
+            }
+        }
+
+        Label {
+            text: "Content"
+            font.pixelSize: 14
+            font.weight: Font.Medium
+            Layout.fillWidth: true
+            Layout.topMargin: 10
+            color: Universal.foreground
+        }
+
+        ScrollView {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            background: Rectangle {
+                color: bodyField.activeFocus ? Qt.lighter(Universal.background, 1.05) : Universal.background
+                border.color: bodyField.activeFocus ? Universal.accent : Qt.darker(Universal.background, 1.2)
+                border.width: 1
+                radius: 4
+
+                Behavior on border.color {
+                    ColorAnimation { duration: 150 }
+                }
+            }
+
+            TextArea {
+                id: bodyField
+                placeholderText: "Enter your note content here..."
+                wrapMode: TextEdit.Wrap
+                selectByMouse: true
+                font.pixelSize: 14
+                padding: 10
+
+                onTextChanged: {
+                    isModified = true
+                }
+
+                // Move to title field when Shift+Tab is pressed
+                Keys.onPressed: function(event) {
+                    if (event.key === Qt.Key_Tab && (event.modifiers & Qt.ShiftModifier)) {
+                        titleField.forceActiveFocus()
+                        event.accepted = true
+                    }
+                }
+            }
+        }
+
+        // Character count and word count
+        Rectangle {
+            Layout.fillWidth: true
+            height: 30
+            color: "transparent"
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 5
+                anchors.rightMargin: 5
+
+                Label {
+                    text: bodyField.text.length + " characters"
+                    font.pixelSize: 12
+                    opacity: 0.7
+                }
+
+                Label {
+                    text: "•"
+                    font.pixelSize: 12
+                    opacity: 0.7
+                }
+
+                Label {
+                    text: bodyField.text.trim() ? bodyField.text.trim().split(/\s+/).length + " words" : "0 words"
+                    font.pixelSize: 12
+                    opacity: 0.7
+                }
+
+                Item { Layout.fillWidth: true }
+
+                Label {
+                    text: new Date().toLocaleString(Qt.locale(), "yyyy-MM-dd")
+                    font.pixelSize: 12
+                    opacity: 0.7
+                }
+            }
+        }
+    }
+}
+
+```
 
 
 
