@@ -10,7 +10,6 @@ Sections correspond to branches.
 
 ## Introduction
 Here we show how to connect a QML Tree with a file. SQLite is used because it's typically the correct choice and working with trees in a relational database is a bit trickier than mere files, hence it serves as a good exemplar
-
 ## Create an Initial Application ( `read_sqlite`)
 ### Overview
 
@@ -1142,9 +1141,6 @@ class TreeModel(QAbstractItemModel):
     # ...
     # ...
 ```
-
-
-
 ## Displaying Note Content With Signals
 Currently the application does nothing, next we need to emit a signal that contains the note content.
 
@@ -1361,9 +1357,9 @@ ApplicationWindow {
 ```
 
 See the full code on the `read_sqlite` branch of the git repository which corresponds to the code this far.
-
-
 ## Creating New Items
+### Overview
+Here we show how to create New Note Items. The logic for Folders is much the same so is omitted.
 ### Notes
 #### Add a Context Menu
 In the context menu add the following to pass the index into a slot of the model:
@@ -1383,7 +1379,6 @@ Action {
                 shortcut: "N"
             }
 ```
-
 #### Add a Slot
 In the model add a slot that will:
 
@@ -1428,7 +1423,6 @@ One can also request the entire tree to be rebuilt, however, this requires track
         # End inserting rows
         self.endInsertRows()
 ```
-
 #### Implement the Database Logic
 
 In the database, the following method will create a new note.
@@ -1497,7 +1491,6 @@ In the database, the following method will create a new note.
         return note
 
 ```
-
 #### Creating a Dialog
 Next, the user requires a dialog to enter the title for the new note
 
@@ -1509,7 +1502,6 @@ In the treeView create a property to store the index details before the popup ha
 // Property to store the parent index for new notes
 property var currentParentIndex: null
 ```
-
 ###### Declare the Dialog
 Inside the tree, declare a new note dialog, we'll implement this in a moment, for now it's important to note that this must recieve a signal from the dialog to actually create the new note. This way the user can cancel the new note creation from the popup dialog:
 
@@ -1525,7 +1517,6 @@ NewNoteDialog {
 }
 
 ```
-
 ###### Context Menu
 The context menu should now have the following action
 
@@ -1546,8 +1537,6 @@ Action {
     shortcut: "N"
 }
 ```
-
-
 ##### Simple Dialog
 
 The dialog should emit a signal to create the new note, here is a simple example of such a popup dialog. Note the use of keybindings to accept and reject the dialog:
@@ -2006,14 +1995,325 @@ Dialog {
 }
 
 ```
+## Refresh the Tree
+### Overview
+### Code
+#### QML
+Add a context menu to the tree that can refresh from the database:
+
+```qml
+MenuSeparator {}
+
+Action {
+    text: qsTr("&Refresh Tree")
+    onTriggered: {
+        treeModel.refreshTree()
+    }
+    shortcut: "R"
+}
+```
+
+#### Python
+In the TreeModel, reload the data from the database just like in the constructor:
+
+```python
+     @Slot()
+     def refreshTree(self) -> None:
+         """Refresh the tree by reloading all data from the database"""
+         # Notify the view that we're about to reset the model
+         self.beginResetModel()
+
+         # Reload the data from the database
+         self.tree_data = self.db_handler.get_folders_with_notes()
+
+         # Connect root folders to the root item
+         for folder in self.tree_data:
+             folder.parent = self.root_item
+
+         # Set the folders as children of the root item
+         self.root_item.children = self.tree_data  # pyright: ignore [reportAttributeAccessIssue]
+
+         # Notify the view that the model has been reset
+         self.endResetModel()
+```
+
+### Preserving Fold State
+
+As it stands, I don't know of a good way to restore the fold state of the tree. T
+
+One can track expanded items like so:
+
+
+```qml
+TreeView {
+    // ...
+    // ...
+    // ...
+
+    onExpanded: function (row, depth) {
+        // Store expanded items to potentially restore state later
+        if (!treeView.expanded_items.includes(row)) {
+            let index = get_index_from_row(row);
+            let id = model.get_id(index);
+            let title = model.get_title(index);
+            expanded_items.push(id);
+            console.log("Expanded " + id + "( " + title + ") all: " + treeView.expanded_items);
+        }
+    }
+
+    onCollapsed: function (row) {
+        let index = get_index_from_row(row);
+        let id = model.get_id(index);
+        // Remove collapsed items from the expanded_items array
+        const js_index = expanded_items.indexOf(id);
+        if (js_index !== -1) {
+            expanded_items.splice(js_index, 1);
+        }
+    }
+}
+```
+
+However, there does not seem to be a way to process every item in a tree, so I don't know of any way to restore the fold state of a tree after refresh.
+
+
+## Update the Tree
+### Rename Items
+#### Overview
+Unlike QtWidgets, I've found Editing items directly in the delegate to be fraught with peril. It's surprisingly complex to get keybindings to identify the correct item. It's generally easier to spawn a dialog and edit in the dialog directly. If the dialog focuses the textfield and remains keyboard centric, this isn't a big deal in terms of UI but it does show that QML is not QTWidgets.
+
+However, this could also have been related to the way that I had nested widgets with focus etc. `#TODO`
+
+#### Code
+##### Database Handler
+```python
+    def update_title(self, item: Note | Folder, new_title: str) -> None:
+        """
+        Update the title of a Note or Folder
+
+        Args:
+            item: The Note or Folder to update
+            new_title: The new title to set
+
+        Raises:
+            TypeError: If item is neither a Note nor a Folder
+        """
+        # Get the current timestamp
+        now = datetime.now()
+
+        if isinstance(item, Note):
+            # Update the note in the database
+            self.cursor.execute(
+                """
+                UPDATE notes
+                SET title = ?, updated_at = ?
+                WHERE id = ?
+                """,
+                (new_title, now, item.id)
+            )
+        elif isinstance(item, Folder):
+            # Update the folder in the database
+            self.cursor.execute(
+                """
+                UPDATE folders
+                SET name = ?, updated_at = ?
+                WHERE id = ?
+                """,
+                (new_title, now, item.id)
+            )
+        else:
+            raise TypeError("Item must be either a Note or Folder")
+
+        # Commit the changes
+        self.connection.commit()
+
+        # Update the object
+        item.title = new_title
+        item.updated_at = now
+```
+##### Tree Model
+```python
+
+    @Slot(QModelIndex, str, result=bool)
+    def update_title(self, index: QModelIndex, new_title: str) -> bool:
+        """
+        Update the title of a Note or Folder
+
+        Args:
+            index: The QModelIndex of the item to update
+            new_title: The new title to set
+
+        Returns:
+            bool: True if the update was successful, False otherwise
+        """
+        if not index.isValid() or not new_title.strip():
+            return False
+
+        item = self._get_item(index)
+        if item is None:
+            return False
+
+        try:
+            # Update the title in the database and the object
+            self.db_handler.update_title(item, new_title)
+
+            # Notify the view that the data has changed
+            self.dataChanged.emit(index, index, [Qt.ItemDataRole.DisplayRole])
+
+            return True
+        except Exception as e:
+            print(f"Error updating title: {e}", file=sys.stderr)
+            return False
+```
+
+##### QML
+
+###### TreeView
+
+Add the following somewhere in the TreeView, the actual Dialog will be created in a moment:
+
+```qml
+EditTitleDialog {
+    id: editTitleDialog
+
+    onTitleEdited: function(newTitle) {
+        // Get the current index
+        let index = treeView.selectionModel.currentIndex;
+        if (index.valid) {
+            // Update the title in the model
+            treeModel.update_title(index, newTitle);
+        }
+    }
+}
+```
+
+Then Add the following to the context menu:
+
+```qml
+// Context menu for tree items
+MenuWithKbd {
+    id: contextMenu
+
+    /// ...
+    /// ...
+    /// ...
+
+
+    Action {
+        text: qsTr("&Edit Title")
+        enabled: true
+        onTriggered: {
+            let index = tree_delegate.treeView.selectionModel.currentIndex
+
+            tree_delegate.treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect);
+
+            if (index.valid) {
+                // Get the current title
+                let currentTitle = treeModel.get_title(index);
+
+                // Set the current title in the dialog
+                editTitleDialog.currentTitle = currentTitle;
+
+                // Show the dialog
+                editTitleDialog.open();
+            }
+        }
+        shortcut: "E"
+    }
+
+    /// ...
+    /// ...
+    /// ...
+
+
+}
+```
 
 
 
-## Connecting to a File (Sqlite)
-### Create a File
-### Read an Existing File
-### Update an Existing File
-#### Create new Nodes
-#### Rename Nodes
-#### Move Nodes
-#### Delete Nodes
+###### Edit Title Dialog
+
+In a separate file, e.g. `src/qml/EditTitleDialog.qml` create a simple dialog like so
+
+```qml
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Controls.Universal
+
+Dialog {
+    id: editTitleDialog
+    title: qsTr("Edit Title")
+    modal: true
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    width: 400
+
+    // Signal emitted when the user confirms the edit
+    signal titleEdited(string newTitle)
+
+    // Property to store the current title
+    property string currentTitle: ""
+
+    // Center the dialog in the parent
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
+
+    // Set focus to the text field when the dialog opens
+    onOpened: {
+        titleField.text = currentTitle;
+        titleField.forceActiveFocus();
+        titleField.selectAll();
+    }
+
+    // Handle OK button click
+    onAccepted: {
+        if (titleField.text.trim() !== "") {
+            titleEdited(titleField.text.trim());
+        }
+    }
+
+    // Function to reset the dialog state
+    function reset() {
+        currentTitle = "";
+    }
+
+    // Content of the dialog
+    contentItem: ColumnLayout {
+        spacing: 10
+
+        TextField {
+            id: titleField
+            Layout.fillWidth: true
+            placeholderText: qsTr("Enter new title")
+            selectByMouse: true
+
+            // Allow pressing Enter to accept the dialog
+            Keys.onReturnPressed: {
+                if (text.trim() !== "") {
+                    editTitleDialog.accept();
+                }
+            }
+            Keys.onEnterPressed: {
+                if (text.trim() !== "") {
+                    editTitleDialog.accept();
+                }
+            }
+        }
+    }
+
+    // Reset the field when the dialog is closed
+    onClosed: {
+        titleField.text = "";
+    }
+}
+
+```
+
+
+### Move Items
+#### Keyboard
+#### Drag and Drop
+##### Database Handler
+##### Model
+##### QML
+### Delete
