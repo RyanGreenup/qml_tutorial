@@ -553,6 +553,30 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#using-icons-for-notes-and-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Icons for Notes and Folders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Icons for Notes and Folders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -845,6 +869,30 @@
       Code
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-icons-for-notes-and-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Icons for Notes and Folders
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Icons for Notes and Folders">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#qml_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -1993,6 +2041,93 @@ The <code>parent</code> method, conversely to <code>index()</code>, returns the 
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
+</code></pre></div>
+<h4 id="using-icons-for-notes-and-folders">Using Icons for Notes and Folders<a class="headerlink" href="#using-icons-for-notes-and-folders" title="Permanent link">&para;</a></h4>
+<h5 id="qml_1">QML<a class="headerlink" href="#qml_1" title="Permanent link">&para;</a></h5>
+<p>Modify the tree delegate to include a built in Icon:</p>
+<div class="highlight"><pre><span></span><code>        <span class="c1">// Item type icon</span>
+        <span class="nx">Image</span> <span class="p">{</span>
+            <span class="kd">id: itemIcon</span>
+            <span class="k">x:</span> <span class="nx">padding</span> <span class="o">+</span> <span class="p">(</span><span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">isTreeNode</span> <span class="o">?</span> <span class="p">(</span><span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="k">tree_delegate.indentation :</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">anchors.verticalCenter:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">verticalCenter</span>
+            <span class="k">width:</span> <span class="mi">16</span>
+            <span class="k">height:</span> <span class="mi">16</span>
+            <span class="k">source:</span> <span class="p">{</span>
+                <span class="c1">// Use decoration role to determine icon</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">decoration</span> <span class="o">===</span> <span class="s2">&quot;folder&quot;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="s2">&quot;qrc:///qt-project.org/styles/commonstyle/images/standardbutton-open-16.png&quot;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="s2">&quot;qrc:///qt-project.org/styles/commonstyle/images/file-16.png&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">opacity:</span> <span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">is_current_item</span><span class="p">()</span> <span class="o">?</span> <span class="mf">1.0</span> <span class="o">:</span> <span class="mf">0.8</span>
+        <span class="p">}</span>
+
+        <span class="nx">Label</span> <span class="p">{</span>
+            <span class="kd">id: label</span>
+            <span class="k">x:</span> <span class="nx">itemIcon</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">itemIcon</span><span class="p">.</span><span class="nx">width</span> <span class="o">+</span> <span class="mi">5</span> <span class="c1">// Position after the icon with some spacing</span>
+            <span class="k">anchors.verticalCenter:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">verticalCenter</span>
+            <span class="k">width:</span> <span class="nx">parent</span><span class="p">.</span><span class="nx">width</span> <span class="o">-</span> <span class="nx">padding</span> <span class="o">-</span> <span class="nx">x</span>
+            <span class="k">clip:</span> <span class="kc">true</span>
+            <span class="k">text:</span> <span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">display</span> <span class="c1">// model.display works but qmlls doesn&#39;t like it.</span>
+            <span class="k">font.pointSize:</span> <span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">is_current_item</span><span class="p">()</span> <span class="o">?</span> <span class="mi">12</span> <span class="o">:</span> <span class="mi">10</span>
+
+            <span class="c1">// Animate font size changes</span>
+            <span class="nx">Behavior</span> <span class="nx">on</span> <span class="nx">font</span><span class="p">.</span><span class="nx">pointSize</span> <span class="p">{</span>
+                <span class="nx">NumberAnimation</span> <span class="p">{</span>
+                    <span class="k">duration:</span> <span class="mi">200</span>
+                    <span class="k">easing.type:</span> <span class="nx">Easing</span><span class="p">.</span><span class="nx">OutQuad</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+</code></pre></div>
+<p>And add a decoration role to the <code>data</code> method of the <code>treeModel</code> class:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TreeModel</span><span class="p">(</span><span class="n">QAbstractItemModel</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># ...</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span>
+        <span class="p">),</span>  <span class="c1"># pyright: ignore [reportCallInDefaultInitializer]</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">UserRole</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DecorationRole</span><span class="p">,</span>
+            <span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">column</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+        <span class="n">row</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">row</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="c1"># Used to set an icon</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DecorationRole</span> <span class="ow">and</span> <span class="n">column</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;folder&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Folder</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;note&quot;</span>
+
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">match</span> <span class="n">column</span><span class="p">:</span>
+                <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span>
+                <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span>
+                <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># ...</span>
+    <span class="c1"># ...</span>
 </code></pre></div>
 <h2 id="displaying-note-content-with-signals">Displaying Note Content With Signals<a class="headerlink" href="#displaying-note-content-with-signals" title="Permanent link">&para;</a></h2>
 <p>Currently the application does nothing, next we need to emit a signal that contains the note content.</p>
