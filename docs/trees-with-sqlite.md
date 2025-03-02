@@ -2038,42 +2038,604 @@ In the TreeModel, reload the data from the database just like in the constructor
 ```
 
 ### Preserving Fold State
+#### Overview
 
-As it stands, I don't know of a good way to restore the fold state of the tree. T
+QT does not provide a way to preserve the fold state out of the box. The approach I recommend is:
 
-One can track expanded items like so:
+1. Track Expanded and Collapsed Items in the `TreeView` using the `onExpanded` and `onCollapsed` signal
+2. Store the ID and associated index in a hashmap when the `QAbstractItemModel` builds the tree, e.g.
+
+    ```python
+
+    class TreeModel(QAbstractItemModel):
+        # Signal for notifying when sort parameters change
+        sortChanged = Signal()
+
+        def __init__(
+            self, db_connection: sqlite3.Connection, parent: QObject | None = None
+        ):
+            super().__init__(parent)
+            self.index_id_map: dict[str, QModelIndex | QPersistentModelIndex] = dict()
+    ```
+3. Create a slot that the view can use to query the ID.
+4. Implement Refresh in the ID
+5. Use the [TreeView.expandToIndex](https://doc.qt.io/qt-6/qml-qtquick-treeview.html#expandToIndex-method) method to expand each tracked item.
+
+There is a lot of code included below, see the branch corresponding to this section on GitHub:
+
+  * [`TreeView {}` src/qml/MyTreeView.qml](https://github.com/RyanGreenup/qml_sqlite_tree_example/blob/main/src/qml/MyTreeView.qml):
+  * [`TreeModel` in src/tree_model.py](https://github.com/RyanGreenup/qml_sqlite_tree_example/blob/main/src/tree_model.py)
+
+One can track expanded items like so, however, it may be necessary to track the id of the first child as the `expandToIndex` method expands **up to** an expanded item.
+
+#### Code
+
+#### QML
 
 
 ```qml
 TreeView {
-    // ...
-    // ...
-    // ...
+    id: treeView
+    anchors.fill: parent
 
-    onExpanded: function (row, depth) {
-        // Store expanded items to potentially restore state later
-        if (!treeView.expanded_items.includes(row)) {
-            let index = get_index_from_row(row);
-            let id = model.get_id(index);
-            let title = model.get_title(index);
-            expanded_items.push(id);
-            console.log("Expanded " + id + "( " + title + ") all: " + treeView.expanded_items);
+    /// ...
+    /// ...
+    /// ...
+
+    function get_index_from_row(row, column = 0) {
+        // Create and return a model index for the given row and column
+        return treeView.index(row, column);
+    }
+
+    function focus_note_from_id(id) {
+        let index = treeModel.get_index_by_id(id);
+
+        // Expand up to the previous current Item
+        treeView.expandToIndex(index);
+        // Focus that item again
+        forceLayout()
+        // Position at that item
+        positionViewAtRow(rowAtIndex(index), Qt.AlignVCenter)
+
+        // Set the current item using the selection model
+        treeView.selectionModel.setCurrentIndex(index, ItemSelectionModel.ClearAndSelect);
+    }
+
+    function get_indexes_from_ids(id_list) {
+        var index_list = [];
+        var row_list = [];
+        for (let i = 0; i < id_list.length; i++) {
+            let id = id_list[i];
+            console.log("Considering expand of: " + id);
+            let index = treeModel.get_index_by_id(id);
+            if (index && index.valid) {
+                try {
+                    treeView.expandToIndex(index);
+                } catch (e) {
+                    console.error("Error expanding index: " + e);
+                }
+            }
         }
+    }
+
+    selectionModel: ItemSelectionModel {
+        onCurrentChanged: function (current, previous) {
+            // current: QModelIndex
+            if (current.valid) {
+                // Get details from the model and emit the signal
+                let details = treeModel.getItemDetails(current);
+                treeView.currentItemChanged(details);
+            }
+        }
+    }
+
+    // Connect to our Python model
+    model: treeModel
+
+    // Track expanded and collapsed items
+    onExpanded: function (row, depth) {
+        // NOTE depth always 1 according to docs
+        // Store expanded items to potentially restore state later
+        let index = get_index_from_row(row, 0);
+        console.log("----------------_> " + index);
+        let id = treeModel.get_id(index);
+        let title = treeModel.get_title(index);
+        let child_id = treeModel.get_first_child_id(index)
+        treeView.expanded_items.push(child_id);
+        console.log("Expanded " + id + "( " + title + ") all: " + treeView.expanded_items);
     }
 
     onCollapsed: function (row) {
         let index = get_index_from_row(row);
-        let id = model.get_id(index);
+        let id = treeModel.get_id(index);
         // Remove collapsed items from the expanded_items array
         const js_index = expanded_items.indexOf(id);
         if (js_index !== -1) {
             expanded_items.splice(js_index, 1);
         }
     }
+
+
+    /// ...
+    /// ...
+    /// ...
+
+
+        // Context menu for tree items
+        MenuWithKbd {
+            id: contextMenu
+
+            /// ...
+            /// ...
+            /// ...
+
+            Action {
+                text: qsTr("&Refresh Tree")
+                onTriggered: {
+                    // Store current expanded items before refresh
+                    let current_expanded = [...treeView.expanded_items];
+                    let current_item_index = tree_delegate.treeView.selectionModel.currentIndex;
+                    let current_item_id = treeModel.get_id(current_item_index)
+
+                    // Refresh the tree
+                    treeModel.refreshTree();
+                    treeView.expanded_items = [];
+
+                    // Unfold up to any unfolded items (so one short #TODO [maybe store the first child?])
+                    get_indexes_from_ids(current_expanded);
+
+                    // Restore the last item
+                    focus_note_from_id(current_item_id);
+
+
+                    // Use a timer to ensure the model is fully updated before restoring
+                    // Timer {
+                    //     interval: 100,
+                    //     running: true,
+                    //     onTriggered: function() {
+                    //         // Restore expanded state
+                    //         get_indexes_from_ids(current_expanded);
+                    //     }
+                    // }
+                }
+                shortcut: "R"
+            }
+        }
+
+    /// ...
+    /// ...
+    /// ...
 }
+
+
+
 ```
 
-However, there does not seem to be a way to process every item in a tree, so I don't know of any way to restore the fold state of a tree after refresh.
+
+#### Python
+
+
+The full Python model that tracks the hashes and IDS
+
+
+
+```python
+
+import sys
+import sqlite3
+from PySide6.QtCore import (
+    QAbstractItemModel,
+    QByteArray,
+    QModelIndex,
+    QObject,
+    QPersistentModelIndex,
+    Qt,
+    Slot,
+)
+from typing import final, override
+from src.database_handler import Note, Folder, DatabaseHandler
+
+
+@final
+class TreeModel(QAbstractItemModel):
+    def __init__(
+        self, db_connection: sqlite3.Connection, parent: QObject | None = None
+    ):
+        super().__init__(parent)
+
+        # Create database handler
+        self.db_handler = DatabaseHandler(db_connection)
+
+        # Create a dummy root item to set as invisible first item
+        self.root_item = Folder(id="0", title="Root", parent=None)
+
+        # Create a dictionary to store id -> index mapping
+        self.id_to_index_map = {}
+
+        self._build_tree()
+
+    @override
+    def columnCount(
+        self,
+        parent: (
+            QModelIndex | QPersistentModelIndex
+        ) = QModelIndex(),  # pyright: ignore [reportCallInDefaultInitializer]
+    ):
+        fixed_columns = 1
+        if parent.isValid():
+            # Assuming the parent has a .columnCount() method we could use
+            # We may want to match
+            # parent_item = self._get_item(parent)
+            # return parent_item.columnCount()
+            return fixed_columns
+
+        # Change this if you want more columns
+        return fixed_columns
+
+    def _get_item(
+        self, index: QModelIndex | QPersistentModelIndex
+    ) -> Folder | Note | None:
+        if not index.isValid():
+            return None
+
+        untyped_item = index.internalPointer()  # pyright: ignore[reportAny]
+        if untyped_item is None:
+            print("Error: index.internalPointer() returned None", file=sys.stderr)
+            return None
+
+        if not (isinstance(untyped_item, Folder) or isinstance(untyped_item, Note)):
+            print(
+                f"Error, Item in Tree has wrong type: {type(untyped_item)}, this is a bug!",
+                file=sys.stderr,
+            )
+            return None
+
+        item: Folder | Note = untyped_item
+        return item
+
+    @override
+    def data(
+        self,
+        index: QModelIndex | QPersistentModelIndex,
+        role: int = int(
+            Qt.ItemDataRole.DisplayRole
+        ),  # pyright: ignore [reportCallInDefaultInitializer]
+    ):
+        if not index.isValid():
+            return None
+
+        if role not in [
+            Qt.ItemDataRole.DisplayRole,
+            Qt.ItemDataRole.UserRole,
+            Qt.ItemDataRole.EditRole,
+            Qt.ItemDataRole.DecorationRole,
+        ]:
+            return None
+
+        column: int = index.column()
+        row: int = index.row()
+        _ = row
+        item = self._get_item(index)
+
+        # Used to set an icon
+        if role == Qt.ItemDataRole.DecorationRole and column == 0:
+            return "folder" if isinstance(item, Folder) else "note"
+
+        if item is None:
+            return None
+        else:
+            match column:
+                case 0:
+                    return item.title
+                case 1:
+                    return item.id
+                case _:
+                    return None
+
+    @override
+    def flags(self, index: QModelIndex | QPersistentModelIndex):
+        if not index.isValid():
+            return Qt.ItemFlag.NoItemFlags
+
+        return (
+            Qt.ItemFlag.ItemIsEnabled
+            | Qt.ItemFlag.ItemIsSelectable
+            | Qt.ItemFlag.ItemIsEditable
+        )
+
+    # Section is the column
+    @override
+    def headerData(
+        self,
+        section: int,
+        orientation: Qt.Orientation,
+        role: int = int(
+            Qt.ItemDataRole.DisplayRole
+        ),  # pyright: ignore [reportCallInDefaultInitializer]
+    ):
+        if (
+            orientation == Qt.Orientation.Horizontal
+            and role == Qt.ItemDataRole.DisplayRole
+        ):
+            match section:
+                case 0:
+                    return "Title"
+                case _:
+                    return None
+
+        return None
+
+    @override
+    def index(
+        self,
+        row: int,
+        column: int,
+        parent: (
+            QModelIndex | QPersistentModelIndex
+        ) = QModelIndex(),  # pyright: ignore [reportCallInDefaultInitializer]
+    ) -> QModelIndex:
+        if not self.hasIndex(row, column, parent):
+            return QModelIndex()
+
+        # Return the Root Item or the parent of the current item
+        if not parent.isValid():
+            parent_item = self.root_item
+        else:
+            parent_item = self._get_item(parent)
+
+        # Get the children of the parent
+        child_items = parent_item.children
+        # Get the Specific child item
+        child_item = child_items[row]
+        # Create an index from that child item
+        child_index = self.createIndex(row, column, child_item)
+
+        # Return that index
+        return child_index
+
+    @override
+    def parent(
+        self, index: QModelIndex | QPersistentModelIndex
+    ):  # pyright: ignore [reportIncompatibleMethodOverride]
+        # Note the ignore is likely a stubs error, docs suggests this is correct
+        # https://doc.qt.io/qtforpython-6/PySide6/QtCore/QAbstractItemModel.html#PySide6.QtCore.QAbstractItemModel.parent
+        if not index.isValid():
+            return QModelIndex()
+
+        child_item: Folder | Note = self._get_item(index)
+        parent_item = child_item.parent
+
+        if parent_item is None or parent_item == self.root_item:
+            return QModelIndex()
+
+        # Find the row of the parent in its parent's children
+        if parent_item.parent is not None:
+            parent_parent = parent_item.parent
+            row = parent_parent.children.index(
+                parent_item
+            )  # pyright: ignore [reportArgumentType]
+        else:
+            # This should not happen with our structure, but just in case
+            row = 0
+
+        return self.createIndex(row, 0, parent_item)
+
+    @override
+    def rowCount(
+        self,
+        parent: (
+            QModelIndex | QPersistentModelIndex
+        ) = QModelIndex(),  # pyright: ignore [reportCallInDefaultInitializer]
+    ):
+        if parent.column() > 0:
+            return 0
+
+        if not parent.isValid():
+            parent_item = self.root_item
+        else:
+            parent_item = self._get_item(parent)
+
+        return len(parent_item.children)
+
+    @override
+    def roleNames(self):
+        roles = {
+            Qt.ItemDataRole.DisplayRole: QByteArray(b"display"),
+            Qt.ItemDataRole.UserRole: QByteArray(b"userData"),
+            Qt.ItemDataRole.EditRole: QByteArray(b"edit"),
+            Qt.ItemDataRole.DecorationRole: QByteArray(b"decoration"),
+        }
+        r: dict[int, QByteArray] = roles  # pyright: ignore [reportAssignmentType]
+        return r
+
+    @Slot(QModelIndex, result=str)
+    def getItemDetails(self, index: QModelIndex) -> str:
+        """Get details for the selected item (note body or folder info)"""
+        if not index.isValid():
+            return "No item selected"
+
+        item = self._get_item(index)
+        if item is None:
+            return "Invalid item"
+
+        if isinstance(item, Note):
+            return item.body
+        elif isinstance(item, Folder):
+            # For folders, return some basic info
+            child_count = len(item.children)
+            return f"Folder: {item.title}\nContains {child_count} items"
+        else:
+            return "Unknown item type"
+
+    @Slot(QModelIndex)
+    def createNewNote(self, parent_index: QModelIndex) -> None:
+        """Create a new note under the specified parent item"""
+        if not parent_index.isValid():
+            return
+
+        parent_item = self._get_item(parent_index)
+        if parent_item is None:
+            return
+
+        # The actual note creation will be handled by createNoteWithDetails
+        # This method now just signals that we want to create a note under this parent
+        # The UI will show a dialog and then call createNoteWithDetails
+        pass
+
+    @Slot(QModelIndex, str, str)
+    def createNoteWithDetails(
+        self, parent_index: QModelIndex, title: str, body: str
+    ) -> None:
+        """Create a new note with the specified title and body under the parent item"""
+        if not parent_index.isValid():
+            return
+
+        parent_item = self._get_item(parent_index)
+        if parent_item is None:
+            return
+
+        # Get the position where the new note will be inserted
+        insert_position = len(parent_item.children)
+
+        # Begin inserting rows
+        self.beginInsertRows(parent_index, insert_position, insert_position)
+
+        # Create the new note in the database and get the Note object
+        new_note = self.db_handler.create_note(
+            title=title, body=body, parent=parent_item
+        )
+
+        # End inserting rows
+        self.endInsertRows()
+
+        # Add the new note to the map
+        new_index = self.createIndex(insert_position, 0, new_note)
+        self.id_to_index_map[new_note.id] = new_index
+
+    def _build_tree(self) -> None:
+        # Reload the data from the database
+        self.tree_data = self.db_handler.get_folders_with_notes()
+
+        # Connect root folders to the root item
+        for folder in self.tree_data:
+            folder.parent = self.root_item
+
+        # Set the folders as children of the root item
+        self.root_item.children = (
+            self.tree_data
+        )  # pyright: ignore [reportAttributeAccessIssue]
+
+        # Clear the existing map and rebuild it
+        self.id_to_index_map = {}
+        self._build_id_index_map()
+
+    def _build_id_index_map(self) -> None:
+        """Build a mapping of item IDs to their QModelIndex"""
+        # Start with an empty map
+        self.id_to_index_map = {}
+
+        # Process the root item's children (which are the top-level folders)
+        for row, item in enumerate(self.root_item.children):
+            # Create the index for this item
+            index = self.createIndex(row, 0, item)
+            # Add to the map
+            self.id_to_index_map[item.id] = index
+            # Recursively process this item's children
+            self._map_children_indices(item, index)
+
+    def _map_children_indices(self, parent_item: Folder | Note, parent_index: QModelIndex) -> None:
+        """Recursively map all children of an item to their indices"""
+        for row, child in enumerate(parent_item.children):
+            # Create the index for this child
+            child_index = self.createIndex(row, 0, child)
+            # Add to the map
+            self.id_to_index_map[child.id] = child_index
+            # If this child has children, process them too
+            if hasattr(child, 'children') and child.children:
+                self._map_children_indices(child, child_index)
+
+
+    @Slot()
+    def refreshTree(self) -> None:
+        """Refresh the tree by reloading all data from the database"""
+        # Notify the view that we're about to reset the model
+        self.beginResetModel()
+
+        self._build_tree()
+        # The map is now rebuilt in _build_tree()
+
+        # Notify the view that the model has been reset
+        self.endResetModel()
+
+    @Slot(str, result=QModelIndex)
+    def get_index_by_id(self, item_id: str) -> QModelIndex:
+        """Get the QModelIndex for an item with the given ID"""
+        if item_id in self.id_to_index_map:
+            return self.id_to_index_map[item_id]
+        return QModelIndex()
+
+
+    @Slot(QModelIndex, result=str)
+    def get_id(self, index: QModelIndex) -> str:
+        if (item := self._get_item(index)):
+            return item.id
+        else:
+            return ""
+
+
+    @Slot(QModelIndex, result=str)
+    def get_title(self, index: QModelIndex) -> str:
+        if (item := self._get_item(index)):
+            return item.title
+        else:
+            return ""
+
+    @Slot(QModelIndex, result=str)
+    def get_first_child_id(self, index: QModelIndex) -> str:
+        """
+        Used for the expandToIndex function on refresh
+        """
+        if (item := self._get_item(index)):
+            return item.children[0].id
+        else:
+            return ""
+
+    @Slot(QModelIndex, str, result=bool)
+    def update_title(self, index: QModelIndex, new_title: str) -> bool:
+        """
+        Update the title of a Note or Folder
+
+        Args:
+            index: The QModelIndex of the item to update
+            new_title: The new title to set
+
+        Returns:
+            bool: True if the update was successful, False otherwise
+        """
+        if not index.isValid() or not new_title.strip():
+            return False
+
+        item = self._get_item(index)
+        if item is None:
+            return False
+
+        try:
+            # Update the title in the database and the object
+            self.db_handler.update_title(item, new_title)
+
+            # Notify the view that the data has changed
+            self.dataChanged.emit(index, index, [Qt.ItemDataRole.DisplayRole])
+
+            # The ID hasn't changed, so we don't need to update the map
+
+            return True
+        except Exception as e:
+            print(f"Error updating title: {e}", file=sys.stderr)
+            return False
+
+
+```
+
 
 
 ## Update the Tree
@@ -2081,7 +2643,7 @@ However, there does not seem to be a way to process every item in a tree, so I d
 #### Overview
 Unlike QtWidgets, I've found Editing items directly in the delegate to be fraught with peril. It's surprisingly complex to get keybindings to identify the correct item. It's generally easier to spawn a dialog and edit in the dialog directly. If the dialog focuses the textfield and remains keyboard centric, this isn't a big deal in terms of UI but it does show that QML is not QTWidgets.
 
-However, this could also have been related to the way that I had nested widgets with focus etc. `#TODO`
+However, this could also have been related to the way that I had nested widgets with focus etc., so if you manage to get your layout right, it's generally achievable. Start with dialogs to get things working and then consider implementing in place editing (which I think is nicer generally).
 
 #### Code
 ##### Database Handler

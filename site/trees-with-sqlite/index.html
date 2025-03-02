@@ -826,6 +826,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Preserving Fold State">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qml_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -854,7 +896,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#overview_5" class="md-nav__link">
+  <a href="#overview_6" class="md-nav__link">
     <span class="md-ellipsis">
       Overview
     </span>
@@ -863,7 +905,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#code_2" class="md-nav__link">
+  <a href="#code_3" class="md-nav__link">
     <span class="md-ellipsis">
       Code
     </span>
@@ -891,7 +933,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qml_3" class="md-nav__link">
+  <a href="#qml_4" class="md-nav__link">
     <span class="md-ellipsis">
       QML
     </span>
@@ -981,7 +1023,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qml_4" class="md-nav__link">
+  <a href="#qml_5" class="md-nav__link">
     <span class="md-ellipsis">
       QML
     </span>
@@ -1448,6 +1490,48 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Preserving Fold State">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qml_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      QML
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Python
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -1476,7 +1560,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#overview_5" class="md-nav__link">
+  <a href="#overview_6" class="md-nav__link">
     <span class="md-ellipsis">
       Overview
     </span>
@@ -1485,7 +1569,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#code_2" class="md-nav__link">
+  <a href="#code_3" class="md-nav__link">
     <span class="md-ellipsis">
       Code
     </span>
@@ -1513,7 +1597,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qml_3" class="md-nav__link">
+  <a href="#qml_4" class="md-nav__link">
     <span class="md-ellipsis">
       QML
     </span>
@@ -1603,7 +1687,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#qml_4" class="md-nav__link">
+  <a href="#qml_5" class="md-nav__link">
     <span class="md-ellipsis">
       QML
     </span>
@@ -3582,42 +3666,588 @@ Here we know the index, so in the TreeModel we need to create a slot that takes 
          <span class="bp">self</span><span class="o">.</span><span class="n">endResetModel</span><span class="p">()</span>
 </code></pre></div>
 <h3 id="preserving-fold-state">Preserving Fold State<a class="headerlink" href="#preserving-fold-state" title="Permanent link">&para;</a></h3>
-<p>As it stands, I don't know of a good way to restore the fold state of the tree. T</p>
-<p>One can track expanded items like so:</p>
-<div class="highlight"><pre><span></span><code><span class="nx">TreeView</span> <span class="p">{</span>
-    <span class="c1">// ...</span>
-    <span class="c1">// ...</span>
-    <span class="c1">// ...</span>
+<h4 id="overview_5">Overview<a class="headerlink" href="#overview_5" title="Permanent link">&para;</a></h4>
+<p>QT does not provide a way to preserve the fold state out of the box. The approach I recommend is:</p>
+<ol>
+<li>Track Expanded and Collapsed Items in the <code>TreeView</code> using the <code>onExpanded</code> and <code>onCollapsed</code> signal</li>
+<li>
+<p>Store the ID and associated index in a hashmap when the <code>QAbstractItemModel</code> builds the tree, e.g.</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TreeModel</span><span class="p">(</span><span class="n">QAbstractItemModel</span><span class="p">):</span>
+    <span class="c1"># Signal for notifying when sort parameters change</span>
+    <span class="n">sortChanged</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
 
-    <span class="k">onExpanded:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">depth</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// Store expanded items to potentially restore state later</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">expanded_items</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">row</span><span class="p">))</span> <span class="p">{</span>
-            <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">get_index_from_row</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
-            <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get_id</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
-            <span class="kd">let</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get_title</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
-            <span class="nx">expanded_items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
-            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Expanded &quot;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;( &quot;</span> <span class="o">+</span> <span class="nx">title</span> <span class="o">+</span> <span class="s2">&quot;) all: &quot;</span> <span class="o">+</span> <span class="nx">treeView</span><span class="p">.</span><span class="nx">expanded_items</span><span class="p">);</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">db_connection</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_id_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+</code></pre></div>
+3. Create a slot that the view can use to query the ID.
+4. Implement Refresh in the ID
+5. Use the <a href="https://doc.qt.io/qt-6/qml-qtquick-treeview.html#expandToIndex-method">TreeView.expandToIndex</a> method to expand each tracked item.</p>
+</li>
+</ol>
+<p>There is a lot of code included below, see the branch corresponding to this section on GitHub:</p>
+<ul>
+<li><a href="https://github.com/RyanGreenup/qml_sqlite_tree_example/blob/main/src/qml/MyTreeView.qml"><code>TreeView {}</code> src/qml/MyTreeView.qml</a>:</li>
+<li><a href="https://github.com/RyanGreenup/qml_sqlite_tree_example/blob/main/src/tree_model.py"><code>TreeModel</code> in src/tree_model.py</a></li>
+</ul>
+<p>One can track expanded items like so, however, it may be necessary to track the id of the first child as the <code>expandToIndex</code> method expands <strong>up to</strong> an expanded item.</p>
+<h4 id="code_2">Code<a class="headerlink" href="#code_2" title="Permanent link">&para;</a></h4>
+<h4 id="qml_3">QML<a class="headerlink" href="#qml_3" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="nx">TreeView</span> <span class="p">{</span>
+    <span class="kd">id: treeView</span>
+    <span class="k">anchors.fill:</span> <span class="nx">parent</span>
+
+    <span class="c1">/// ...</span>
+    <span class="c1">/// ...</span>
+    <span class="c1">/// ...</span>
+
+    <span class="kd">function</span> <span class="nx">get_index_from_row</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Create and return a model index for the given row and column</span>
+        <span class="k">return</span> <span class="nx">treeView</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">column</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">focus_note_from_id</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_index_by_id</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+
+        <span class="c1">// Expand up to the previous current Item</span>
+        <span class="nx">treeView</span><span class="p">.</span><span class="nx">expandToIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+        <span class="c1">// Focus that item again</span>
+        <span class="nx">forceLayout</span><span class="p">()</span>
+        <span class="c1">// Position at that item</span>
+        <span class="nx">positionViewAtRow</span><span class="p">(</span><span class="nx">rowAtIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">),</span> <span class="nx">Qt</span><span class="p">.</span><span class="nx">AlignVCenter</span><span class="p">)</span>
+
+        <span class="c1">// Set the current item using the selection model</span>
+        <span class="nx">treeView</span><span class="p">.</span><span class="nx">selectionModel</span><span class="p">.</span><span class="nx">setCurrentIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">ItemSelectionModel</span><span class="p">.</span><span class="nx">ClearAndSelect</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">get_indexes_from_ids</span><span class="p">(</span><span class="nx">id_list</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">index_list</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="kd">var</span> <span class="nx">row_list</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">id_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">id_list</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Considering expand of: &quot;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">);</span>
+            <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_index_by_id</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">index</span> <span class="o">&amp;&amp;</span> <span class="nx">index</span><span class="p">.</span><span class="nx">valid</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">try</span> <span class="p">{</span>
+                    <span class="nx">treeView</span><span class="p">.</span><span class="nx">expandToIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Error expanding index: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
         <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">selectionModel:</span> <span class="nx">ItemSelectionModel</span> <span class="p">{</span>
+        <span class="k">onCurrentChanged:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">current</span><span class="p">,</span> <span class="nx">previous</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// current: QModelIndex</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">current</span><span class="p">.</span><span class="nx">valid</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Get details from the model and emit the signal</span>
+                <span class="kd">let</span> <span class="nx">details</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">getItemDetails</span><span class="p">(</span><span class="nx">current</span><span class="p">);</span>
+                <span class="nx">treeView</span><span class="p">.</span><span class="nx">currentItemChanged</span><span class="p">(</span><span class="nx">details</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Connect to our Python model</span>
+    <span class="k">model:</span> <span class="nx">treeModel</span>
+
+    <span class="c1">// Track expanded and collapsed items</span>
+    <span class="k">onExpanded:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="nx">depth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// NOTE depth always 1 according to docs</span>
+        <span class="c1">// Store expanded items to potentially restore state later</span>
+        <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">get_index_from_row</span><span class="p">(</span><span class="nx">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;----------------_&gt; &quot;</span> <span class="o">+</span> <span class="nx">index</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_id</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_title</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">child_id</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_first_child_id</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>
+        <span class="nx">treeView</span><span class="p">.</span><span class="nx">expanded_items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">child_id</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Expanded &quot;</span> <span class="o">+</span> <span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;( &quot;</span> <span class="o">+</span> <span class="nx">title</span> <span class="o">+</span> <span class="s2">&quot;) all: &quot;</span> <span class="o">+</span> <span class="nx">treeView</span><span class="p">.</span><span class="nx">expanded_items</span><span class="p">);</span>
     <span class="p">}</span>
 
     <span class="k">onCollapsed:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
         <span class="kd">let</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">get_index_from_row</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
-        <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get_id</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_id</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
         <span class="c1">// Remove collapsed items from the expanded_items array</span>
         <span class="kr">const</span> <span class="nx">js_index</span> <span class="o">=</span> <span class="nx">expanded_items</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">js_index</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">expanded_items</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">js_index</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
+
+
+    <span class="c1">/// ...</span>
+    <span class="c1">/// ...</span>
+    <span class="c1">/// ...</span>
+
+
+        <span class="c1">// Context menu for tree items</span>
+        <span class="nx">MenuWithKbd</span> <span class="p">{</span>
+            <span class="kd">id: contextMenu</span>
+
+            <span class="c1">/// ...</span>
+            <span class="c1">/// ...</span>
+            <span class="c1">/// ...</span>
+
+            <span class="nx">Action</span> <span class="p">{</span>
+                <span class="k">text:</span> <span class="nx">qsTr</span><span class="p">(</span><span class="s2">&quot;&amp;Refresh Tree&quot;</span><span class="p">)</span>
+                <span class="k">onTriggered:</span> <span class="p">{</span>
+                    <span class="c1">// Store current expanded items before refresh</span>
+                    <span class="kd">let</span> <span class="nx">current_expanded</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">expanded_items</span><span class="p">];</span>
+                    <span class="kd">let</span> <span class="nx">current_item_index</span> <span class="o">=</span> <span class="nx">tree_delegate</span><span class="p">.</span><span class="nx">treeView</span><span class="p">.</span><span class="nx">selectionModel</span><span class="p">.</span><span class="nx">currentIndex</span><span class="p">;</span>
+                    <span class="kd">let</span> <span class="nx">current_item_id</span> <span class="o">=</span> <span class="nx">treeModel</span><span class="p">.</span><span class="nx">get_id</span><span class="p">(</span><span class="nx">current_item_index</span><span class="p">)</span>
+
+                    <span class="c1">// Refresh the tree</span>
+                    <span class="nx">treeModel</span><span class="p">.</span><span class="nx">refreshTree</span><span class="p">();</span>
+                    <span class="nx">treeView</span><span class="p">.</span><span class="nx">expanded_items</span> <span class="o">=</span> <span class="p">[];</span>
+
+                    <span class="c1">// Unfold up to any unfolded items (so one short #TODO [maybe store the first child?])</span>
+                    <span class="nx">get_indexes_from_ids</span><span class="p">(</span><span class="nx">current_expanded</span><span class="p">);</span>
+
+                    <span class="c1">// Restore the last item</span>
+                    <span class="nx">focus_note_from_id</span><span class="p">(</span><span class="nx">current_item_id</span><span class="p">);</span>
+
+
+                    <span class="c1">// Use a timer to ensure the model is fully updated before restoring</span>
+                    <span class="c1">// Timer {</span>
+                    <span class="c1">//     interval: 100,</span>
+                    <span class="c1">//     running: true,</span>
+                    <span class="c1">//     onTriggered: function() {</span>
+                    <span class="c1">//         // Restore expanded state</span>
+                    <span class="c1">//         get_indexes_from_ids(current_expanded);</span>
+                    <span class="c1">//     }</span>
+                    <span class="c1">// }</span>
+                <span class="p">}</span>
+                <span class="k">shortcut:</span> <span class="s2">&quot;R&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="c1">/// ...</span>
+    <span class="c1">/// ...</span>
+    <span class="c1">/// ...</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>However, there does not seem to be a way to process every item in a tree, so I don't know of any way to restore the fold state of a tree after refresh.</p>
+<h4 id="python_1">Python<a class="headerlink" href="#python_1" title="Permanent link">&para;</a></h4>
+<p>The full Python model that tracks the hashes and IDS</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QAbstractItemModel</span><span class="p">,</span>
+    <span class="n">QByteArray</span><span class="p">,</span>
+    <span class="n">QModelIndex</span><span class="p">,</span>
+    <span class="n">QObject</span><span class="p">,</span>
+    <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+    <span class="n">Qt</span><span class="p">,</span>
+    <span class="n">Slot</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">final</span><span class="p">,</span> <span class="n">override</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">src.database_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">Note</span><span class="p">,</span> <span class="n">Folder</span><span class="p">,</span> <span class="n">DatabaseHandler</span>
+
+
+<span class="nd">@final</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TreeModel</span><span class="p">(</span><span class="n">QAbstractItemModel</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">db_connection</span><span class="p">:</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Connection</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1"># Create database handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_handler</span> <span class="o">=</span> <span class="n">DatabaseHandler</span><span class="p">(</span><span class="n">db_connection</span><span class="p">)</span>
+
+        <span class="c1"># Create a dummy root item to set as invisible first item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Root&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Create a dictionary to store id -&gt; index mapping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_tree</span><span class="p">()</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">columnCount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">(),</span>  <span class="c1"># pyright: ignore [reportCallInDefaultInitializer]</span>
+    <span class="p">):</span>
+        <span class="n">fixed_columns</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="c1"># Assuming the parent has a .columnCount() method we could use</span>
+            <span class="c1"># We may want to match</span>
+            <span class="c1"># parent_item = self._get_item(parent)</span>
+            <span class="c1"># return parent_item.columnCount()</span>
+            <span class="k">return</span> <span class="n">fixed_columns</span>
+
+        <span class="c1"># Change this if you want more columns</span>
+        <span class="k">return</span> <span class="n">fixed_columns</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_item</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Folder</span> <span class="o">|</span> <span class="n">Note</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">untyped_item</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">internalPointer</span><span class="p">()</span>  <span class="c1"># pyright: ignore[reportAny]</span>
+        <span class="k">if</span> <span class="n">untyped_item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: index.internalPointer() returned None&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">untyped_item</span><span class="p">,</span> <span class="n">Folder</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">untyped_item</span><span class="p">,</span> <span class="n">Note</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error, Item in Tree has wrong type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">untyped_item</span><span class="p">)</span><span class="si">}</span><span class="s2">, this is a bug!&quot;</span><span class="p">,</span>
+                <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">item</span><span class="p">:</span> <span class="n">Folder</span> <span class="o">|</span> <span class="n">Note</span> <span class="o">=</span> <span class="n">untyped_item</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span>
+        <span class="p">),</span>  <span class="c1"># pyright: ignore [reportCallInDefaultInitializer]</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">UserRole</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DecorationRole</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">column</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">column</span><span class="p">()</span>
+        <span class="n">row</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">row</span><span class="p">()</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">row</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+        <span class="c1"># Used to set an icon</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DecorationRole</span> <span class="ow">and</span> <span class="n">column</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;folder&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Folder</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;note&quot;</span>
+
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">match</span> <span class="n">column</span><span class="p">:</span>
+                <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span>
+                <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span>
+                <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">NoItemFlags</span>
+
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">ItemIsEnabled</span>
+            <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">ItemIsSelectable</span>
+            <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemFlag</span><span class="o">.</span><span class="n">ItemIsEditable</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Section is the column</span>
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">headerData</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">section</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">orientation</span><span class="p">:</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="p">,</span>
+        <span class="n">role</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span>
+        <span class="p">),</span>  <span class="c1"># pyright: ignore [reportCallInDefaultInitializer]</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">orientation</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">Horizontal</span>
+            <span class="ow">and</span> <span class="n">role</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span>
+        <span class="p">):</span>
+            <span class="k">match</span> <span class="n">section</span><span class="p">:</span>
+                <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s2">&quot;Title&quot;</span>
+                <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">index</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">row</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">column</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">(),</span>  <span class="c1"># pyright: ignore [reportCallInDefaultInitializer]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QModelIndex</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">hasIndex</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">QModelIndex</span><span class="p">()</span>
+
+        <span class="c1"># Return the Root Item or the parent of the current item</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="n">parent_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parent_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="c1"># Get the children of the parent</span>
+        <span class="n">child_items</span> <span class="o">=</span> <span class="n">parent_item</span><span class="o">.</span><span class="n">children</span>
+        <span class="c1"># Get the Specific child item</span>
+        <span class="n">child_item</span> <span class="o">=</span> <span class="n">child_items</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
+        <span class="c1"># Create an index from that child item</span>
+        <span class="n">child_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createIndex</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">child_item</span><span class="p">)</span>
+
+        <span class="c1"># Return that index</span>
+        <span class="k">return</span> <span class="n">child_index</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parent</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span>
+    <span class="p">):</span>  <span class="c1"># pyright: ignore [reportIncompatibleMethodOverride]</span>
+        <span class="c1"># Note the ignore is likely a stubs error, docs suggests this is correct</span>
+        <span class="c1"># https://doc.qt.io/qtforpython-6/PySide6/QtCore/QAbstractItemModel.html#PySide6.QtCore.QAbstractItemModel.parent</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">QModelIndex</span><span class="p">()</span>
+
+        <span class="n">child_item</span><span class="p">:</span> <span class="n">Folder</span> <span class="o">|</span> <span class="n">Note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="n">parent_item</span> <span class="o">=</span> <span class="n">child_item</span><span class="o">.</span><span class="n">parent</span>
+
+        <span class="k">if</span> <span class="n">parent_item</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">parent_item</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QModelIndex</span><span class="p">()</span>
+
+        <span class="c1"># Find the row of the parent in its parent&#39;s children</span>
+        <span class="k">if</span> <span class="n">parent_item</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parent_parent</span> <span class="o">=</span> <span class="n">parent_item</span><span class="o">.</span><span class="n">parent</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="n">parent_parent</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                <span class="n">parent_item</span>
+            <span class="p">)</span>  <span class="c1"># pyright: ignore [reportArgumentType]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This should not happen with our structure, but just in case</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">createIndex</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">parent_item</span><span class="p">)</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rowCount</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">QModelIndex</span> <span class="o">|</span> <span class="n">QPersistentModelIndex</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="n">QModelIndex</span><span class="p">(),</span>  <span class="c1"># pyright: ignore [reportCallInDefaultInitializer]</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">column</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="n">parent_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parent_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent_item</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+
+    <span class="nd">@override</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roleNames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">roles</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">:</span> <span class="n">QByteArray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;display&quot;</span><span class="p">),</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">UserRole</span><span class="p">:</span> <span class="n">QByteArray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;userData&quot;</span><span class="p">),</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">EditRole</span><span class="p">:</span> <span class="n">QByteArray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;edit&quot;</span><span class="p">),</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DecorationRole</span><span class="p">:</span> <span class="n">QByteArray</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;decoration&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">r</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">QByteArray</span><span class="p">]</span> <span class="o">=</span> <span class="n">roles</span>  <span class="c1"># pyright: ignore [reportAssignmentType]</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getItemDetails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get details for the selected item (note body or folder info)&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s2">&quot;No item selected&quot;</span>
+
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Invalid item&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Note</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">body</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Folder</span><span class="p">):</span>
+            <span class="c1"># For folders, return some basic info</span>
+            <span class="n">child_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Folder: </span><span class="si">{</span><span class="n">item</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="se">\n</span><span class="s2">Contains </span><span class="si">{</span><span class="n">child_count</span><span class="si">}</span><span class="s2"> items&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Unknown item type&quot;</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createNewNote</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new note under the specified parent item&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent_index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="n">parent_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">parent_index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parent_item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># The actual note creation will be handled by createNoteWithDetails</span>
+        <span class="c1"># This method now just signals that we want to create a note under this parent</span>
+        <span class="c1"># The UI will show a dialog and then call createNoteWithDetails</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createNoteWithDetails</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">parent_index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a new note with the specified title and body under the parent item&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">parent_index</span><span class="o">.</span><span class="n">isValid</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="n">parent_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">parent_index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parent_item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Get the position where the new note will be inserted</span>
+        <span class="n">insert_position</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">parent_item</span><span class="o">.</span><span class="n">children</span><span class="p">)</span>
+
+        <span class="c1"># Begin inserting rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beginInsertRows</span><span class="p">(</span><span class="n">parent_index</span><span class="p">,</span> <span class="n">insert_position</span><span class="p">,</span> <span class="n">insert_position</span><span class="p">)</span>
+
+        <span class="c1"># Create the new note in the database and get the Note object</span>
+        <span class="n">new_note</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_handler</span><span class="o">.</span><span class="n">create_note</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent_item</span>
+        <span class="p">)</span>
+
+        <span class="c1"># End inserting rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endInsertRows</span><span class="p">()</span>
+
+        <span class="c1"># Add the new note to the map</span>
+        <span class="n">new_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createIndex</span><span class="p">(</span><span class="n">insert_position</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">new_note</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span><span class="p">[</span><span class="n">new_note</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_index</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Reload the data from the database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_handler</span><span class="o">.</span><span class="n">get_folders_with_notes</span><span class="p">()</span>
+
+        <span class="c1"># Connect root folders to the root item</span>
+        <span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree_data</span><span class="p">:</span>
+            <span class="n">folder</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span>
+
+        <span class="c1"># Set the folders as children of the root item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root_item</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tree_data</span>
+        <span class="p">)</span>  <span class="c1"># pyright: ignore [reportAttributeAccessIssue]</span>
+
+        <span class="c1"># Clear the existing map and rebuild it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_id_index_map</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_id_index_map</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Build a mapping of item IDs to their QModelIndex&quot;&quot;&quot;</span>
+        <span class="c1"># Start with an empty map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Process the root item&#39;s children (which are the top-level folders)</span>
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_item</span><span class="o">.</span><span class="n">children</span><span class="p">):</span>
+            <span class="c1"># Create the index for this item</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createIndex</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+            <span class="c1"># Add to the map</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="c1"># Recursively process this item&#39;s children</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_map_children_indices</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_map_children_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_item</span><span class="p">:</span> <span class="n">Folder</span> <span class="o">|</span> <span class="n">Note</span><span class="p">,</span> <span class="n">parent_index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Recursively map all children of an item to their indices&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">parent_item</span><span class="o">.</span><span class="n">children</span><span class="p">):</span>
+            <span class="c1"># Create the index for this child</span>
+            <span class="n">child_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">createIndex</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span>
+            <span class="c1"># Add to the map</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span><span class="p">[</span><span class="n">child</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">child_index</span>
+            <span class="c1"># If this child has children, process them too</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_map_children_indices</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">child_index</span><span class="p">)</span>
+
+
+    <span class="nd">@Slot</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">refreshTree</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Refresh the tree by reloading all data from the database&quot;&quot;&quot;</span>
+        <span class="c1"># Notify the view that we&#39;re about to reset the model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beginResetModel</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_tree</span><span class="p">()</span>
+        <span class="c1"># The map is now rebuilt in _build_tree()</span>
+
+        <span class="c1"># Notify the view that the model has been reset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">endResetModel</span><span class="p">()</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">QModelIndex</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_index_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QModelIndex</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the QModelIndex for an item with the given ID&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">item_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_to_index_map</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">QModelIndex</span><span class="p">()</span>
+
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_first_child_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Used for the expandToIndex function on refresh</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QModelIndex</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">QModelIndex</span><span class="p">,</span> <span class="n">new_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the title of a Note or Folder</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            index: The QModelIndex of the item to update</span>
+<span class="sd">            new_title: The new title to set</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the update was successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">index</span><span class="o">.</span><span class="n">isValid</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">new_title</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_item</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Update the title in the database and the object</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">db_handler</span><span class="o">.</span><span class="n">update_title</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">new_title</span><span class="p">)</span>
+
+            <span class="c1"># Notify the view that the data has changed</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataChanged</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="p">[</span><span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">DisplayRole</span><span class="p">])</span>
+
+            <span class="c1"># The ID hasn&#39;t changed, so we don&#39;t need to update the map</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error updating title: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+</code></pre></div>
 <h2 id="update-the-tree">Update the Tree<a class="headerlink" href="#update-the-tree" title="Permanent link">&para;</a></h2>
 <h3 id="rename-items">Rename Items<a class="headerlink" href="#rename-items" title="Permanent link">&para;</a></h3>
-<h4 id="overview_5">Overview<a class="headerlink" href="#overview_5" title="Permanent link">&para;</a></h4>
+<h4 id="overview_6">Overview<a class="headerlink" href="#overview_6" title="Permanent link">&para;</a></h4>
 <p>Unlike QtWidgets, I've found Editing items directly in the delegate to be fraught with peril. It's surprisingly complex to get keybindings to identify the correct item. It's generally easier to spawn a dialog and edit in the dialog directly. If the dialog focuses the textfield and remains keyboard centric, this isn't a big deal in terms of UI but it does show that QML is not QTWidgets.</p>
-<p>However, this could also have been related to the way that I had nested widgets with focus etc. <code>#TODO</code></p>
-<h4 id="code_2">Code<a class="headerlink" href="#code_2" title="Permanent link">&para;</a></h4>
+<p>However, this could also have been related to the way that I had nested widgets with focus etc., so if you manage to get your layout right, it's generally achievable. Start with dialogs to get things working and then consider implementing in place editing (which I think is nicer generally).</p>
+<h4 id="code_3">Code<a class="headerlink" href="#code_3" title="Permanent link">&para;</a></h4>
 <h5 id="database-handler_1">Database Handler<a class="headerlink" href="#database-handler_1" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code>    <span class="k">def</span><span class="w"> </span><span class="nf">update_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Note</span> <span class="o">|</span> <span class="n">Folder</span><span class="p">,</span> <span class="n">new_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -3695,7 +4325,7 @@ Here we know the index, so in the TreeModel we need to create a slot that takes 
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error updating title: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">False</span>
 </code></pre></div>
-<h5 id="qml_3">QML<a class="headerlink" href="#qml_3" title="Permanent link">&para;</a></h5>
+<h5 id="qml_4">QML<a class="headerlink" href="#qml_4" title="Permanent link">&para;</a></h5>
 <h6 id="treeview_1">TreeView<a class="headerlink" href="#treeview_1" title="Permanent link">&para;</a></h6>
 <p>Add the following somewhere in the TreeView, the actual Dialog will be created in a moment:</p>
 <div class="highlight"><pre><span></span><code><span class="nx">EditTitleDialog</span> <span class="p">{</span>
@@ -3828,7 +4458,7 @@ Here we know the index, so in the TreeModel we need to create a slot that takes 
 <h4 id="drag-and-drop">Drag and Drop<a class="headerlink" href="#drag-and-drop" title="Permanent link">&para;</a></h4>
 <h5 id="database-handler_2">Database Handler<a class="headerlink" href="#database-handler_2" title="Permanent link">&para;</a></h5>
 <h5 id="model_1">Model<a class="headerlink" href="#model_1" title="Permanent link">&para;</a></h5>
-<h5 id="qml_4">QML<a class="headerlink" href="#qml_4" title="Permanent link">&para;</a></h5>
+<h5 id="qml_5">QML<a class="headerlink" href="#qml_5" title="Permanent link">&para;</a></h5>
 <h3 id="delete">Delete<a class="headerlink" href="#delete" title="Permanent link">&para;</a></h3>
 <div class="footnote">
 <hr />
